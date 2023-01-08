@@ -1,0 +1,25 @@
+get_category_strings_d        R code to demo get_category_strings
+get_dataset_names_d           R code to demo get_dataset_names
+get_geography_d               R code to demo get_geography
+get_groups_d                  R code to demo get_groups
+get_multi_vintage_data_d      R code to demo get_multi_vintage_data
+get_variable_names_d          R code to demo get_variable_names
+tiger_block_groups_sf_d       R code to demo tiger_block_groups_sf
+tiger_block_sf_d              R code to demo tiger_block_sf
+tiger_cbsa_sf_d               R code to demo tiger_cbsa_sf
+tiger_counties_sf_d           R code to demo tiger_counties_sf
+tiger_landmarks_sf_d          R code to demo tiger_landmarks_sf
+tiger_places_sf_d             R code to demo tiger_places_sf
+tiger_roads_sf_d              R code to demo tiger_roads_sf
+tiger_states_sf_d             R code to demo tiger_states_sf
+tiger_tracts_sf_d_1           R code to demo tiger_tracts_sf
+tiger_tracts_sf_d_2           R code to demo tiger_tracts_sf
+tiger_tracts_sf_d_3           R code to demo tiger_tracts_sf
+tiger_water_sf_d              R code to demo tiger_water_sf
+tutorial_general_steps        Gives general steps in accessing Census Bureau API
+tutorial_group_data           Shows how to make group based requests
+tutorial_join_data_1          Shows how to join data with sf geometries
+tutorial_join_data_2          Shows how to join data with sf geometries
+tutorial_long_to_wide         Shows how to use long_to_wide function
+tutorial_predicates           Shows how to use predicates
+tutorial_wide_to_long         Shows how to use wide_to_long function

@@ -1,0 +1,141 @@
+#' tiger_cbsa_sf
+#'
+#' This function performs three tasks:
+#' \enumerate{
+#'   \item Download to a temporary directory a zip file from the TIGER/Line Shapefiles database.
+#'   \item Unzip the zip file and locate the shape file of interest.
+#'   \item Read and convert the shape file to a simple feature object.
+#' }
+#' Returns simple feature (sf) of core based statistical area (CBSA) boundary related geometric polygons,
+#'   provided by the US Census Bureau's TIGER/Line Shapefiles database. See
+#'   \href{https://r-spatial.github.io/sf/articles/sf1.html}{Simple Features for R}
+#'   for more information on simple features.
+#'
+#' A more generalized, recognizable version of the CBSA geometries that has less download size is also available.  For more information on cartographic boundary files see
+#'   \href{https://www.census.gov/programs-surveys/geography/technical-documentation/naming-convention/cartographic-boundary-file.html}{Cartographic Boundary File Description}.
+#'   These files are available for vintages greater than 2009 with resolution 1:500k, 1:5m, 1:20m meters.
+#'   For descriptive information on CBSA see {https://www.census.gov/programs-surveys/metro-micro/about.html}{About}.
+#'
+#' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RspatialPkg}{RspatialPkg::get_geom_sf()}) or
+#' joined with US Census Bureau demographic data. To help incorporate data files, this function
+#' has a \code{datafile} parameter which will be joined with the resultant simple feature object. The only
+#' requirement is that a common "key" for joining exist between the data dataframe and the simple feature dataframe.
+#'
+#' @param output_dir A full directory path where the shapefile will be downloaded. This is a required parameter. The function will stop
+#' if this directory does not exist.  Be aware that all files in this directory are removed before downloading.
+#' @param vintage A numeric that sets the vintage of interest. The default is 2020.
+#' @param general A logical which if TRUE will download a less detailed, more gerneralized version of the state geometries.
+#' @param resol If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
+#'   "500k", "5m", "20m".
+#' @param crs_transform A numeric or string that if non-NULL transforms the geometries to this coordinate reference system. See
+#'   \href{sf::st_transform()}{https://cran.r-project.org/web/packages/sf/sf.pdf} for acceptable values.
+#' @param sf_info A logical which if TRUE displays info on the resulting simple feature object.
+#' @param do_progress A logical which if TRUE displays a progress bar during the download.
+#' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
+#' @param datafile A dataframe containing data that should be joined with this function's resultant simple feature object.
+#' @param datafile_key The column name from \code{datafile} used to key with the "tract" column of the resultant simple feature object.
+#' @param sf_key The column from the resultant dataframe used to key with the \code{datafile} dataframe.
+#' @param state_filter A string that filters the resultant sf by a state name (e.g. "TX") .
+#' @param city_filter A string that filters the resultant sf by a city name (e.g. "Kansas City").
+#' @param check_na A logical which if TRUE will remove rows that have missing values for any of the columns.
+#'   The default is to not check the columns for NA values.
+#'
+#' @importFrom sf st_transform
+#' @importFrom sf st_as_sf
+#' @importFrom sf st_read
+#' @importFrom data.table as.data.table
+#' @importFrom data.table tstrsplit
+#'
+#' @return A data frame object of class sf, data frame
+#'
+#' @author Rick Dean
+#'
+#' @export
+tiger_cbsa_sf <- function(
+  output_dir = NULL,
+  vintage = 2020,
+  general = FALSE,
+  resol = "500k",
+  crs_transform = NULL,
+  sf_info = TRUE,
+  do_progress = FALSE,
+  shapefile = NULL,
+  datafile = NULL,
+  datafile_key = NULL,
+  sf_key = "GEOID",
+  state_filter = NULL,
+  city_filter = NULL,
+  check_na = FALSE
+) {
+  if(is.null(shapefile) & !(resol %in% c("500k", "5m", "20m"))){
+    stop("Acceptable values for resolution are '500k', '5m', '20m'.")
+  }
+
+  if(!is.null(shapefile)){ # Reading shapefile
+    if(!file.exists(shapefile)){
+      stop(paste0("Shapefile folder ", shapefile, " does not exists."))
+    }
+    tiger_sf <- sf::st_read(dsn = shapefile)
+    if(!is.null(crs_transform)){
+      sf::st_transform(tiger_sf, crs = crs_transform)
+    }
+    return(tiger_sf)
+  }else {  # Downloading shapefile
+    vintage_char <- as.character(vintage)
+    a_url <- NULL
+    if(general){
+      if(vintage == 2010) {
+        if(resol == "5m") stop("Available resolutions for 2010 are '500k' and '20m'")
+        a_url <- sprintf("https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_310_m1_%s.zip", resol)
+      }else {
+        a_url <- sprintf("https://www2.census.gov/geo/tiger/GENZ%s/shp/cb_%s_us_cbsa_%s.zip",
+                         vintage_char, vintage_char, resol)
+        if(vintage == 2013) a_url <- gsub("shp/", "", a_url)
+      }
+    }else {
+      if(vintage == 2010){
+        a_url <- sprintf("https://www2.census.gov/geo/tiger/TIGER2010/CBSA/2010/t1_2010_us_cbsa10.zip")
+      }else {
+        a_url <- sprintf("https://www2.census.gov/geo/tiger/TIGER%s/CBSA/t1_%s_us_cbsa.zip", vintage_char, vintage_char)
+      }
+    }
+
+    tiger_sf <- .send_tiger_url(
+      a_url = a_url,
+      output_dir = output_dir,
+      crs_transform = crs_transform,
+      sf_info = sf_info,
+      do_progress = do_progress,
+      caller = "tiger_states_sf"
+    )
+
+    if(!is.null(datafile)){
+      tiger_sf <- RcensusPkg::join_it(
+        df_1 = datafile,
+        df_2 = tiger_sf,
+        key_1 = datafile_key,
+        key_2 = sf_key,
+        return_sf = T
+      )
+    }
+
+    if(!is.null(city_filter) | !is.null(state_filter)){
+      tiger_dt <- data.table::as.data.table(tiger_sf)
+      tiger_dt[, c("city","state") := tstrsplit(NAME, ",")]
+      if(!is.null(city_filter)){
+        tiger_dt <- tiger_dt[trimws(city) == city_filter,]
+      }
+      if(!is.null(state_filter)){
+        tiger_dt <- tiger_dt[trimws(state) == state_filter,]
+      }
+      tiger_dt[, `:=`(city = NULL, state = NULL)]
+      tiger_sf <- sf::st_as_sf(tiger_dt)
+    }
+
+    if(check_na){
+      tiger_sf <- na.omit(tiger_sf)
+    }
+
+    return(tiger_sf)
+  }
+}
