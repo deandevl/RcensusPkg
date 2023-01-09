@@ -41,7 +41,8 @@ caption {
 }
 
 .task {
-  font-size: 10pt;
+  font-size: 12pt;
+  font-weight: bold;
   color: #964B00;
 }
 
@@ -63,7 +64,7 @@ caption {
   border: 1px solid hsl(0, 0%, 0%);
   margin-top: 30px;
   margin-bottom: 30px;
-  box-shadow: 
+  box-shadow:
   0 0 0.25rem hsl(300, 40%, 5%),
   0 1rem .5rem -1rem hsl(300, 40%, 5%),
   0 0.25rem 1rem hsl(200, 40%, 30%),
