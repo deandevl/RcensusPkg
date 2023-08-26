@@ -8,14 +8,11 @@ library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
-output_dir <- file.path(here(), "demo", "shapefiles")
-
 # Get the general state geometries for just Kentucky
 # Create a logical expression that filters out Kentucky
 kentucky_express <- expression(STATEFP == "21")
 # Get the Kentucky geometries
 kentucky_sf <- RcensusPkg::tiger_states_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = kentucky_express
 )
@@ -30,8 +27,7 @@ nelson_fips <- substr(kentucky_nelson_fips, 3, 5)
 # Get all the landmark geometries (i.e. points) for Kentucky
 kentucky_landmarks_sf <- RcensusPkg::tiger_landmarks_sf(
   state = kentucky_fips,
-  entity = "point",
-  output_dir = output_dir
+  entity = "point"
 )
 kentucky_landmarks_sf <- na.omit(kentucky_landmarks_sf)
 
@@ -53,7 +49,6 @@ kentucky_landmarks_plot
 nelson_express <- expression(STATEFP == "21" & COUNTYFP == "179")
 # Get the geometries for just Nelson County
 nelson_sf <- RcensusPkg::tiger_counties_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = nelson_express
 )
@@ -70,21 +65,22 @@ nelson_landmarks_sf <- kentucky_landmarks_sf[nelson_landmarks_intersect_lg[,1],]
 nelson_landmarks_plot <-
   RspatialPkg::get_geom_sf(
     sf = nelson_sf,
-    sf_fill = "blue",
-    sf_alpha = 0.7
-  ) +
+    sf_fill = "yellow",
+    sf_alpha = 0.7,
+    hide_x_tics = T,
+    hide_y_tics = T) +
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     aes_text = "FULLNAME",
-    text_color = "yellow",
-    text_size = 4,
+    text_color = "black",
+    text_size = 1.5,
     text_nudge_y = 0.007,
     adding = T
   ) +
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     sf_fill = "red",
-    sf_size = 3,
+    sf_size = 1.0,
     adding = T
   )
 nelson_landmarks_plot

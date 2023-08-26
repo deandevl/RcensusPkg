@@ -8,16 +8,13 @@ library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
-output_dir <- file.path(here(), "demo", "shapefiles")
-
 # Get shapefile geometries for the Core-based statistical areas
-#   of Kansas City with vintage 2020.
+#   of Texas with vintage 2020.
 cbsa_tx_sf <- RcensusPkg::tiger_cbsa_sf(
   vintage = 2020,
   resol = "20m",
   #city_filter = "Kansas City",
   state_filter = "TX",
-  output_dir = output_dir,
   general = TRUE,
   sf_info = FALSE
 )

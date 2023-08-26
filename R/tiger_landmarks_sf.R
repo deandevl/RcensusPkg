@@ -30,24 +30,24 @@
 #'
 #' @param state The two-digit FIPS code for the state of interest. This is required parameter.
 #'  See \href{https://cran.r-project.org/web/packages/usmap/usmap.pdf}{usmap::fips function} for finding FIPS codes.
-#' @param output_dir A full directory path where the shapefile will be downloaded. This is a required parameter. The function will stop 
-#' if this directory does not exist.  Be aware that all files in this directory are removed before downloading. 
+#' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
+#'   The default is the directory defined by the value returned by \code{tempdir()}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #'   The value should be greater than 2010.
 #' @param entity A character string that sets the specific landmark entity of interest. The
 #'   acceptable values are "area" or "point". The default is "point".
 #' @param crs_transform A numeric or string that if non-NULL transforms the geometries to this coordinate reference system. See
 #'   \href{sf::st_transform()}{https://cran.r-project.org/web/packages/sf/sf.pdf} for acceptable values.
-#' @param sf_info A logical which if TRUE displays info on the resulting simple feature object.      
-#' @param do_progress A logical which if TRUE displays a progress bar during the download.      
+#' @param sf_info A logical which if TRUE displays info on the resulting simple feature object.
+#' @param do_progress A logical which if TRUE displays a progress bar during the download.
 #' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
-#' @param express A logical expression object used to filter the resultant simple feature dataframe. 
+#' @param express A logical expression object used to filter the resultant simple feature dataframe.
 #'   For example, one of the columns of the resultant simple feature dataframe is "STATEFP".
 #'   If you wanted to return just the geometries for Nelson County, Kentucky (which has a fips code of "179"),
-#'   then you assign \code{express} equal to: expression(COUNTYFP == "179"). The expression will be 
+#'   then you assign \code{express} equal to: expression(COUNTYFP == "179"). The expression will be
 #'   evaluated and only the landmark geometries for Nelson County will be returned.
 #' @param check_na A logical which if TRUE will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.    
+#'   The default is to not check the columns for NA values.
 #'
 #' \strong{Note: Vintage must be greater than 2010.}
 #'
@@ -62,7 +62,7 @@
 #' @export
 tiger_landmarks_sf <- function(
   state = NULL,
-  output_dir = NULL,
+  output_dir = tempdir(check = T),
   vintage = 2020,
   entity = "point",
   crs_transform = NULL,
@@ -72,11 +72,11 @@ tiger_landmarks_sf <- function(
   express = NULL,
   check_na = FALSE
 ){
-  
+
   if(is.null(shapefile) & is.null(state)){
     stop("The state argument is required")
   }
-  
+
   if(is.null(shapefile) & vintage < 2011){
     stop("Vintage is not currently available for years prior to 2011")
   }
@@ -102,26 +102,26 @@ tiger_landmarks_sf <- function(
     }else {
       stop(paste0("Function does not recognize entity ", entity))
     }
-  
+
     tiger_sf <- .send_tiger_url(
-      a_url = a_url, 
-      output_dir = output_dir, 
-      crs_transform = crs_transform, 
+      a_url = a_url,
+      output_dir = output_dir,
+      crs_transform = crs_transform,
       sf_info = sf_info,
       do_progress = do_progress,
       caller = "tiger_landmarks_sf"
     )
-    
+
     if(!is.null(express)){
       tiger_dt <- data.table::as.data.table(tiger_sf)
       tiger_dt <- tiger_dt[eval(express), ]
       tiger_sf <- sf::st_as_sf(tiger_dt)
     }
-  
+
     if(check_na){
       tiger_sf <- na.omit(tiger_sf)
     }
-    
+
     return(tiger_sf)
   }
 }

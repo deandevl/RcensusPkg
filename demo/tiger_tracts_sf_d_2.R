@@ -4,8 +4,10 @@ library(sf)
 library(data.table)
 library(magrittr)
 library(usmap)
+library(purrr)
 library(ggplot2)
 library(RspatialPkg)
+library(RplotterPkg)
 library(RcensusPkg)
 
 years <- c(1990, 2000, 2010, 2020)
@@ -16,12 +18,9 @@ tx_fips <- substr(tx_tarrant_fips, 1, 2)
 tarrant_fips <- substr(tx_tarrant_fips, 3, 5)
 
 build_plot <- function(id, years, crs_transform, vars, state_fips, county_fips){
-  output_dir <- file.path(here(), "demo", "shapefiles")
-
   tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
     state = state_fips,
     vintage = years[[id]],
-    output_dir = output_dir,
     general = T,
     crs_transform = crs_transform[[id]]
   )

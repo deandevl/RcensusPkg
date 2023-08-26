@@ -18,11 +18,10 @@ tarrant_fips <- substr(tx_tarrant_fips, 3, 5)
 # This particular shapefile has NA for its crs, so we will
 #   transform it to crs NAD83 (i.e. crs_transform = 3426).
 # We will also show a progress bar during the download of the shapefile.
-output_dir <- file.path(here(), "demo", "shapefiles")
+
 tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
   state = tx_fips,
   vintage = 1990,
-  output_dir = output_dir,
   crs_transform = 3486,
   general = T,
   do_progress = T
@@ -40,14 +39,13 @@ tarrant_cty_tracts_plot <- RspatialPkg::get_geom_sf(
 )
 tarrant_cty_tracts_plot
 
-
 # -----------------------Read and convert to a simple feature a downloaded shapefile-------------------------
-downloaded_shapefile_path <- file.path(here(), "demo", "downloaded_shapefiles")
+downloaded_shapefile_path <- tempdir()
 tx_tracts_downloaded_sf <- RcensusPkg::tiger_tracts_sf(
   shapefile = downloaded_shapefile_path
 )
 
-# Map the simeple feature
+# Map the simple feature
 tx_tracts_downloaded_plot <- RspatialPkg::get_geom_sf(
   sf = tx_tracts_downloaded_sf,
   sf_fill = "yellow"

@@ -6,8 +6,6 @@ library(RspatialPkg)
 library(ggplot2)
 library(RcensusPkg)
 
-output_dir <- file.path(here(), "demo", "shapefiles")
-
 # -------Map the geometries for Ohio counties-----
 
 # Determine the fips code for Ohio (returns "39")
@@ -19,7 +17,6 @@ express <- expression(STATEFP == "39")
 
 # Get the Ohio county's generalized geometries
 ohio_counties_sf <- RcensusPkg::tiger_counties_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = express
 )
@@ -38,7 +35,6 @@ express <- expression(STATEFP == "39" & COUNTYFP == "055")
 
 # Get the Geauga County geometries
 geauga_sf <- RcensusPkg::tiger_counties_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = express
 )

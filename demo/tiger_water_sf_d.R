@@ -6,8 +6,6 @@ library(ggplot2)
 library(RspatialPkg)
 library(RcensusPkg)
 
-output_dir <- file.path(here(), "demo", "shapefiles")
-
 state_county_fips <- usmap::fips(state = "Ohio", county = "Geauga")
 state_fips <- substr(state_county_fips,1,2)
 county_fips <- substr(state_county_fips,3,5)
@@ -15,8 +13,7 @@ county_fips <- substr(state_county_fips,3,5)
 # get area water
 geauga_area_water_sf <- RcensusPkg::tiger_water_sf(
   state = state_fips,
-  county = county_fips,
-  output_dir = output_dir
+  county = county_fips
 )
 str(geauga_area_water_sf)
 
@@ -30,8 +27,7 @@ geauga_area_water_plot
 geauga_linear_water_sf <- RcensusPkg::tiger_water_sf(
   state = state_fips,
   county = county_fips,
-  entity = "linear",
-  output_dir = output_dir
+  entity = "linear"
 )
 str(geauga_linear_water_sf)
 
@@ -43,8 +39,7 @@ geauga_linear_water_plot
 
 # get coastline
 us_coastline_sf <- RcensusPkg::tiger_water_sf(
-  entity = "coastline",
-  output_dir = output_dir
+  entity = "coastline"
 )
 str(us_coastline_sf)
 

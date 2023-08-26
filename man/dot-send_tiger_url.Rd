@@ -16,8 +16,7 @@
 \arguments{
 \item{a_url}{A required string that defines the url to be sent in the http GET request.}
 
-\item{output_dir}{A required parameter that sets the full directory path for the download
-shapefile destination. The files in this directory are removed before the download.}
+\item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.}
 
 \item{crs_transform}{A numeric which if non-NULL calls sf::st_transform()
 to perform a crs transform of the geometries.}

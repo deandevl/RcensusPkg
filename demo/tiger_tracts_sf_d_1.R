@@ -8,8 +8,6 @@ library(RspatialPkg)
 library(ggplot2)
 library(RcensusPkg)
 
-output_dir <- file.path(here(), "demo", "shapefiles")
-
 # Get the generalized tract geometries for Los Alamos, New Mexico
 # Determine the fips codes for New Mexico and Los Alamos
 nm_los_alamos_fips <- usmap::fips(state = "new mexico", county = "los alamos")
@@ -21,7 +19,6 @@ express <- expression(COUNTYFP == "028")
 
 # Get the tract geometries for just Los Alamos
 losalamos_tracts_sf <- RcensusPkg::tiger_tracts_sf(
-  output_dir = output_dir,
   state = nm_fips,
   general = TRUE,
   express = express

@@ -24,36 +24,27 @@ format:
     abstract-title: "Abstract"
     abstract: "Accessing the US Census Bureau's database of survey data and map geometries via their API can be a challenge. The R package RcensusPkg can help by providing specific functions for checking on the availability of geographies, variables, datasets, and dates. In addition, the package provides easy access to the Bureau's extensive Tiger Line map geometries and for joining the maps with Census Bureau survey data.  This paper presents a basic step-by-step demonstration of how RcensusPkg could be applied to investigate computer and broadband presence from an earlier time to the present across the states. A series of 'task' are presented to illustrate how to download the data, download the state geometries, join data with the map and finally present the results.  The companion package RspatialPkg is a ggplot2 based R package that creates and maps the visualizations. As the investigator gains more knowledge of his/her subject, not all of the steps outlined here will be required.  We are starting from ground zero with this demonstration where we know little about the availability of Census Bureau data or how to access it and put it together. RcensusPkg is available from GitHub at [deandevl](https://github.com/deandevl/RcensusPkg). There are many additional demonstrations on the package at the repository. In the `demo` folder each function is demonstrated for downloading data and sf geometries along with R script tutorials. Also [R_Analysis_of_US_Census_Data](https://github.com/deandevl/R_Analysis_of_US_Census_Data) contains R script that uses RcensusPkg to follow Kyle Walker's book [Analyzing US Census Data: Methods, Maps, and Models in R](https://walker-data.com/census-r/index.html)."
 ---
-
-::: note
--   Article setup:
-    -   Install \`quarto\` executable from \<https://quarto.org\>
--   To compile article inside RStudio:
-    -   open file `Introduction_to_RcensusPkg.qmd`
-    -   press \`Render\` from a recent version of RStudio
--   For a table of contents, set the yaml line `toc:` to true and re-render.
-:::
-
 # Accessing the US Census Bureau API with `RcensusPkg`
 
 ## Load the Required R Packages:
 
-```{r, message=FALSE, warning=FALSE}
-#| label: load-packages
+```{r}
+#| warning: false
+#| message: false
 
-library(data.table, quietly = T)
-library(jsonlite, quietly = T)
-library(httr, quietly = T)
-library(usmap, quietly = T)
-library(purrr, quietly = T)
-library(sf, quietly = T)
-library(ggplot2, quietly = T)
-library(RColorBrewer, quietly = T)
-library(here, quietly = T)
-library(magrittr, quietly = T)
-library(RspatialPkg, quietly = T)
-library(RplotterPkg, quietly = T)
-library(RcensusPkg, quietly = T)
+library(data.table)
+library(jsonlite)
+library(httr)
+library(usmap)
+library(purrr)
+library(sf)
+library(ggplot2)
+library(RColorBrewer)
+library(here)
+library(magrittr)
+library(RspatialPkg)
+library(RplotterPkg)
+library(RcensusPkg)
 ```
 
 ## Formulate a goal
@@ -268,9 +259,8 @@ Our goal here is to join the boundary geometries by state with the above survey 
 Join the 2013 and 2021 computer present data with state geometries.
 :::
 
-Some preliminaries: Note that an existing local folder must be specified to receive all downloaded Census Tiger related shapefiles. Also when requesting geometries we can define an "express" parameter to limit the request with a logical expression. 
+Some preliminaries: Note that an existing local folder must be specified to receive all downloaded Census Tiger related shapefiles. We will use the default directory given by `tempdir()`. Also when requesting geometries we can define an "express" parameter to limit the request with a logical expression. 
 ```{r}
-output_dir <- file.path(here(), "demo", "shapefiles")
 express <- expression(State != "Alaska" & State != "Hawaii")
 ```
 
@@ -278,7 +268,6 @@ A data.frame with data and state boundaries for 2013 joined:
 
 ```{r}
 state_boundaries_2013_sf <- RcensusPkg::tiger_states_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = express,
   datafile = acs1_computers_data_2013_dt,
@@ -293,7 +282,6 @@ A data.frame with data and state boundaries for 2021 joined:
 
 ```{r}
 state_boundaries_2021_sf <- RcensusPkg::tiger_states_sf(
-  output_dir = output_dir,
   general = TRUE,
   express = express,
   datafile = acs1_computers_data_2021_dt,

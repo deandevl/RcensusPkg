@@ -21,8 +21,8 @@
 #' has a \code{datafile} parameter which will be joined with the resultant simple feature object. The only
 #' requirement is that a common "key" for joining exist between the data dataframe and the simple feature dataframe.
 #'
-#' @param output_dir A full directory path where the shapefile will be downloaded. This is a required parameter. The function will stop
-#' if this directory does not exist.  Be aware that all files in this directory are removed before downloading.
+#' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
+#'   The default is the directory defined by the value returned by \code{tempdir()}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #' @param general A logical which if TRUE will download a less detailed, more gerneralized version of the state geometries.
 #' @param resol If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
@@ -52,7 +52,7 @@
 #'
 #' @export
 tiger_cbsa_sf <- function(
-  output_dir = NULL,
+  output_dir = tempdir(check = T),
   vintage = 2020,
   general = FALSE,
   resol = "500k",
