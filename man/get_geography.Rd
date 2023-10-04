@@ -15,7 +15,8 @@ get_geography(dataset, vintage = NULL)
 A data.table
 }
 \description{
-Get the list of geography entities available (state, county, tract, etc)
+Get the list of geography entities available (state, county, tract, etc) for a
+a specific dataset.
 }
 \details{
 Function produces a data.table of all the geography "name" and "geoLevelDisplay" variables

@@ -2,7 +2,7 @@
 #'
 #'This function performs three tasks:
 #' \enumerate{
-#'   \item Download to a temporary directory a zip file from the TIGER/Line Shapefiles database.
+#'   \item Download to an output directory a zip file from the TIGER/Line Shapefiles database.
 #'   \item Unzip the zip file and locate the shape file of interest.
 #'   \item Read and convert the shape file to a simple feature object.
 #' }
@@ -30,9 +30,12 @@
 #'   See \href{https://cran.r-project.org/web/packages/usmap/usmap.pdf}{usmap::fips function} for finding FIPS codes.
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
+#' @param delete_files A logical which if TRUE will delete the shapefile and associated files in `output_dir`.
+#'   The default is TRUE.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
-#' @param crs_transform A numeric or string that if non-NULL transforms the geometries to this coordinate reference system. See
-#'   \href{sf::st_transform()}{https://cran.r-project.org/web/packages/sf/sf.pdf} for acceptable values.
+#' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.
+#' @param transform_crs A numeric or character string which if non-NULL calls sf::st_transform()
+#'   to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.
 #' @param sf_info A logical which if TRUE displays info on the resulting simple feature object.
 #' @param do_progress A logical which if TRUE displays a progress bar during the download.
 #' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
@@ -45,6 +48,7 @@
 #'   The default is to not check the columns for NA values.
 #'
 #' @importFrom sf st_transform
+#' @importFrom sf st_crs
 #' @importFrom sf st_as_sf
 #' @importFrom sf st_read
 #' @importFrom data.table as.data.table
@@ -57,8 +61,10 @@
 tiger_blocks_sf <- function(
   state = NULL,
   output_dir = tempdir(check = T),
+  delete_files = TRUE,
   vintage = 2020,
-  crs_transform = NULL,
+  set_crs = NULL,
+  transform_crs = NULL,
   sf_info = TRUE,
   do_progress = FALSE,
   shapefile = NULL,
@@ -75,9 +81,19 @@ tiger_blocks_sf <- function(
       stop(paste0("Shapefile folder ", shapefile, " does not exists."))
     }
     tiger_sf <- sf::st_read(dsn = shapefile)
-    if(!is.null(crs_transform)){
-      sf::st_transform(tiger_sf, crs = crs_transform)
+
+    if(!is.null(set_crs)){
+      sf::st_crs(tiger_sf) <- set_crs
+
+      tiger_sf <- tiger_sf |>
+        sf::st_transform(set_crs)
     }
+
+    if(!is.null(transform_crs)){
+      tiger_sf <- tiger_sf |>
+        sf::st_transform(transform_crs)
+    }
+
     return(tiger_sf)
   }else {  # Downloading shapefile
     vintage_char <- as.character(vintage)
@@ -103,7 +119,9 @@ tiger_blocks_sf <- function(
     tiger_sf <- .send_tiger_url(
       a_url = a_url,
       output_dir = output_dir,
-      crs_transform = crs_transform,
+      delete_files = delete_files,
+      set_crs = set_crs,
+      transform_crs = transform_crs,
       sf_info = sf_info,
       do_progress = do_progress,
       caller = "tiger_blocks_sf")

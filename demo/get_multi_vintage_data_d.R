@@ -42,11 +42,8 @@ college_by_year_dt <- RcensusPkg::get_multi_vintage_data(
   .[,`:=`(state = NULL, county = NULL)]
 
 # Reshape college_by_year_dt in "long" format.
-college_by_year_long_dt <- RcensusPkg::wide_to_long(
-  dt = college_by_year_dt,
-  id_v = c("NAME","GEOID","vintage"),
-  do_est_moe = TRUE
+college_by_year_long_dt <- data.table::melt(
+  college_by_year_dt,
+  id.vars = c("NAME","GEOID","vintage"),
+  measure.vars = vars
 )
-
-
-

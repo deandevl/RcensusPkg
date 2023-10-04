@@ -17,12 +17,15 @@ los_alamos_fips <- substr(nm_los_alamos_fips, 3, 5)
 # Create an expression to filter just the Los Alamos geometries
 express <- expression(COUNTYFP == "028")
 
+output_dir <- file.path(here(), "demo", "shapefiles")
 # Get the tract geometries for just Los Alamos
 losalamos_tracts_sf <- RcensusPkg::tiger_tracts_sf(
   state = nm_fips,
   general = TRUE,
-  express = express
+  express = express,
+  output_dir = output_dir
 )
+
 
 # Map the Los Alamos County tract geometries
 losalamos_tracts_plot <- RspatialPkg::get_geom_sf(sf = losalamos_tracts_sf)

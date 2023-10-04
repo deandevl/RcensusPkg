@@ -6,12 +6,14 @@
 \usage{
 tiger_block_groups_sf(
   state = NULL,
-  output_dir = NULL,
+  output_dir = tempdir(check = T),
+  delete_files = TRUE,
   vintage = 2020,
   general = FALSE,
   sf_info = TRUE,
   do_progress = FALSE,
-  crs_transform = NULL,
+  set_crs = NULL,
+  transform_crs = NULL,
   shapefile = NULL,
   express = NULL,
   check_na = FALSE
@@ -21,8 +23,11 @@ tiger_block_groups_sf(
 \item{state}{A two-digit FIPS code for the state of interest. This is a required parameter.
 See \href{https://cran.r-project.org/web/packages/usmap/usmap.pdf}{usmap::fips function} for finding FIPS codes.}
 
-\item{output_dir}{A full directory path where the shapefile will be downloaded. This is a required parameter. The function will stop
-if this directory does not exist.  Be aware that all files in this directory are removed before downloading.}
+\item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.
+The default is the directory defined by the value returned by \code{tempdir()}.}
+
+\item{delete_files}{A logical which if TRUE will delete the shapefile and associated files in \code{output_dir}.
+The default is TRUE.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.}
 
@@ -32,8 +37,10 @@ if this directory does not exist.  Be aware that all files in this directory are
 
 \item{do_progress}{A logical which if TRUE displays a progress bar during the download.}
 
-\item{crs_transform}{A numeric or string that if non-NULL transforms the geometries to this coordinate reference system. See
-\href{sf::st_transform()}{https://cran.r-project.org/web/packages/sf/sf.pdf} for acceptable values.}
+\item{set_crs}{A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.}
+
+\item{transform_crs}{A numeric or character string which if non-NULL calls sf::st_transform()
+to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.}
 
 \item{shapefile}{A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.}
 
@@ -52,7 +59,7 @@ A data frame object of class sf, data frame
 \description{
 This function performs three tasks:
 \enumerate{
-\item Download to a temporary directory a zip file from the TIGER/Line Shapefiles database.
+\item Download to an output directory a zip file from the TIGER/Line Shapefiles database.
 \item Unzip the zip file and locate the shape file of interest.
 \item Read and convert the shape file to a simple feature object.
 }

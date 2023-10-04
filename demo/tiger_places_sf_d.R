@@ -8,6 +8,8 @@ library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
+output_dir <- file.path(here(), "demo", "shapefiles")
+
 kentucky_fips <- usmap::fips(state = "Kentucky")
 
 # Filter out some major place geometries for Kentucky
@@ -15,14 +17,16 @@ major_places_express <- expression(NAME %in% c("Bardstown", "Bowling Green", "Lo
 kentucky_places_sf <- RcensusPkg::tiger_places_sf(
   state = kentucky_fips,
   express = major_places_express,
-  general = TRUE
+  general = TRUE,
+  output_dir = output_dir
 )
 
 # Get Kentucky state boundary geometries
 kentucky_express <- expression(STATEFP == "21")
 kentucky_sf <- RcensusPkg::tiger_states_sf(
   general = TRUE,
-  express = kentucky_express
+  express = kentucky_express,
+  output_dir = output_dir
 )
 
 # Map the major places and Kentucky state boundary geometries

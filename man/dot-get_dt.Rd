@@ -41,7 +41,8 @@ An internal function for sending an R based http GET request
 to the US Census Bureau's Census Data API. The function returns a data.table
 with column values based on dataset, vintage, Census variable predicates, and
 geography.
-
+}
+\details{
 See \href{https://www.census.gov/data/developers/guidance.html}{Census Data API User Guide} for
 definitions and examples in running an API query.
 }

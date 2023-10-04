@@ -7,11 +7,24 @@
 #'   issued from the Bureau. Variables of interest can be specified individually or by group/table name.
 #'   Predicate phrases can be specified for filtering the results.
 #'
-#' @param dataset A string that sets the name of the data set of interest (e.g. "acs/acs5").
-#'  See Census Bureau's publicly available
+#' See Census Bureau's publicly available
 #'  \href{https://www.census.gov/data/developers/data-sets.html}{datasets} for
-#'  descriptions. Descriptions/vintages for datasets can also be found by running
-#'  \code{Rcensus::get_dataset_names()}. This is a required parameter.
+#'  dataset descriptions.
+#'
+#' Some of the following Census Bureau datasets are used to demo \code{get_vintage_data} in this package's demo folder:
+#'  \itemize{
+#'    \item\href{https://www.census.gov/data/developers/data-sets/acs-1year.html}{American Community Survey 1-year Data (2005-2021)}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/ACS-supplemental-data.html}{American Community Survey 1-year Supplemental Data}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/acs-5year.html}{American Community Survey 5-Year Data (2009-2021)}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/decennial-census.html}{Decennial Census (2020, 2010, 2000)}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/economic-census.html}{Economic Census (2017, 2012, 2007, 2002)}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html}{Population Estimates and Projections}
+#'    \item\href{https://www.census.gov/data/developers/data-sets/abs.html}{Annual Business Survey (ABS) (2018-2021)}
+#'  }
+#'
+#' @param dataset A string that sets the name of the data set of interest (e.g. "acs/acs5").
+#'  Descriptions/vintages for datasets can be found by running
+#'  \code{RcensusPkg::get_dataset_names()}. This is a required parameter.
 #' @param vintage An optional numeric that sets the vintage of interest. Available vintages
 #'   for a specific dataset can be found by running \code{Rcensus::get_dataset_names()}.
 #' @param vars A string vector of variable names to be acquired.
@@ -25,11 +38,10 @@
 #' @param group An optional string that names an entire group of similar variables to be retrieved.
 #'   For example the group value "B01001" would return values of all variables related to
 #'  "SEX BY AGE". To find available groups submit a dataset and vintage to \code{RcensusPkg::get_groups}.
-#' @param region An optional string that specifies the geography of the request.
-#'   See \href{https://www.census.gov/data/developers/guidance.html}{Census Data API User Guide} for
-#'   specifying this and the \code{regionin} parameter. Not all regions such as counties,
+#' @param region An optional string that specifies the geography of the request. See \href{https://www.census.gov/library/reference/code-lists/ansi.html}{Federal Information Processing Series (FIPS)}
+#'   for a listing of codes for this and the \code{regionin} parameter. Not all regions such as counties,
 #'   blocks, or tracts are available for a specific dataset and vintage. Use
-#'   \code{Rcensus::get_geography()} to check on both \code{region} and \code{regionin}.
+#'   \code{RcensusPkg::get_geography()} to check on both \code{region} and \code{regionin}.
 #' @param regionin A string that sets a qualifier for \code{region}.
 #' @param na_cols If TRUE will remove all rows with missing values. If a
 #'   vector of column names/integers will check only those columns for missing values.
@@ -94,15 +106,6 @@ get_vintage_data <- function(
     dt[, c("pre", "GEOID") := tstrsplit(GEO_ID, "US")]
     dt[,`:=`(pre = NULL, GEO_ID = NULL)]
   }
-
-  if(!is.null(group)){
-    # Get the "long" forms of estimate and moe columns
-    dt <- RcensusPkg::wide_to_long(dt = dt, do_est_moe = T)
-
-    # The -555555555 values in "moe" column need to be defined as NA
-    dt[, moe := ifelse(moe == -555555555, NA, moe)]
-  }
-
 
   if(!is.null(na_cols)){
     if(is.logical(na_cols)){

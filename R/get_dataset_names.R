@@ -3,7 +3,7 @@
 #' Get the acronym names and descriptions of the Census Bureau's datasets.
 #'
 #' Function produces a data.table/dataframe of the
-#'   Census Bureau's dataset acronym names that can be used in other \code{Rcensus::}
+#'   Census Bureau's dataset acronym names that can be used in other \code{RcensusPkg::}
 #'   functions calling for a dataset acronym name. See Census Bureau's publicly available
 #'    \href{https://www.census.gov/data/developers/data-sets.html}{datasets} for
 #'    descriptions.

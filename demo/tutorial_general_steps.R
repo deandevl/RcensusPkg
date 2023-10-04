@@ -67,18 +67,18 @@ data.table::setnames(
 
 # You may notice that the data from the Bureau will be in a "wide" format where each variable's value
 #   will be in a separate column.
-# We will use  RcensusPkg's helper function wide_to_long() to put the returned data.table into
+# We will use data.table::melt() function to put the returned data.table into
 #   a "long" format where we consolidate our computer related values under one column.
-#
-ky_computers_broadband_long_dt <- RcensusPkg::wide_to_long(
-  dt = ky_computers_broadband_dt,
-  measure_v = c("Total", "ComputerUse", "BroadbandUse"),
-  variable_name = "Computer Variable",
-  value_name = "Value"
-)
-ky_computers_broadband_dt <- data.table::melt(ky_computers_broadband_dt, measure.vars = c("Total", "ComputerUse", "BroadbandUse"))
 
-# The result is 90.2% for computers and 87.1% for broadband over 1,748,682 total households.
+ky_computers_broadband_long_dt <- data.table::melt(
+  ky_computers_broadband_dt,
+  id.vars = "NAME",
+  measure.vars = c("Total", "ComputerUse", "BroadbandUse"),
+  variable.name = "Computer Variable",
+  value.name = "Value"
+)
+
+# The result is 92.7% for computers and 87.1% for broadband over 1,785,682 total households.
 # These numbers can be checked by going to https://data.census.gov/all and using the Bureau's
 #   search tool.
 

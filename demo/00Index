@@ -1,9 +1,20 @@
 get_category_strings_d        R code to demo get_category_strings
 get_dataset_names_d           R code to demo get_dataset_names
+get_data_acs_1_year           R code to demo getting ACS 1 year data
+get_data_acs_1_year_supplement  R code to demo getting ACS 1 year supplement
+get_data_acs_5_year           R code to demo getting ACS 5 year data
+get_data_decennial_2000       R code to demo getting Decennial 2000 data
+get_data_decennial_2010       R code to demo getting Decennial 2010 data
+get_data_decennial_2020       R code to demo getting Decennial 2020 data
+get_data_economic             R code to demo getting economic data
+get_data_population_estimates R code to demo getting population estimates
+get_data_cps_asec_poverty     R code to demo getting cps_asc poverty
+get_data_annual_business_survey R code to demo getting annual business survey data
 get_geography_d               R code to demo get_geography
 get_groups_d                  R code to demo get_groups
 get_multi_vintage_data_d      R code to demo get_multi_vintage_data
 get_variable_names_d          R code to demo get_variable_names
+remove_area_water_d           R code to demo remove_area_water
 tiger_block_groups_sf_d       R code to demo tiger_block_groups_sf
 tiger_block_sf_d              R code to demo tiger_block_sf
 tiger_cbsa_sf_d               R code to demo tiger_cbsa_sf
@@ -22,4 +33,4 @@ tutorial_join_data_1          Shows how to join data with sf geometries
 tutorial_join_data_2          Shows how to join data with sf geometries
 tutorial_long_to_wide         Shows how to use long_to_wide function
 tutorial_predicates           Shows how to use predicates
-tutorial_wide_to_long         Shows how to use wide_to_long function
+tutorial_melt                 Shows how to use data.table::melt() function

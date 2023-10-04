@@ -7,7 +7,9 @@
 .send_tiger_url(
   a_url = NULL,
   output_dir = NULL,
-  crs_transform = NULL,
+  delete_files = TRUE,
+  set_crs = NULL,
+  transform_crs = NULL,
   sf_info = TRUE,
   do_progress = FALSE,
   caller = NULL
@@ -18,7 +20,12 @@
 
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.}
 
-\item{crs_transform}{A numeric which if non-NULL calls sf::st_transform()
+\item{delete_files}{A logical which if TRUE will delete the shapefile and associated files in \code{output_dir}.
+The default is TRUE.}
+
+\item{set_crs}{A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries.}
+
+\item{transform_crs}{A numeric or character string which if non-NULL calls sf::st_transform()
 to perform a crs transform of the geometries.}
 
 \item{sf_info}{A logical which if TRUE displays info on the resulting simple feature object.}

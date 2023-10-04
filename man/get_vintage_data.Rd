@@ -19,10 +19,8 @@ get_vintage_data(
 }
 \arguments{
 \item{dataset}{A string that sets the name of the data set of interest (e.g. "acs/acs5").
-See Census Bureau's publicly available
-\href{https://www.census.gov/data/developers/data-sets.html}{datasets} for
-descriptions. Descriptions/vintages for datasets can also be found by running
-\code{Rcensus::get_dataset_names()}. This is a required parameter.}
+Descriptions/vintages for datasets can be found by running
+\code{RcensusPkg::get_dataset_names()}. This is a required parameter.}
 
 \item{vintage}{An optional numeric that sets the vintage of interest. Available vintages
 for a specific dataset can be found by running \code{Rcensus::get_dataset_names()}.}
@@ -42,11 +40,10 @@ start with an ampersand sign.}
 For example the group value "B01001" would return values of all variables related to
 "SEX BY AGE". To find available groups submit a dataset and vintage to \code{RcensusPkg::get_groups}.}
 
-\item{region}{An optional string that specifies the geography of the request.
-See \href{https://www.census.gov/data/developers/guidance.html}{Census Data API User Guide} for
-specifying this and the \code{regionin} parameter. Not all regions such as counties,
+\item{region}{An optional string that specifies the geography of the request. See \href{https://www.census.gov/library/reference/code-lists/ansi.html}{Federal Information Processing Series (FIPS)}
+for a listing of codes for this and the \code{regionin} parameter. Not all regions such as counties,
 blocks, or tracts are available for a specific dataset and vintage. Use
-\code{Rcensus::get_geography()} to check on both \code{region} and \code{regionin}.}
+\code{RcensusPkg::get_geography()} to check on both \code{region} and \code{regionin}.}
 
 \item{regionin}{A string that sets a qualifier for \code{region}.}
 
@@ -70,6 +67,21 @@ in the form of a data.table.
 Function produces a data.table with selected Census Bureau variables as columns. The function requires an access key
 issued from the Bureau. Variables of interest can be specified individually or by group/table name.
 Predicate phrases can be specified for filtering the results.
+
+See Census Bureau's publicly available
+\href{https://www.census.gov/data/developers/data-sets.html}{datasets} for
+dataset descriptions.
+
+Some of the following Census Bureau datasets are used to demo \code{get_vintage_data} in this package's demo folder:
+\itemize{
+\item\href{https://www.census.gov/data/developers/data-sets/acs-1year.html}{American Community Survey 1-year Data (2005-2021)}
+\item\href{https://www.census.gov/data/developers/data-sets/ACS-supplemental-data.html}{American Community Survey 1-year Supplemental Data}
+\item\href{https://www.census.gov/data/developers/data-sets/acs-5year.html}{American Community Survey 5-Year Data (2009-2021)}
+\item\href{https://www.census.gov/data/developers/data-sets/decennial-census.html}{Decennial Census (2020, 2010, 2000)}
+\item\href{https://www.census.gov/data/developers/data-sets/economic-census.html}{Economic Census (2017, 2012, 2007, 2002)}
+\item\href{https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html}{Population Estimates and Projections}
+\item\href{https://www.census.gov/data/developers/data-sets/abs.html}{Annual Business Survey (ABS) (2018-2021)}
+}
 }
 \author{
 Rick Dean

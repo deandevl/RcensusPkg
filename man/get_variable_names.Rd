@@ -9,10 +9,12 @@ get_variable_names(
   vintage = NULL,
   vars = NULL,
   group = NULL,
-  filter_group = TRUE,
+  filter_group_est = FALSE,
   filter_name_str = NULL,
   filter_label_str = NULL,
-  ignore_case = TRUE
+  filter_concept_str = NULL,
+  ignore_case = TRUE,
+  fixed = FALSE
 )
 }
 \arguments{
@@ -26,14 +28,18 @@ See \code{Rcensus::get_dataset_names()} for available dataset names.}
 \item{group}{An optional string that sets the group name associated with a set of variables.
 See \code{Rcensus::get_groups()} for available group names under a specific dataset and vintage.}
 
-\item{filter_group}{A logical which if TRUE will filter the variable names from \code{group} and return
-only estimate and margin of error related variable names. The default is TRUE.}
+\item{filter_group_est}{A logical which if TRUE will filter the variable names from \code{group} and return
+only estimate related variable names. The default is FALSE.}
 
 \item{filter_name_str}{A character string by which to filter the resultant data.table's "name" column.}
 
 \item{filter_label_str}{A character string by which to filter the resultant data.table's "label" column.}
 
-\item{ignore_case}{A logical which if FALSE will not ignore case in filtering the "name" or "label" column.}
+\item{filter_concept_str}{A character string by which to filter the resultant data.table's "concept" column.}
+
+\item{ignore_case}{A logical which if FALSE will not ignore case in filtering the "name", "label", "concept" column.}
+
+\item{fixed}{A logical which if TRUE, then the above filter strings are used 'as is' in matching.}
 }
 \value{
 A data.table

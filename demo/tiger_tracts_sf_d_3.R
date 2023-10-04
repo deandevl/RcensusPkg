@@ -1,53 +1,69 @@
 library(httr)
-library(sf)
 library(here)
+library(sf)
 library(data.table)
 library(magrittr)
 library(usmap)
+library(purrr)
 library(ggplot2)
 library(RspatialPkg)
+library(RplotterPkg)
 library(RcensusPkg)
 
-# Get the fips codes for the state of Texas and its county Tarrant
+years <- c(1990, 2000, 2010, 2020)
+set_crs <- c(4326, 4326, 4326, 4326)
+vars <- c("CO", "COUNTY", "COUNTY", "COUNTYFP")
 tx_tarrant_fips <- usmap::fips(state = "texas", county = "tarrant")
 tx_fips <- substr(tx_tarrant_fips, 1, 2)
 tarrant_fips <- substr(tx_tarrant_fips, 3, 5)
 
-# Download a generalized version of the Texas tracts shapefile
-#   and convert it to a special feature(sf) object.
-# This particular shapefile has NA for its crs, so we will
-#   transform it to crs NAD83 (i.e. crs_transform = 3426).
-# We will also show a progress bar during the download of the shapefile.
+output_dir <- file.path(here(), "demo", "shapefiles")
 
-tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
-  state = tx_fips,
-  vintage = 1990,
-  crs_transform = 3486,
-  general = T,
-  do_progress = T
+build_plot <- function(id, years, set_crs, vars, state_fips, county_fips){
+  tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
+    state = state_fips,
+    vintage = years[[id]],
+    general = T,
+    set_crs = set_crs[[id]],
+    output_dir = output_dir,
+    sf_info = F
+  )
+
+  col_name <- vars[[id]]
+  tarrant_tracts_sf <- data.table::as.data.table(tx_tracts_sf) %>%
+    .[.[[col_name]] == county_fips, ] %>%
+    sf::st_as_sf(.)
+
+  tarrant_tracts_plot <- RspatialPkg::get_geom_sf(
+    sf = tarrant_tracts_sf,
+    subtitle = paste0(years[[id]], ": ", nrow(tarrant_tracts_sf), " tracts"),
+    hide_x_tics = T,
+    hide_y_tics = T
+  )
+  return(tarrant_tracts_plot)
+}
+
+plot_lst <- purrr::map(
+  1:4,
+  build_plot,
+  years = years,
+  set_crs = set_crs,
+  vars = vars,
+  state_fips = tx_fips,
+  county_fips = tarrant_fips
 )
 
-# Get just the tracts for Tarrant County, Texas
-tarrant_cty_tracts_sf <- data.table::as.data.table(tx_tracts_sf) %>%
-  .[CO == tarrant_fips, ] %>%
-  sf::st_as_sf(.)
+names(plot_lst) <- years
 
-# Map the simple feature (sf) object for Tarrant County, Texas tracts
-tarrant_cty_tracts_plot <- RspatialPkg::get_geom_sf(
-  sf = tarrant_cty_tracts_sf,
-  sf_fill = "green"
-)
-tarrant_cty_tracts_plot
-
-# -----------------------Read and convert to a simple feature a downloaded shapefile-------------------------
-downloaded_shapefile_path <- tempdir()
-tx_tracts_downloaded_sf <- RcensusPkg::tiger_tracts_sf(
-  shapefile = downloaded_shapefile_path
+layout <- list(
+  plots = plot_lst,
+  rows = c(1, 1, 2, 2),
+  cols = c(1, 2, 1, 2)
 )
 
-# Map the simple feature
-tx_tracts_downloaded_plot <- RspatialPkg::get_geom_sf(
-  sf = tx_tracts_downloaded_sf,
-  sf_fill = "yellow"
+RplotterPkg::multi_panel_grid(
+  layout = layout,
+  col_widths = c(5, 5),
+  row_heights = c(5, 5)
 )
-tx_tracts_downloaded_plot
+

@@ -5,7 +5,10 @@
 #'
 #' @param a_url A required string that defines the url to be sent in the http GET request.
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
-#' @param crs_transform A numeric which if non-NULL calls sf::st_transform()
+#' @param delete_files A logical which if TRUE will delete the shapefile and associated files in `output_dir`.
+#'   The default is TRUE.
+#' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries.
+#' @param transform_crs A numeric or character string which if non-NULL calls sf::st_transform()
 #'   to perform a crs transform of the geometries.
 #' @param sf_info A logical which if TRUE displays info on the resulting simple feature object.
 #' @param do_progress A logical which if TRUE displays a progress bar during the download.
@@ -25,12 +28,14 @@
 .send_tiger_url <- function(
     a_url = NULL,
     output_dir = NULL,
-    crs_transform = NULL,
+    delete_files = TRUE,
+    set_crs = NULL,
+    transform_crs = NULL,
     sf_info = TRUE,
     do_progress = FALSE,
     caller = NULL
 ) {
-  if(is.null(output_dir)){
+  if(is.null(output_dir) | !file.exists(output_dir)){
     stop(paste0("The ouput directory ", output_dir ," does not exist. Please create this directory."))
   }
 
@@ -59,9 +64,24 @@
   #shape_file_path <- list.files(path = output_dir, full.names = TRUE, recursive = TRUE, pattern = "\\.shp$")
   #tiger_sf <- sf::st_read(dsn = shape_file_path)
   tiger_sf <- sf::st_read(dsn = output_dir, quiet = !sf_info)
-  if(!is.null(crs_transform)){
-    sf::st_crs(tiger_sf) <- crs_transform
-    sf::st_transform(tiger_sf, crs = crs_transform)
+
+  if(!is.null(set_crs)){
+    sf::st_crs(tiger_sf) <- set_crs
+
+    tiger_sf <- tiger_sf |>
+      sf::st_transform(set_crs)
+  }
+
+  if(!is.null(transform_crs)){
+    tiger_sf <- tiger_sf |>
+      sf::st_transform(transform_crs)
+  }
+
+  if(delete_files){
+    # Get all files in the directories, recursively
+    f <- list.files(output_dir, include.dirs = T, full.names = T, recursive = T)
+    # remove the files
+    file.remove(f)
   }
 
   return(tiger_sf)

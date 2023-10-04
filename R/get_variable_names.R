@@ -24,11 +24,13 @@
 #' @param vars An optional vector of variable names whose descriptions are of interest.
 #' @param group An optional string that sets the group name associated with a set of variables.
 #'   See \code{Rcensus::get_groups()} for available group names under a specific dataset and vintage.
-#' @param filter_group A logical which if TRUE will filter the variable names from \code{group} and return
-#'   only estimate and margin of error related variable names. The default is TRUE.
+#' @param filter_group_est A logical which if TRUE will filter the variable names from \code{group} and return
+#'   only estimate related variable names. The default is FALSE.
 #' @param filter_name_str A character string by which to filter the resultant data.table's "name" column.
 #' @param filter_label_str A character string by which to filter the resultant data.table's "label" column.
-#' @param ignore_case A logical which if FALSE will not ignore case in filtering the "name" or "label" column.
+#' @param filter_concept_str A character string by which to filter the resultant data.table's "concept" column.
+#' @param ignore_case A logical which if FALSE will not ignore case in filtering the "name", "label", "concept" column.
+#' @param fixed A logical which if TRUE, then the above filter strings are used 'as is' in matching.
 #'
 #' @import data.table
 #' @import httr
@@ -45,10 +47,12 @@ get_variable_names <- function(
   vintage = NULL,
   vars = NULL,
   group = NULL,
-  filter_group = TRUE,
+  filter_group_est = FALSE,
   filter_name_str = NULL,
   filter_label_str = NULL,
-  ignore_case = TRUE){
+  filter_concept_str = NULL,
+  ignore_case = TRUE,
+  fixed = FALSE){
 
   if(is.null(dataset)){
     stop("A dataset is required for get_variable_names()")
@@ -104,8 +108,8 @@ get_variable_names <- function(
 
   # If variables were derived by group, do we filter their names
   #   to get just estimates and margin of error related variable names
-  if(!is.null(group) & filter_group){
-    dt <- dt[endsWith(name, "E") | endsWith(name, "M"),]
+  if(!is.null(group) & filter_group_est){
+    dt <- dt[endsWith(name, "E"),]
   }
 
   # Order by name
@@ -116,13 +120,15 @@ get_variable_names <- function(
     dt <- dt[name %in% vars,]
   }
 
-  # Filtering of "name" and/or "label" columns?
+  # Filtering of "name" and/or "label", "concept" columns?
   if(!is.null(filter_name_str)){
-    dt <- dt[grepl(filter_name_str, dt$name, ignore.case = ignore_case, fixed = FALSE)]
+    dt <- dt[grepl(filter_name_str, dt$name, ignore.case = ignore_case, fixed = fixed)]
   }
   if(!is.null(filter_label_str)){
-    dt <- dt[grepl(filter_label_str, dt$label, ignore.case = ignore_case, fixed = FALSE)]
+    dt <- dt[grepl(filter_label_str, dt$label, ignore.case = ignore_case, fixed = fixed)]
   }
-
+  if(!is.null(filter_concept_str)){
+    dt <- dt[grepl(filter_concept_str, dt$concept, ignore.case = ignore_case, fixed = fixed)]
+  }
   return(dt)
 }
