@@ -26,6 +26,7 @@ tiger_states_sf_d             R code to demo tiger_states_sf
 tiger_tracts_sf_d_1           R code to demo tiger_tracts_sf
 tiger_tracts_sf_d_2           R code to demo tiger_tracts_sf
 tiger_tracts_sf_d_3           R code to demo tiger_tracts_sf
+tiger_urban_area_sf_d         R code to demo tiger_urban_area_sf
 tiger_water_sf_d              R code to demo tiger_water_sf
 tutorial_general_steps        Gives general steps in accessing Census Bureau API
 tutorial_group_data           Shows how to make group based requests
