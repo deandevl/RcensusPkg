@@ -33,6 +33,7 @@ naics_codes_dt <- RcensusPkg::get_vintage_data(
   region = "us:*"
 )
 
+# -------------------------------------------
 # Get and compare the following computer related expense variables:
 #   "Data processing and other purchased computer services ($1,000)" -- "PCHDAPR"
 #   "Expensed computer hardware and other equipment ($1,000)" -- "PCHCMPQ"

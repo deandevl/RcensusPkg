@@ -7,6 +7,8 @@ library(RspatialPkg)
 library(RplotterPkg)
 library(RcensusPkg)
 
+output_dir <- file.path(here(), "demo", "shapefiles")
+
 # -----------2000 Decennial data--------------------
 # Description of Summary Files 1,2,3,4: https://www.census.gov/data/developers/data-sets/decennial-census.2000.html#list-tab-533552149
 
@@ -39,7 +41,8 @@ household_size_plot <- RplotterPkg::create_bar_plot(
   rot_y_tic_label = T,
   bar_fill = "green",
   order_bars = "desc",
-  bar_labels = T
+  bar_labels = T,
+  x_title = "Percent"
 )
 household_size_plot
 
@@ -68,26 +71,17 @@ foster_total_2000_dt <- RcensusPkg::get_vintage_data(
 
 # Plot the US states showing their respective percentage of households with a foster child among
 #   households with non-relatives.
-output_dir <- file.path(here(), "", "shapefiles")
-foster_percent_sf <- RcensusPkg::tiger_states_sf(
+RcensusPkg::plot_us_data(
+  df = foster_total_2000_dt,
+  states_col = "NAME",
+  value_col = "percent_with_foster",
   output_dir = output_dir,
-  vintage = 2000,
-  datafile = foster_total_2000_dt,
-  datafile_key = "NAME",
-  sf_key = "NAME",
-  general = T,
-  sf_info = F
+  scale_breaks = seq(0,6,1),
+  scale_limits = c(0,6),
+  scale_palette = "YlOrRd",
+  scale_labels = seq(0,6,1),
+  scale_direction = 1
 )
-RspatialPkg::get_geom_sf(
-  sf = foster_percent_sf,
-  aes_fill = "percent_with_foster",
-  hide_x_tics = T,
-  hide_y_tics = T
-) +
-  ggplot2::coord_sf(
-    xlim = c(-179.0, -60.0),
-    ylim = c(15.0, 72.0)
-  )
 
 # Using Summary File 3 ("dec/sf3") get the variable metadata that gives the total
 #  urban and rural counts ("H005002" and "H005005" respectively) and total urban + rural total
@@ -112,26 +106,17 @@ urban_rural_2000_dt <- RcensusPkg::get_vintage_data(
   .[, percent_rural := round(rural/urban_rural * 100, digits = 1)]
 
 # Plot the US states showing their respective percentage of rural households
-output_dir <- file.path(here(), "", "shapefiles")
-rural_percent_sf <- RcensusPkg::tiger_states_sf(
+RcensusPkg::plot_us_data(
+  df = urban_rural_2000_dt,
+  states_col = "NAME",
+  value_col = "percent_rural",
   output_dir = output_dir,
-  vintage = 2000,
-  datafile = urban_rural_2000_dt,
-  datafile_key = "NAME",
-  sf_key = "NAME",
-  general = T,
-  sf_info = F
+  scale_breaks = seq(0,70,10),
+  scale_limits = c(0,70),
+  scale_palette = "Greens",
+  scale_labels = seq(0,70,10),
+  scale_direction = 1
 )
-RspatialPkg::get_geom_sf(
-  sf = rural_percent_sf,
-  aes_fill = "percent_rural",
-  hide_x_tics = T,
-  hide_y_tics = T
-) +
-  ggplot2::coord_sf(
-    xlim = c(-179.0, -60.0),
-    ylim = c(15.0, 72.0)
-  )
 
 # Using Summary File 4 ("dec/sf4") get the variable metadata that gives the counts
 #  of individuals whose income for 1999 was below the poverty level ("PCT148002"),
@@ -158,24 +143,14 @@ poverty_disability_2000_dt <- RcensusPkg::get_vintage_data(
 
 # Plot the US states showing their respective percentage of individuals below the poverty
 #  level with a disability.
-output_dir <- file.path(here(), "", "shapefiles")
-rural_percent_sf <- RcensusPkg::tiger_states_sf(
+RcensusPkg::plot_us_data(
+  df = poverty_disability_2000_dt,
+  states_col = "NAME",
+  value_col = "percent_poverty_with_disability",
   output_dir = output_dir,
-  vintage = 2000,
-  datafile = poverty_disability_2000_dt,
-  datafile_key = "NAME",
-  sf_key = "NAME",
-  general = T,
-  sf_info = F
+  scale_breaks = seq(20,40,5),
+  scale_limits = c(20,40),
+  scale_palette = "OrRd",
+  scale_labels = seq(20,40,5),
+  scale_direction = 1
 )
-RspatialPkg::get_geom_sf(
-  sf = rural_percent_sf,
-  aes_fill = "percent_poverty_with_disability",
-  hide_x_tics = T,
-  hide_y_tics = T
-) +
-  ggplot2::coord_sf(
-    xlim = c(-179.0, -60.0),
-    ylim = c(15.0, 72.0)
-  )
-

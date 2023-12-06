@@ -2,6 +2,7 @@ library(httr)
 library(jsonlite)
 library(data.table)
 library(purrr)
+library(magrittr)
 library(RcensusPkg)
 
 # The following R script shows how to obtain Census Bureau using
@@ -15,7 +16,9 @@ B01001_dt <- RcensusPkg::get_vintage_data(
   dataset = "acs/acs5",
   vintage = 2020,
   group = "B01001",
-  region = "state"
-)
+  region = "state",
+  wide_to_long = TRUE
+) %>%
+  data.table::setorderv(cols = "NAME")
 
 

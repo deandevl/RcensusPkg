@@ -38,6 +38,9 @@
 #' @param group An optional string that names an entire group of similar variables to be retrieved.
 #'   For example the group value "B01001" would return values of all variables related to
 #'  "SEX BY AGE". To find available groups submit a dataset and vintage to \code{RcensusPkg::get_groups}.
+#' @param wide_to_long The returned data.table is normally in a wide format with all the group variables as columns.
+#'   If this logical parameter is TRUE then a long format is returned with group variable names in one column (named "estimate") and
+#'   their respective values in another column (named "value").
 #' @param region An optional string that specifies the geography of the request. See \href{https://www.census.gov/library/reference/code-lists/ansi.html}{Federal Information Processing Series (FIPS)}
 #'   for a listing of codes for this and the \code{regionin} parameter. Not all regions such as counties,
 #'   blocks, or tracts are available for a specific dataset and vintage. Use
@@ -54,6 +57,7 @@
 #' @import data.table
 #' @import httr
 #' @import jsonlite
+#' @importFrom stringr str_ends str_sub
 #'
 #' @return A data.table
 #'
@@ -67,6 +71,7 @@ get_vintage_data <- function(
   NAME_GEOID = TRUE,
   predicates = NULL,
   group = NULL,
+  wide_to_long = FALSE,
   region = NULL,
   regionin = NULL,
   na_cols = NULL,
@@ -115,6 +120,29 @@ get_vintage_data <- function(
     }
   }
 
+  if(!is.null(group) & wide_to_long){
+    long_dt <- data.table::melt(
+      data = dt,
+      id.vars = c("NAME","GEOID")
+    )
+
+    E_M_dt <- long_dt[stringr::str_ends(long_dt$variable,"E") | stringr::str_ends(long_dt$variable,"M"),]
+    if(nrow(E_M_dt) == 0){
+      return(long_dt)
+    }else {
+      E_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "E",]
+      M_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "M",]
+
+      return_dt <- data.table(
+        NAME = E_dt$NAME,
+        GEOID = E_dt$GEOID,
+        variable = stringr::str_remove(E_dt$variable,"E"),
+        estimate = E_dt$value,
+        moe = M_dt$value
+      )
+      return(return_dt)
+    }
+  }
   return(dt)
 }
 

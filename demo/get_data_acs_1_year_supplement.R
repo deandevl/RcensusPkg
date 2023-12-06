@@ -16,7 +16,7 @@ marital_status_names_dt <- RcensusPkg::get_variable_names(
   filter_group_est = T,
   vintage = 2021
 ) %>%
- .[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
+.[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
 
 marital_status_names_dt$label[[1]] <- "Total"
 
@@ -26,13 +26,14 @@ marital_status_dt <- RcensusPkg::get_vintage_data(
   dataset = "acs/acsse",
   vintage = 2021,
   group = "K201001",
-  region = "US:*"
+  region = "US:*",
+  wide_to_long = TRUE
 ) %>%
-  data.table::melt(id.v = "NAME", measure.vars = marital_status_names_dt$name) %>%
- .[, .(value = as.numeric(value))] %>%
- .[, `:=`(Label = marital_status_names_dt$label, Percent = round(value/value[1] * 100, digits = 1))] %>%
+ .[, .(estimate = as.numeric(estimate))] %>%
+ .[, `:=`(Label = marital_status_names_dt$label, Percent = round(estimate/estimate[1] * 100, digits = 1))] %>%
  .[Label != "Total"] %>%
- .[, Label := factor(Label, levels = marital_status_names_dt$label[2:6])]
+ .[, Label := factor(Label, levels = marital_status_names_dt$label[2:6])] %>%
+  na.omit(.)
 
 # Create a bar plot of the US marital status
 marital_status_plot <- RplotterPkg::create_bar_plot(
@@ -45,6 +46,7 @@ marital_status_plot <- RplotterPkg::create_bar_plot(
   order_bars = "desc",
   bar_labels = T,
   bar_fill = "green",
-  bar_alpha = 0.7
+  bar_alpha = 0.7,
+  x_title = "Percent"
 )
 marital_status_plot

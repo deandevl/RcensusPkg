@@ -27,7 +27,6 @@ ny_tracts_sf <- RcensusPkg::tiger_tracts_sf(
 ny_tracts_plot <- RspatialPkg::get_geom_sf(
   sf = ny_tracts_sf,
   sf_fill = "green",
-  subtitle = "with water",
   hide_x_tics = T,
   hide_y_tics = T
 )
@@ -37,7 +36,6 @@ ny_tracts_without_water_sf <- RcensusPkg::remove_area_water(ny_tracts_sf, output
 ny_tracts_without_water_plot <- RspatialPkg::get_geom_sf(
   sf = ny_tracts_without_water_sf,
   sf_fill = "blue",
-  subtitle = "without water",
   hide_x_tics = T,
   hide_y_tics = T
 )
@@ -48,8 +46,8 @@ layout <- list(
   cols = c(1, 2)
 )
 
-ny_tracts_multi_plot <- RplotterPkg::multi_panel_grid(
+RplotterPkg::multi_panel_grid(
   layout = layout,
-  col_widths = c(8,8),
-  row_heights = 8
+  title = "New York with/without Water",
+  plot_titles = c("With water","Without water")
 )

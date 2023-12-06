@@ -26,11 +26,11 @@ sex_by_age_dt <- RcensusPkg::get_vintage_data(
   dataset = "acs/acs1",
   vintage = 2021,
   group = "B01001",
-  region = "us:1"
+  region = "us:1",
+  wide_to_long = TRUE
 ) %>%
- data.table::melt(id.vars = "NAME", measure.vars = sex_by_age_names_dt$name) %>%
- .[, .(variable, value = as.numeric(value))] %>%
- .[, `:=`(label = sex_by_age_names_dt$label, percent = round(value/value[1] * 100, digits = 1))]
+ .[, .(variable, estimate = as.numeric(estimate))] %>%
+ .[, `:=`(label = sex_by_age_names_dt$label, percent = round(estimate/estimate[1] * 100, digits = 1))]
 
 # Divide the datatable sex_by_age_dt into male and female datatables, modify their "Label" columns, and add a "sex" column
 male_dt <- sex_by_age_dt[grepl("Male", sex_by_age_dt$label, fixed = T),][2:24] %>%

@@ -37,7 +37,7 @@
 #' @param delete_files A logical which if TRUE will delete the shapefile and associated files in `output_dir`.
 #'   The default is TRUE.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
-#' @param general A logical which if TRUE will download a less detailed, more gerneralized version of the state geometries.
+#' @param general A logical which if TRUE will download a less detailed, more generalized version of the state geometries.
 #' @param resol If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
 #'   "500k", "5m", "20m".
 #' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.

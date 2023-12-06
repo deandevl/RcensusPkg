@@ -31,7 +31,7 @@ The default is TRUE.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.}
 
-\item{general}{A logical which if TRUE will download a less detailed, more gerneralized version of the state geometries.}
+\item{general}{A logical which if TRUE will download a less detailed, more generalized version of the state geometries.}
 
 \item{resol}{If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
 "500k", "5m", "20m".}

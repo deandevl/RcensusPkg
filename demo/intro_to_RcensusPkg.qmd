@@ -19,7 +19,6 @@ format:
     fig-align: "center"
     fig-cap-location: "bottom"
     css: style.css
-    minimal: true
     link-external-newwindow: true
     abstract-title: "Abstract"
     abstract: "Accessing the US Census Bureau's database of survey data and map geometries via their API can be a challenge. The R package RcensusPkg can help by providing specific functions for checking on the availability of geographies, variables, datasets, and dates. In addition, the package provides easy access to the Bureau's extensive Tiger Line map geometries and for joining the maps with Census Bureau survey data.  This paper presents a basic step-by-step demonstration of how RcensusPkg could be applied to investigate computer and broadband presence from an earlier time to the present across the states. A series of 'task' are presented to illustrate how to download the data, download the state geometries, join data with the map and finally present the results.  The companion package RspatialPkg is a ggplot2 based R package that creates and maps the visualizations. As the investigator gains more knowledge of his/her subject, not all of the steps outlined here will be required.  We are starting from ground zero with this demonstration where we know little about the availability of Census Bureau data or how to access it and put it together. RcensusPkg is available from GitHub at [deandevl](https://github.com/deandevl/RcensusPkg). There are many additional demonstrations on the package at the repository. In the `demo` folder each function is demonstrated for downloading data and sf geometries along with R script tutorials. Also [R_Analysis_of_US_Census_Data](https://github.com/deandevl/R_Analysis_of_US_Census_Data) contains R script that uses RcensusPkg to follow Kyle Walker's book [Analyzing US Census Data: Methods, Maps, and Models in R](https://walker-data.com/census-r/index.html)."
@@ -40,8 +39,8 @@ library(purrr)
 library(sf)
 library(ggplot2)
 library(RColorBrewer)
-library(here)
 library(magrittr)
+library(here)
 library(RspatialPkg)
 library(RplotterPkg)
 library(RcensusPkg)
@@ -251,132 +250,59 @@ acs1_computers_data_2021_dt <- acs1_computers_data_2021_dt %>%
            BroadbandPresent = as.numeric(BroadbandPresent))]    
 ```
 
-## Download the boundary geometries for US states and join with the 2013 and 2021 computer present data
+## Map the "ComputerPresent" variable across the states for both years 2013 and 2021
 
-Our goal here is to join the boundary geometries by state with the above survey data which is also by state. We can get state boundary data by using `RcensusPkg::tiger_states_sf()`.
+Use *RcensusPkg::plot_us_data()* to do the mapping.
 
-::: task
-Join the 2013 and 2021 computer present data with state geometries.
-:::
-
-Some preliminaries: Note that an existing local folder must be specified to receive all downloaded Census Tiger related shapefiles. We will use the default directory given by `tempdir()`. Also when requesting geometries we can define an "express" parameter to limit the request with a logical expression. 
+Define an output directory for the downloading of shapefiles from the Census Bureau:
 ```{r}
-express <- expression(State != "Alaska" & State != "Hawaii")
+output_dir <- file.path(here(), "demo", "shapefiles")
 ```
 
-A data.frame with data and state boundaries for 2013 joined:
-
+From the `acs1_computers_data_2013_dt` dataframe map "ComputerPresent" for 2013:
 ```{r}
-state_boundaries_2013_sf <- RcensusPkg::tiger_states_sf(
-  general = TRUE,
-  express = express,
-  datafile = acs1_computers_data_2013_dt,
-  datafile_key = "GEOID",
-  sf_key = "STATEFP",
-  check_na = TRUE,
-  sf_info = FALSE
+computers_2013_lst <- RcensusPkg::plot_us_data(
+  df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+  states_col = "State",
+  value_col = "ComputerPresent",
+  output_dir = output_dir,
+  scale_breaks = seq(70,100,5),
+  scale_labels = seq(70,100,5),
+  scale_limits = c(70,100),
+  scale_palette = "GnBu",
+  display_plot = FALSE,
+  show_legend = FALSE
 )
 ```
 
-A data.frame with data and state boundaries for 2021 joined:
-
+From the `acs1_computers_data_2021_dt` dataframe map "ComputerPresent" for 2021:
 ```{r}
-state_boundaries_2021_sf <- RcensusPkg::tiger_states_sf(
-  general = TRUE,
-  express = express,
-  datafile = acs1_computers_data_2021_dt,
-  datafile_key = "GEOID",
-  sf_key = "STATEFP",
-  check_na = TRUE,
-  sf_info = FALSE
+computers_2021_lst <- RcensusPkg::plot_us_data(
+  df = acs1_computers_data_2021_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+  states_col = "State",
+  value_col = "ComputerPresent",
+  output_dir = output_dir,
+  scale_breaks = seq(70,100,5),
+  scale_labels = seq(70,100,5),
+  scale_limits = c(70,100),
+  scale_palette = "GnBu",
+  display_plot = FALSE
 )
-```
-
-## Map the "ComputerPresent"/"BroadbandPresent" columns as a fill aesthetic for the state MULTIPOLYGON's
-
-We can show a visual map of the state geometries by using `RspatialPkg::get_geom_sf()`.
-
-Map the states "ComputerPresent" data column for 2013:
-
-```{r}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-cap: |
-#|   Figure 1.1: Percent of Computers Present in 2013
-
-computers_present_2013_plot <- RspatialPkg::get_geom_sf(
-  sf = state_boundaries_2013_sf,
-  aes_fill = "ComputerPresent",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE,
-) +
-ggplot2::scale_fill_gradientn(
-  colors = RColorBrewer::brewer.pal(n = 9, name = "Greens"),
-  breaks = seq(from = 60, to = 100, by = 5),
-  limits = c(60, 100)
-) 
-computers_present_2013_plot
-```
-
-Map the states "ComputerPresent" data column for 2021:
-
-```{r}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-cap: |
-#|   Figure 1.2: Percent of Computers Present in 2021
-
-computers_present_2021_plot <- RspatialPkg::get_geom_sf(
-  sf = state_boundaries_2021_sf,
-  aes_fill = "ComputerPresent",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE
-) +
-ggplot2::scale_fill_gradientn(
-  colors = RColorBrewer::brewer.pal(n = 9, name = "Greens"),
-  breaks = seq(from = 60, to = 100, by = 5),
-  limits = c(60, 100)
-) 
-computers_present_2021_plot
 ```
 
 ## Arrange the two plots for easier comparison:
 
 ```{r}
 #| code-fold: true
-#| fig-width: 8
-#| fig-height: 6.5
+#| fig-width: 12
+#| fig-height: 10
 #| fig-cap: |
 #|   Figure 1.3: Percent of Computers Present in 2013/2021
 
-computers_present_2013_compare_plot <- RspatialPkg::get_geom_sf(
-  sf = state_boundaries_2013_sf,
-  aes_fill = "ComputerPresent",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE,
-  legend_pos = "top",
-  legend_key_width = 1.4
-) +
-ggplot2::scale_fill_gradientn(
-  colors = RColorBrewer::brewer.pal(n = 9, name = "Greens"),
-  breaks = seq(from = 60, to = 100, by = 5),
-  limits = c(60, 100)
-) 
-
-computers_present_2021_compare_plot <- RspatialPkg::get_geom_sf(
-  sf = state_boundaries_2021_sf,
-  aes_fill = "ComputerPresent",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE,
-  show_legend = FALSE
-) +
-ggplot2::scale_fill_gradientn(
-  colors = RColorBrewer::brewer.pal(n = 9, name = "Greens"),
-  breaks = seq(from = 60, to = 100, by = 5),
-  limits = c(60, 100)
-) 
-
-plot_lst <- list(computers_present_2013_compare_plot, computers_present_2021_compare_plot)
+plot_lst <- list(
+  computers_2013_lst$us_states, 
+  computers_2021_lst$us_states
+)
 
 layout <- list(
   plots = plot_lst,
@@ -386,8 +312,9 @@ layout <- list(
 
 RplotterPkg::multi_panel_grid(
   layout = layout,
-  col_widths = 12,
-  row_heights = c(9.5,8)
+  cell_width = 15,
+  cell_height = 9,
+  plot_titles = c("Year: 2013","Year:2021")
 )
 ```
 

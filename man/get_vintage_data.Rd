@@ -11,6 +11,7 @@ get_vintage_data(
   NAME_GEOID = TRUE,
   predicates = NULL,
   group = NULL,
+  wide_to_long = FALSE,
   region = NULL,
   regionin = NULL,
   na_cols = NULL,
@@ -39,6 +40,10 @@ start with an ampersand sign.}
 \item{group}{An optional string that names an entire group of similar variables to be retrieved.
 For example the group value "B01001" would return values of all variables related to
 "SEX BY AGE". To find available groups submit a dataset and vintage to \code{RcensusPkg::get_groups}.}
+
+\item{wide_to_long}{The returned data.table is normally in a wide format with all the group variables as columns.
+If this logical parameter is TRUE then a long format is returned with group variable names in one column (named "estimate") and
+their respective values in another column (named "value").}
 
 \item{region}{An optional string that specifies the geography of the request. See \href{https://www.census.gov/library/reference/code-lists/ansi.html}{Federal Information Processing Series (FIPS)}
 for a listing of codes for this and the \code{regionin} parameter. Not all regions such as counties,

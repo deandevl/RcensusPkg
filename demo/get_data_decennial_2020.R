@@ -34,14 +34,14 @@ get_household_size_count <- function(county_fips){
   dataset = "dec/dhc",
   vintage = 2020,
   group = "H12I",
+  wide_to_long = T,
   region = paste0("county:", county_fips),
   regionin = paste0("state:", ohio_fips),
 ) %>%
-  data.table::melt(id.vars = "NAME") %>%
-  na.omit() %>%
-  .[2:9, .(NAME, variable, value = as.numeric(value))] %>%
-  .[, `:=`(label =  household_size_vars_dt$label, percent = round(value/value[[1]],digits = 2))] %>%
-  .[2:8]
+ na.omit() %>%
+ .[2:9, .(NAME, variable, value = as.numeric(value))] %>%
+ .[, `:=`(label =  household_size_vars_dt$label, percent = round(value/value[[1]],digits = 2))] %>%
+ .[2:8]
 
   return(county_household_size_count_dt)
 }

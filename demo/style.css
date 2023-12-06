@@ -12,7 +12,6 @@ h4 {
 }
 
 .fullcontent {
-  font-weight: bolder;
   font-size: 11px;
   font-family: Verdana;
 }
@@ -41,8 +40,7 @@ caption {
 }
 
 .task {
-  font-size: 12pt;
-  font-weight: bold;
+  font-size: 10pt;
   color: #964B00;
 }
 

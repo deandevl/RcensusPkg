@@ -63,7 +63,7 @@ layout <- list(
 
 RplotterPkg::multi_panel_grid(
   layout = layout,
-  col_widths = c(5, 5),
-  row_heights = c(5, 5)
+  title = "Tract Changes for Tarrant Cty, Texas",
+  plot_titles = c("Year: 1990","Year: 2000","Year: 2010","Year: 2020")
 )
 
