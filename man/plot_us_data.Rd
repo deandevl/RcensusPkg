@@ -21,14 +21,14 @@ plot_us_data(
   hide_y_tics = TRUE,
   show_legend = TRUE,
   legend_pos = "right",
-  check_na = FALSE,
-  scale_breaks = NULL,
+  na_rm = FALSE,
+  scale_breaks = waiver(),
   scale_values = NULL,
   scale_limits = NULL,
   scale_labels = NULL,
-  scale_palette = 1,
-  scale_direction = -1,
+  scale_colors = heat.colors(8),
   scale_na_value = "gray50",
+  own_scale = FALSE,
   sf_color = "black",
   sf_fill = "gray",
   sf_linewidth = 0.1,
@@ -76,8 +76,8 @@ The default is the directory defined by the value returned by \code{tempdir()}.}
 \item{legend_pos}{A string that sets the legend position. Acceptable values are "right",
 "top", "bottom".}
 
-\item{check_na}{A logical which if TRUE will remove rows that have missing values for any of the columns.
-The default is to not check the columns for NA values.}
+\item{na_rm}{A logical which if TRUE, missing observations are removed. If FALSE, the default,
+missing observations are removed with a warning.}
 
 \item{scale_breaks}{A string/numeric vector that defines the scale breaks. This is a required parameter.}
 
@@ -89,12 +89,12 @@ and is a vector string of colors.}
 \item{scale_labels}{An optional string vector that defines the scale labels. Vector must be the same length
 as \code{scale_breaks}.}
 
-\item{scale_palette}{If a string, will use that named palette for continuous values. If a number, will index into a colorbrewer type list of
-\code{sequential, diverging, qualitative}. See ggplot2::scale_fill_distiller() for more information.}
-
-\item{scale_direction}{Sets the order of colors in the scale. If -1, the order is reversed.}
+\item{scale_colors}{Vector of colors to use for n-color gradient.}
 
 \item{scale_na_value}{A string that sets the color for missing values.}
+
+\item{own_scale}{A logical which if TRUE, then your own scaling may be appended to the plot without using the above
+scale_* parameters.}
 
 \item{sf_color}{A string that sets the polygon border line color.}
 

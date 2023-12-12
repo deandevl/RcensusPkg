@@ -20,6 +20,7 @@ tiger_block_groups_sf_d       R code to demo tiger_block_groups_sf
 tiger_block_sf_d              R code to demo tiger_block_sf
 tiger_cbsa_sf_d               R code to demo tiger_cbsa_sf
 tiger_counties_sf_d           R code to demo tiger_counties_sf
+tiger_county_subsection_sf_d  R code to demo tiger_county_subsection_sf_d
 tiger_landmarks_sf_d          R code to demo tiger_landmarks_sf
 tiger_places_sf_d             R code to demo tiger_places_sf
 tiger_roads_sf_d              R code to demo tiger_roads_sf

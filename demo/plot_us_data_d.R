@@ -1,9 +1,9 @@
 library(sf)
 library(here)
-library(cowplot)
 library(magrittr)
 library(ggplot2)
 library(ggplotify)
+library(RColorBrewer)
 library(RspatialPkg)
 library(RplotterPkg)
 library(RcensusPkg)
@@ -31,10 +31,7 @@ us_plot_lst <- RcensusPkg::plot_us_data(
   value_col = "median_age",
   output_dir = output_dir,
   scale_breaks = seq(30,50,5),
-  scale_direction = 1,
-  scale_palette = "RdPu",
   scale_limits = c(30,50),
-  #scale_palette = 1, # an optional palette value for continuous variables
   scale_labels = c("Age:30","Age:35","Age:40","Age:45","Age:50"),
   display_plot = F
 )
@@ -128,7 +125,7 @@ computers_2013_lst <- RcensusPkg::plot_us_data(
   scale_breaks = seq(70,100,5),
   scale_labels = seq(70,100,5),
   scale_limits = c(70,100),
-  scale_palette = "GnBu",
+  scale_colors = RColorBrewer::brewer.pal(8, "GnBu"),
   display_plot = FALSE
 )
 computers_2021_lst <- RcensusPkg::plot_us_data(
@@ -139,7 +136,7 @@ computers_2021_lst <- RcensusPkg::plot_us_data(
   scale_breaks = seq(70,100,5),
   scale_labels = seq(70,100,5),
   scale_limits = c(70,100),
-  scale_palette = "GnBu",
+  scale_colors = RColorBrewer::brewer.pal(8, "GnBu"),
   display_plot = FALSE
 )
 
@@ -155,5 +152,7 @@ layout <- list(
 RplotterPkg::multi_panel_grid(
   layout = layout,
   title = "Computers Present Across the US 2013/2021",
-  plot_titles = c("Year: 2013", "Year: 2021")
+  plot_titles = c("Year: 2013", "Year: 2021"),
+  cell_width = 16,
+  cell_height = 10
 )

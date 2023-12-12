@@ -35,18 +35,18 @@
 #' @param show_legend A logical that controls the appearance of the legend.
 #' @param legend_pos A string that sets the legend position. Acceptable values are "right",
 #'  "top", "bottom".
-#' @param check_na A logical which if TRUE will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.
+#' @param na_rm A logical which if TRUE, missing observations are removed. If FALSE, the default,
+#'   missing observations are removed with a warning.
 #' @param scale_breaks A string/numeric vector that defines the scale breaks. This is a required parameter.
 #' @param scale_values A string/numeric vector that defines the possible values. For factor values, this is required
 #'   and is a vector string of colors.
 #' @param scale_limits A string/numeric vector that defines the scale limits.
 #' @param scale_labels An optional string vector that defines the scale labels. Vector must be the same length
 #' as \code{scale_breaks}.
-#' @param scale_palette If a string, will use that named palette for continuous values. If a number, will index into a colorbrewer type list of
-#'   \code{sequential, diverging, qualitative}. See ggplot2::scale_fill_distiller() for more information.
-#' @param scale_direction Sets the order of colors in the scale. If -1, the order is reversed.
+#' @param scale_colors Vector of colors to use for n-color gradient.
 #' @param scale_na_value A string that sets the color for missing values.
+#' @param own_scale A logical which if TRUE, then your own scaling may be appended to the plot without using the above
+#'   scale_* parameters.
 #' @param sf_color A string that sets the polygon border line color.
 #' @param sf_fill A string that sets the polygon area fill color.
 #' @param sf_linewidth A numeric that sets the border line thickness.
@@ -95,14 +95,14 @@ plot_us_data <- function(
   hide_y_tics = TRUE,
   show_legend = TRUE,
   legend_pos = "right",
-  check_na = FALSE,
-  scale_breaks = NULL,
+  na_rm = FALSE,
+  scale_breaks = waiver(),
   scale_values = NULL,
   scale_limits = NULL,
   scale_labels = NULL,
-  scale_palette = 1,
-  scale_direction = -1,
+  scale_colors = heat.colors(8),
   scale_na_value = "gray50",
+  own_scale = FALSE,
   sf_color = "black",
   sf_fill = "gray",
   sf_linewidth = 0.1,
@@ -173,6 +173,13 @@ plot_us_data <- function(
     sf_fill = sf_fill,
     sf_linewidth = sf_linewidth,
     sf_alpha = sf_alpha,
+    scale_breaks = scale_breaks,
+    scale_values = scale_values,
+    scale_limits = scale_limits,
+    scale_labels = scale_labels,
+    scale_colors = scale_colors,
+    scale_na_value = scale_na_value,
+    own_scale = own_scale,
     show_legend = show_legend,
     legend_pos = legend_pos
   ) + theme(
@@ -181,33 +188,6 @@ plot_us_data <- function(
     plot.margin = unit(rep(0.1,4),"cm")
   )
 
-  # Perform scaling
-  if(is.factor(states_lower_48_sf[[value_col]])){
-    if(is.null(scale_values)){
-      stop("For factor values, 'scale_values' must be provided.")
-    }
-
-    states_plot = states_plot +
-      scale_fill_manual(
-        breaks = scale_breaks,
-        values = scale_values,
-        limits = scale_limits,
-        labels = scale_labels,
-        na.value = scale_na_value
-      )
-  }else{
-    states_plot = states_plot +
-      scale_fill_distiller(
-        palette = scale_palette,
-        direction = scale_direction,
-        breaks = scale_breaks,
-        n.breaks = length(scale_breaks),
-        values = scale_values,
-        limits = scale_limits,
-        labels = scale_labels,
-        na.value = scale_na_value
-      )
-  }
   return_lst[["us_states"]] = states_plot
 
   # Convert ggplot2 object to grob
@@ -234,6 +214,13 @@ plot_us_data <- function(
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
       sf_alpha = sf_alpha,
+      scale_breaks = scale_breaks,
+      scale_values = scale_values,
+      scale_limits = scale_limits,
+      scale_labels = scale_labels,
+      scale_colors = scale_colors,
+      scale_na_value = scale_na_value,
+      own_scale = own_scale,
       show_legend = F
     ) + theme(
       panel.border = element_blank(),
@@ -241,30 +228,7 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    if(is.factor(states_lower_48_sf[[value_col]])){
-      alaska_plot = alaska_plot +
-        scale_fill_manual(
-          breaks = scale_breaks,
-          values = scale_values,
-          limits = scale_limits,
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }else{
-      alaska_plot = alaska_plot +
-        scale_fill_distiller(
-          palette = scale_palette,
-          direction = scale_direction,
-          breaks = scale_breaks,
-          n.breaks = length(scale_breaks),
-          values = scale_values,
-          limits = c(min(scale_breaks),max(scale_breaks)),
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }
-
-    return_lst[["alaska"]] = alaska_plot
+    return_lst[["alaska"]] <- alaska_plot
     alaska_grob <- ggplot2::ggplotGrob(alaska_plot)
   }
 
@@ -288,6 +252,13 @@ plot_us_data <- function(
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
       sf_alpha = sf_alpha,
+      scale_breaks = scale_breaks,
+      scale_values = scale_values,
+      scale_limits = scale_limits,
+      scale_labels = scale_labels,
+      scale_colors = scale_colors,
+      scale_na_value = scale_na_value,
+      own_scale = own_scale,
       show_legend = F
     ) + theme(
       panel.border = element_blank(),
@@ -295,28 +266,6 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    if(is.factor(states_lower_48_sf[[value_col]])){
-      hawaii_plot = hawaii_plot +
-        scale_fill_manual(
-          breaks = scale_breaks,
-          values = scale_values,
-          limits = scale_limits,
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }else{
-      hawaii_plot = hawaii_plot +
-        scale_fill_distiller(
-          palette = scale_palette,
-          direction = scale_direction,
-          breaks = scale_breaks,
-          n.breaks = length(scale_breaks),
-          values = scale_values,
-          limits = c(min(scale_breaks),max(scale_breaks)),
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }
     return_lst[["hawaii"]] = hawaii_plot
     hawaii_grob <- ggplot2::ggplotGrob(hawaii_plot)
   }
@@ -340,6 +289,13 @@ plot_us_data <- function(
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
       sf_alpha = sf_alpha,
+      scale_breaks = scale_breaks,
+      scale_values = scale_values,
+      scale_limits = scale_limits,
+      scale_labels = scale_labels,
+      scale_colors = scale_colors,
+      scale_na_value = scale_na_value,
+      own_scale = own_scale,
       show_legend = F
     ) + theme(
       panel.border = element_blank(),
@@ -347,28 +303,6 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    if(is.factor(states_lower_48_sf[[value_col]])){
-      puerto_plot = puerto_plot +
-        scale_fill_manual(
-          breaks = scale_breaks,
-          values = scale_values,
-          limits = scale_limits,
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }else{
-      puerto_plot = puerto_plot +
-        scale_fill_distiller(
-          palette = scale_palette,
-          direction = scale_direction,
-          breaks = scale_breaks,
-          n.breaks = length(scale_breaks),
-          values = scale_values,
-          limits = c(min(scale_breaks),max(scale_breaks)),
-          labels = scale_labels,
-          na.value = scale_na_value
-        )
-    }
     return_lst[["puerto_rico"]] = puerto_plot
     puerto_grob <- ggplot2::ggplotGrob(puerto_plot)
   }
