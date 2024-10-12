@@ -21,7 +21,7 @@
 #' @import httr
 #' @import jsonlite
 #'
-#' @return A data.table
+#' @return A list with a data.table of dataset names and a vector of unique vintages.
 #'
 #' @author Rick Dean
 #'
@@ -73,13 +73,22 @@ get_dataset_names <- function(
   }
 
   if(!is.null(filter_name_str)){
-    datasets_dt <- datasets_dt[grepl(filter_name_str, datasets_dt$name, ignore.case = ignore_case, fixed = FALSE)]
+    if(nchar(filter_name_str) != 0){
+      datasets_dt <- datasets_dt[grepl(filter_name_str, datasets_dt$name, ignore.case = ignore_case, fixed = FALSE)]
+    }
   }
-  if(!is.null(filter_title_str)){
-    datasets_dt <- datasets_dt[grepl(filter_title_str, datasets_dt$title, ignore.case = ignore_case, fixed = FALSE)]
+  if(!is.null(filter_title_str)) {
+    if(nchar(filter_title_str) != 0){
+      datasets_dt <- datasets_dt[grepl(filter_title_str, datasets_dt$title, ignore.case = ignore_case, fixed = FALSE)]
+    }
   }
 
   data.table::setorderv(datasets_dt, cols = c("name", "vintage"))
 
-  return(datasets_dt)
+  return(
+    list(
+      data = datasets_dt,
+      vintages = unique(datasets_dt$vintage)
+    )
+  )
 }

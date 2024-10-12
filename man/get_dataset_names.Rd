@@ -27,7 +27,7 @@ get_dataset_names(
 "name", "vintage", "title". The default is TRUE.}
 }
 \value{
-A data.table
+A list with a data.table of dataset names and a vector of unique vintages.
 }
 \description{
 Get the acronym names and descriptions of the Census Bureau's datasets.

@@ -16,19 +16,19 @@ sex_by_age_names_dt <- RcensusPkg::get_variable_names(
   group = "B01001",
   filter_group_est = T
 ) %>%
-  .[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
+ .[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
 
 sex_by_age_names_dt$label[[1]] <- "Total"
 
 # Get count estimates for all 49 of the group variables in US for 2021
 #  and add a percentage column.
-sex_by_age_dt <- RcensusPkg::get_vintage_data(
+sex_by_age_wide_dt <- RcensusPkg::get_vintage_data(
   dataset = "acs/acs1",
   vintage = 2021,
   group = "B01001",
   region = "us:1",
   wide_to_long = TRUE
-) %>%
+)
  .[, .(variable, estimate = as.numeric(estimate))] %>%
  .[, `:=`(label = sex_by_age_names_dt$label, percent = round(estimate/estimate[1] * 100, digits = 1))]
 

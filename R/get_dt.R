@@ -66,7 +66,6 @@
   a_url <- paste0(a_url, "&key=", key)
 
   url_coded <- URLencode(a_url)
-
   resp <- httr::GET(url = url_coded)
 
   # Check the response as valid JSON

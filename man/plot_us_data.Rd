@@ -9,6 +9,7 @@ plot_us_data(
   states_col = NULL,
   value_col = NULL,
   title = NULL,
+  title_fontsz = 14,
   text_col = NULL,
   text_size = 3,
   text_color = "black",
@@ -25,7 +26,7 @@ plot_us_data(
   scale_breaks = waiver(),
   scale_values = NULL,
   scale_limits = NULL,
-  scale_labels = NULL,
+  scale_labels = waiver(),
   scale_colors = heat.colors(8),
   scale_na_value = "gray50",
   own_scale = FALSE,
@@ -38,7 +39,7 @@ plot_us_data(
 }
 \arguments{
 \item{df}{The data frame with a column of full state names and a second variable column of their respective values.
-The column name for the states must be "NAME".}
+The column name for the states must be "NAME". If NULL, then only the state simple feature geometries are returned.}
 
 \item{states_col}{A string that sets the column name from \code{df} containing the state names of interest. These are
 full state names, either capitalized or lower case. This is a required parameter.}
@@ -47,6 +48,8 @@ full state names, either capitalized or lower case. This is a required parameter
 If the column has discrete values then it must be a factor. This is a required parameter.}
 
 \item{title}{A string that sets the plot title.}
+
+\item{title_fontsz}{A numeric that sets the title's font size. The default is 14.}
 
 \item{text_col}{An optional string that sets the column name from \code{df} for labelling each state polygon.}
 
@@ -115,13 +118,11 @@ geom_sf plots of the lower 48 ("lower_48"), Alaska ("alaska"), Hawaii ("hawaii")
 \description{
 This function produces a ggplot2 based choropleth map of a discrete/continuous variable across all/selected US states
 including viewable placement of Alaska, Hawaii, and Puerto Rico.  The function accepts a data frame with a column of
-state names and a column with their respective values.  The function offers several options for
-control of state geographies and variable legend.
+state names and a column with their respective values.  If the data frame (parameter \emph{df}) is submitted as NULL then only the simple
+feature state geometries are returned for mapping. The function offers several options for
+control/selection of state geographies and variable scaling.
 }
 \details{
-Because scaling is done manually, "scale_breaks" is a required parameter. For discrete values this must
-must be a character vector. For continuous values this must be a numeric vector.
-
 This function depends extensively on \code{RcensusPkg::tiger_states_sf()} for obtaining state geometries, so many of
 that function's parameters are repeated in this function. Also \code{RspatialPkg::get_geom_sf()} is called upon for
 displaying the shapefile geometries.

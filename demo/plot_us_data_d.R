@@ -10,6 +10,12 @@ library(RcensusPkg)
 
 output_dir <- file.path(here(), "demo", "shapefiles")
 
+# --------------------plot just the states without joining data (the default case)----------------
+RcensusPkg::plot_us_data(
+  title = "A Default Mapping of US States",
+  output_dir = output_dir
+)
+
 # ----------------------------continuous case-------------------------
 # Get the median age for each state (i.e. "B01002_001E"):
 states_median_age_dt <- RcensusPkg::get_vintage_data(
@@ -118,12 +124,12 @@ acs1_computers_data_2021_dt <- acs1_computers_data_2021_dt %>%
 
 # Create the plots for 2013, 2021
 computers_2013_lst <- RcensusPkg::plot_us_data(
-  df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+ # df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+  df = acs1_computers_data_2013_dt,
   states_col = "State",
   value_col = "ComputerPresent",
   output_dir = output_dir,
   scale_breaks = seq(70,100,5),
-  scale_labels = seq(70,100,5),
   scale_limits = c(70,100),
   scale_colors = RColorBrewer::brewer.pal(8, "GnBu"),
   display_plot = FALSE
@@ -134,7 +140,6 @@ computers_2021_lst <- RcensusPkg::plot_us_data(
   value_col = "ComputerPresent",
   output_dir = output_dir,
   scale_breaks = seq(70,100,5),
-  scale_labels = seq(70,100,5),
   scale_limits = c(70,100),
   scale_colors = RColorBrewer::brewer.pal(8, "GnBu"),
   display_plot = FALSE

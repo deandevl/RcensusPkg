@@ -2,23 +2,22 @@
 #'
 #' This function produces a ggplot2 based choropleth map of a discrete/continuous variable across all/selected US states
 #'   including viewable placement of Alaska, Hawaii, and Puerto Rico.  The function accepts a data frame with a column of
-#'   state names and a column with their respective values.  The function offers several options for
-#'   control of state geographies and variable legend.
-#'
-#' Because scaling is done manually, "scale_breaks" is a required parameter. For discrete values this must
-#'   must be a character vector. For continuous values this must be a numeric vector.
+#'   state names and a column with their respective values.  If the data frame (parameter *df*) is submitted as NULL then only the simple
+#'   feature state geometries are returned for mapping. The function offers several options for
+#'   control/selection of state geographies and variable scaling.
 #'
 #' This function depends extensively on \code{RcensusPkg::tiger_states_sf()} for obtaining state geometries, so many of
 #'   that function's parameters are repeated in this function. Also \code{RspatialPkg::get_geom_sf()} is called upon for
 #'   displaying the shapefile geometries.
 #'
 #' @param df The data frame with a column of full state names and a second variable column of their respective values.
-#'   The column name for the states must be "NAME".
+#'   The column name for the states must be "NAME". If NULL, then only the state simple feature geometries are returned.
 #' @param states_col A string that sets the column name from \code{df} containing the state names of interest. These are
 #'   full state names, either capitalized or lower case. This is a required parameter.
 #' @param value_col A string that sets the column name from \code{df} where values(discrete or continuous) are defined.
 #'   If the column has discrete values then it must be a factor. This is a required parameter.
 #' @param title A string that sets the plot title.
+#' @param title_fontsz A numeric that sets the title's font size. The default is 14.
 #' @param text_col An optional string that sets the column name from \code{df} for labelling each state polygon.
 #' @param text_size A numeric value that sets the size of labeled state text.
 #' @param text_color A string that sets the color of labeled state text.
@@ -83,6 +82,7 @@ plot_us_data <- function(
   states_col = NULL,
   value_col = NULL,
   title = NULL,
+  title_fontsz = 14,
   text_col = NULL,
   text_size = 3.0,
   text_color = "black",
@@ -99,7 +99,7 @@ plot_us_data <- function(
   scale_breaks = waiver(),
   scale_values = NULL,
   scale_limits = NULL,
-  scale_labels = NULL,
+  scale_labels = waiver(),
   scale_colors = heat.colors(8),
   scale_na_value = "gray50",
   own_scale = FALSE,
@@ -109,12 +109,11 @@ plot_us_data <- function(
   sf_alpha = 1.0,
   display_plot = TRUE
 ){
-  # Check aes_fill
-  if(is.null(states_col) | is.null(value_col)){
-    stop("Both the states and value column names from the data frame must be assigned")
-  }
-  if(is.null(scale_breaks)){
-    stop("The scale_breaks parameter must be assigned")
+  # Check columns for state names and values
+  if(!is.null(df)){
+    if(is.null(states_col) | is.null(value_col)){
+      stop("Both the states and value column names from the data frame must be assigned")
+    }
   }
 
   return_lst <- list()
@@ -131,42 +130,45 @@ plot_us_data <- function(
     general = T,
     sf_info = F,
     output_dir = output_dir
-  )
+  ) %>%
+    data.table::as.data.table(.) %>%
+    .[, NAME := tolower(NAME)] %>%
+    sf::st_as_sf(.)
 
   # join states_sf with df
-  dt <- data.table::as.data.table(df)
-  # reformat the state names column so we're on the same page
-  dt[, NAME := tolower(dt[[states_col]])]
+  if(!is.null(df)){
+    dt <- data.table::as.data.table(df)
+    # reformat the state names column so we're on the same page
+    dt[, NAME := tolower(dt[[states_col]])]
 
-  states_dt <- data.table::as.data.table(states_sf) %>%
-    .[, NAME := tolower(NAME)]
+    states_dt <- data.table::as.data.table(states_sf)
 
-  data.table::setkeyv(dt, cols = "NAME")
-  data.table::setkeyv(states_dt, cols = "NAME")
-  data_sf <- states_dt[dt, nomatch = 0] %>%
-    sf::st_as_sf(.)
+    data.table::setkeyv(dt, cols = "NAME")
+    data.table::setkeyv(states_dt, cols = "NAME")
+    data_sf <- states_dt[dt, nomatch = 0] %>%
+      sf::st_as_sf(.)
+  }else {
+    data_sf <- states_sf
+  }
 
   # Remove AK,HI,PR from data_sf
   states_lower_48_sf <- data_sf %>%
     data.table::as.data.table(.) %>%
-    .[!NAME %in% c("alaska","hawaii","puerto rico"),] %>%
+    .[!NAME %in% c("alaska","hawaii","puerto rico",
+                   "guam","commonwealth of the northern mariana islands",
+                   "united states virgin islands","american samoa")
+      ] %>%
     sf::st_as_sf(.) %>%
     sf::st_transform(lower_48_crs)
-    # for debug purposes to find crs
-    # lower_crs <- crsuggest::suggest_crs(states_lower_48_sf)
-    # lower_top_crs <- crsuggest::suggest_top_crs(states_lower_48_sf)
-    # browser()
 
   # Get plot grob for lower 48 states
-  states_plot <- RspatialPkg::get_geom_sf(
+  lower_48_states_plot <- RspatialPkg::get_geom_sf(
     sf = states_lower_48_sf,
     aes_fill = value_col,
     aes_text = text_col,
     text_size = text_size,
     text_color = text_color,
     text_fontface = text_fontface,
-    title = title,
-    center_titles = T,
     hide_x_tics = T,
     hide_y_tics = T,
     sf_color = sf_color,
@@ -188,12 +190,12 @@ plot_us_data <- function(
     plot.margin = unit(rep(0.1,4),"cm")
   )
 
-  return_lst[["us_states"]] = states_plot
-
+  return_lst[["lower_48"]] = lower_48_states_plot
   # Convert ggplot2 object to grob
-  states_grob <- ggplot2::ggplotGrob(states_plot)
+  lower_48_states_grob <- ggplot2::ggplotGrob(lower_48_states_plot)
 
   # Get geometries/grobs for "outer" states
+  alaska_grob <- NULL
   if("alaska" %in% data_sf$NAME){
     alaska_sf <- data_sf %>%
       data.table::as.data.table(.) %>%
@@ -232,6 +234,7 @@ plot_us_data <- function(
     alaska_grob <- ggplot2::ggplotGrob(alaska_plot)
   }
 
+  hawaii_grob <- NULL
   if("hawaii" %in% data_sf$NAME){
     hawaii_sf <- data_sf %>%
       data.table::as.data.table(.) %>%
@@ -269,6 +272,8 @@ plot_us_data <- function(
     return_lst[["hawaii"]] = hawaii_plot
     hawaii_grob <- ggplot2::ggplotGrob(hawaii_plot)
   }
+
+  puerto_grob <- NULL
   if("puerto rico" %in% data_sf$NAME){
     puerto_sf <- data_sf %>%
       data.table::as.data.table(.) %>%
@@ -309,32 +314,48 @@ plot_us_data <- function(
 
   plots_table <- gtable::gtable(
     name = "plots_table",
-    widths = unit(rep(1,15),"null"),
-    heights = unit(rep(1,15),"null")
+    widths = grid::unit(rep(1,25),"null"),
+    heights = unit(rep(1,20),"null")
   )
   # Debug arrangement
   #gtable::gtable_show_layout(plots_table)
 
+  # Are we doing a title?
+  if(!is.null(title)){
+    title_grob <- grid::textGrob(label = title, gp = grid::gpar(col = "black", fontsize = title_fontsz, fontface = 2L))
+    plots_table <- gtable::gtable_add_grob(
+      plots_table,
+      grobs = list(
+        title_grob
+      ),
+      t = 1,
+      l = 1,
+      r = 20
+    )
+    starting_row <- 3
+  }
+
   plots_table <- gtable::gtable_add_grob(
     plots_table,
     grobs = list(
-      states_grob
+      lower_48_states_grob
     ),
-    t = 5,
-    l = 5,
-    r = 15,
-    b = 12
+    t = 7,
+    l = 3,
+    r = 24,
+    b = 19
   )
+
   if("alaska" %in% data_sf$NAME){
     plots_table <- gtable::gtable_add_grob(
       plots_table,
       grobs = list(
         alaska_grob
       ),
-      t = 2.5,
+      t = 1,
       l = 1,
-      r = 5,
-      b = 6.5
+      r = 8,
+      b = 8
     )
   }
   if("hawaii" %in% data_sf$NAME){
@@ -343,10 +364,10 @@ plot_us_data <- function(
       grobs = list(
         hawaii_grob
       ),
-      t = 7,
+      t = 15,
       l = 1,
-      r = 4.5,
-      b = 11
+      r = 5,
+      b = 19
     )
   }
   if("puerto rico" %in% data_sf$NAME){
@@ -355,20 +376,22 @@ plot_us_data <- function(
       grobs = list(
         puerto_grob
       ),
-      t = 12.9,
-      l = 13,
-      r = 13.2,
-      b = 13.1
+      t = 19.8,
+      l = 20,
+      r = 20.5,
+      b = 20
     )
   }
 
   # for debug purposes
-  #plot(plots_table)
+  # grid::grid.draw(plots_table)
 
   # Display plot table?
   a_plot <- ggplotify::as.ggplot(plots_table)
+
+  return_lst[["us_states"]] <- a_plot
   if(display_plot){
-    a_plot
+    return(a_plot)
   }else{
     return(return_lst)
   }
