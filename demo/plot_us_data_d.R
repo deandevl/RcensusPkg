@@ -18,7 +18,7 @@ RcensusPkg::plot_us_data(
 
 # ----------------------------continuous case-------------------------
 # Get the median age for each state (i.e. "B01002_001E"):
-states_median_age_dt <- RcensusPkg::get_vintage_data(
+ states_median_age_dt <- RcensusPkg::get_vintage_data(
   dataset = "acs/acs1",
   vintage = 2019,
   vars = "B01002_001E",
