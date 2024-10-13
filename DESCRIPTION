@@ -1,6 +1,6 @@
 Package: RcensusPkg
 Title: Routines for Accessing US Census Bureau Data via R
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Author: Rick Dean, <deanr3@bardstown.com>
 Maintainer: Rick Dean, <deanr3@bardstown.com>
 Description: Routines for downloading various US Census Bureau data sources via R Computer language.

@@ -29,8 +29,6 @@
 #' @param general A logical which if TRUE will download a less detailed, more generalized version of the state geometries.
 #' @param resol If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
 #'   "500k", "5m", "20m".
-#' @param hide_x_tics A logical that controls the appearance of the x axis tics.
-#' @param hide_y_tics A logical that controls the appearance of the y axis tics.
 #' @param show_legend A logical that controls the appearance of the legend.
 #' @param legend_pos A string that sets the legend position. Acceptable values are "right",
 #'  "top", "bottom".
@@ -91,8 +89,6 @@ plot_us_data <- function(
   vintage = 2020,
   general = FALSE,
   resol = "500k",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE,
   show_legend = TRUE,
   legend_pos = "right",
   na_rm = FALSE,
@@ -340,8 +336,8 @@ plot_us_data <- function(
     grobs = list(
       lower_48_states_grob
     ),
-    t = 7,
-    l = 3,
+    t = 8,
+    l = 4,
     r = 24,
     b = 19
   )
@@ -352,8 +348,8 @@ plot_us_data <- function(
       grobs = list(
         alaska_grob
       ),
-      t = 1,
-      l = 1,
+      t = 2,
+      l = 2,
       r = 8,
       b = 8
     )
@@ -364,10 +360,10 @@ plot_us_data <- function(
       grobs = list(
         hawaii_grob
       ),
-      t = 15,
+      t = 13,
       l = 1,
       r = 5,
-      b = 19
+      b = 17
     )
   }
   if("puerto rico" %in% data_sf$NAME){
@@ -377,8 +373,10 @@ plot_us_data <- function(
         puerto_grob
       ),
       t = 19.8,
-      l = 20,
-      r = 20.5,
+      l = 21,
+      r = 21.5,
+      # l = 20,
+      # r = 20.5,
       b = 20
     )
   }
