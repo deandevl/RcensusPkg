@@ -18,8 +18,6 @@ plot_us_data(
   vintage = 2020,
   general = FALSE,
   resol = "500k",
-  hide_x_tics = TRUE,
-  hide_y_tics = TRUE,
   show_legend = TRUE,
   legend_pos = "right",
   na_rm = FALSE,
@@ -69,10 +67,6 @@ The default is the directory defined by the value returned by \code{tempdir()}.}
 
 \item{resol}{If \code{general} is TRUE, then the resolution to return. Acceptable values are strings
 "500k", "5m", "20m".}
-
-\item{hide_x_tics}{A logical that controls the appearance of the x axis tics.}
-
-\item{hide_y_tics}{A logical that controls the appearance of the y axis tics.}
 
 \item{show_legend}{A logical that controls the appearance of the legend.}
 

@@ -4,6 +4,7 @@ library(here)
 library(usmap)
 library(RspatialPkg)
 library(ggplot2)
+library(data.table)
 library(RcensusPkg)
 
 output_dir <- file.path(here(), "demo", "shapefiles")
