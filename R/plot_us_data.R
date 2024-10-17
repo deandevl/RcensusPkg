@@ -37,7 +37,7 @@
 #' @param scale_breaks A string/numeric vector that defines the scale breaks. This is a required parameter.
 #' @param scale_values A string/numeric vector that defines the possible values. For factor values, this is required
 #'   and is a vector string of colors.
-#' @param scale_limits A string/numeric vector that defines the scale limits.
+#' @param scale_limits A string/numeric vector that defines the scale limits. This is a required parameter.
 #' @param scale_labels An optional string vector that defines the scale labels. Vector must be the same length
 #' as \code{scale_breaks}.
 #' @param scale_colors Vector of colors to use for n-color gradient.
@@ -92,7 +92,7 @@ plot_us_data <- function(
   show_legend = TRUE,
   legend_pos = "right",
   na_rm = FALSE,
-  scale_breaks = waiver(),
+  scale_breaks = NULL,
   scale_values = NULL,
   scale_limits = NULL,
   scale_labels = waiver(),
@@ -105,10 +105,15 @@ plot_us_data <- function(
   sf_alpha = 1.0,
   display_plot = TRUE
 ){
-  # Check columns for state names and values
+  # If data (i.e. df) in not NULL the check following:
+  # Check if states_col and value_col have been defined
+  # Check if scale_breaks and scale_limits have been defined
   if(!is.null(df)){
     if(is.null(states_col) | is.null(value_col)){
-      stop("Both the states and value column names from the data frame must be assigned")
+      stop("Both states_col and value_col parameters must be defined")
+    }
+    if(is.null(scale_breaks) | is.null(scale_limits)){
+      stop("Both scale_breaks and scale_limits parameters must be defined")
     }
   }
 
@@ -237,7 +242,6 @@ plot_us_data <- function(
       .[NAME == "hawaii",] %>%
       sf::st_as_sf(.) %>%
       sf::st_transform(hawaii_crs)
-
     hawaii_plot <- RspatialPkg::get_geom_sf(
       sf = hawaii_sf,
       aes_fill = value_col,
@@ -360,7 +364,7 @@ plot_us_data <- function(
       grobs = list(
         hawaii_grob
       ),
-      t = 13,
+      t = 15,
       l = 1,
       r = 5,
       b = 17

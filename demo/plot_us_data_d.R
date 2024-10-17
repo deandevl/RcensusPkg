@@ -81,12 +81,49 @@ us_vote_lst <- RcensusPkg::plot_us_data(
   value_col = "Party",
   output_dir = output_dir,
   scale_breaks = c("R","D"),
+  scale_limits = c("R","D"),
   scale_values = c("red","blue"),
   scale_labels = c("R","D"),
   sf_color = "white",
   display_plot = F
 )
 us_vote_lst[["us_states"]]
+
+
+# --------------------------US house values with user defined scaling-------------
+# Get housing values data
+housing_values_dt <- RcensusPkg::get_vintage_data(
+  dataset = "acs/acs1",
+  vintage = 2019,
+  vars = "B25077_001E",
+  region = "state:*"
+) %>%
+  data.table::setnames(old = "B25077_001E", new = "estimate") %>%
+  .[, estimate := as.numeric(estimate)] %>%
+  data.table::setnames(., old = "estimate", new = "Median_House_Values")
+
+# Define "pretty" intervals for housing values
+intervals <- classInt::classIntervals(
+  housing_values_dt$Median_House_Values,
+  n = 6,
+  style = "pretty"
+)
+breaks <- intervals$brks
+labels <- c("$100,000","$200,000","$300,000","$400,000","$500,000","$600,000","$700,000")
+
+# Plot the map of US housing values
+us_housing_plot <- RcensusPkg::plot_us_data(
+  df = housing_values_dt,
+  states_col = "NAME",
+  value_col = "Median_House_Values",
+  output_dir = output_dir,
+  scale_breaks = breaks,
+  scale_limits = c(100000, 700000),
+  scale_labels = labels,
+  scale_colors = RColorBrewer::brewer.pal(8,"YlOrRd")
+)
+us_housing_plot
+
 
 # -----------------------------multiplot------------------------------
 # Data is percent of computers present across states
@@ -124,8 +161,7 @@ acs1_computers_data_2021_dt <- acs1_computers_data_2021_dt %>%
 
 # Create the plots for 2013, 2021
 computers_2013_lst <- RcensusPkg::plot_us_data(
- # df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
-  df = acs1_computers_data_2013_dt,
+  df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
   states_col = "State",
   value_col = "ComputerPresent",
   output_dir = output_dir,
@@ -159,5 +195,5 @@ RplotterPkg::multi_panel_grid(
   title = "Computers Present Across the US 2013/2021",
   plot_titles = c("Year: 2013", "Year: 2021"),
   cell_width = 16,
-  cell_height = 10
+  cell_height = 8
 )
