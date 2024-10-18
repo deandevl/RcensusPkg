@@ -21,7 +21,7 @@ plot_us_data(
   show_legend = TRUE,
   legend_pos = "right",
   na_rm = FALSE,
-  scale_breaks = waiver(),
+  scale_breaks = NULL,
   scale_values = NULL,
   scale_limits = NULL,
   scale_labels = waiver(),
@@ -81,7 +81,7 @@ missing observations are removed with a warning.}
 \item{scale_values}{A string/numeric vector that defines the possible values. For factor values, this is required
 and is a vector string of colors.}
 
-\item{scale_limits}{A string/numeric vector that defines the scale limits.}
+\item{scale_limits}{A string/numeric vector that defines the scale limits. This is a required parameter.}
 
 \item{scale_labels}{An optional string vector that defines the scale labels. Vector must be the same length
 as \code{scale_breaks}.}

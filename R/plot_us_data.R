@@ -117,7 +117,8 @@ plot_us_data <- function(
     }
   }
 
-  return_lst <- list()
+  plots_lst <- list()
+  sf_lst <- list()
 
   lower_48_crs <- 5070
   alaska_crs <- 4425
@@ -153,7 +154,7 @@ plot_us_data <- function(
   }
 
   # Remove AK,HI,PR from data_sf
-  states_lower_48_sf <- data_sf %>%
+  lower_48_states_sf <- data_sf %>%
     data.table::as.data.table(.) %>%
     .[!NAME %in% c("alaska","hawaii","puerto rico",
                    "guam","commonwealth of the northern mariana islands",
@@ -164,7 +165,7 @@ plot_us_data <- function(
 
   # Get plot grob for lower 48 states
   lower_48_states_plot <- RspatialPkg::get_geom_sf(
-    sf = states_lower_48_sf,
+    sf = lower_48_states_sf,
     aes_fill = value_col,
     aes_text = text_col,
     text_size = text_size,
@@ -191,7 +192,8 @@ plot_us_data <- function(
     plot.margin = unit(rep(0.1,4),"cm")
   )
 
-  return_lst[["lower_48"]] = lower_48_states_plot
+  plots_lst[["lower_48"]] = lower_48_states_plot
+  sf_lst[["lower_48"]] = lower_48_states_sf
   # Convert ggplot2 object to grob
   lower_48_states_grob <- ggplot2::ggplotGrob(lower_48_states_plot)
 
@@ -231,7 +233,8 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    return_lst[["alaska"]] <- alaska_plot
+    plots_lst[["alaska"]] <- alaska_plot
+    sf_lst[["alaska"]] <- alaska_sf
     alaska_grob <- ggplot2::ggplotGrob(alaska_plot)
   }
 
@@ -269,7 +272,8 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    return_lst[["hawaii"]] = hawaii_plot
+    plots_lst[["hawaii"]] <- hawaii_plot
+    sf_lst[["hawaii"]] <- hawaii_sf
     hawaii_grob <- ggplot2::ggplotGrob(hawaii_plot)
   }
 
@@ -308,7 +312,8 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm")
     )
 
-    return_lst[["puerto_rico"]] = puerto_plot
+    plots_lst[["puerto_rico"]] <- puerto_plot
+    sf_lst[["puerto_rico"]] <- puerto_sf
     puerto_grob <- ggplot2::ggplotGrob(puerto_plot)
   }
 
@@ -391,10 +396,13 @@ plot_us_data <- function(
   # Display plot table?
   a_plot <- ggplotify::as.ggplot(plots_table)
 
-  return_lst[["us_states"]] <- a_plot
+  plots_lst[["us_states"]] <- a_plot
   if(display_plot){
     return(a_plot)
   }else{
-    return(return_lst)
+    return(list(
+      plots = plots_lst,
+      sf = sf_lst
+    ))
   }
 }

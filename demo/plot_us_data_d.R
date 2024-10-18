@@ -41,7 +41,7 @@ us_plot_lst <- RcensusPkg::plot_us_data(
   scale_labels = c("Age:30","Age:35","Age:40","Age:45","Age:50"),
   display_plot = F
 )
-us_plot_lst[["us_states"]]
+us_plot_lst$plots$us_states
 
 # ------------------discrete case-----------------
 party_df <- data.frame(
@@ -87,7 +87,7 @@ us_vote_lst <- RcensusPkg::plot_us_data(
   sf_color = "white",
   display_plot = F
 )
-us_vote_lst[["us_states"]]
+us_vote_lst$plots$us_states
 
 
 # --------------------------US house values with user defined scaling-------------
@@ -112,7 +112,7 @@ breaks <- intervals$brks
 labels <- c("$100,000","$200,000","$300,000","$400,000","$500,000","$600,000","$700,000")
 
 # Plot the map of US housing values
-us_housing_plot <- RcensusPkg::plot_us_data(
+RcensusPkg::plot_us_data(
   df = housing_values_dt,
   states_col = "NAME",
   value_col = "Median_House_Values",
@@ -122,8 +122,6 @@ us_housing_plot <- RcensusPkg::plot_us_data(
   scale_labels = labels,
   scale_colors = RColorBrewer::brewer.pal(8,"YlOrRd")
 )
-us_housing_plot
-
 
 # -----------------------------multiplot------------------------------
 # Data is percent of computers present across states
@@ -182,7 +180,7 @@ computers_2021_lst <- RcensusPkg::plot_us_data(
 )
 
 # Layout the two maps vertically
-plot_lst <- list(computers_2013_lst$us_states, computers_2021_lst$us_states)
+plot_lst <- list(computers_2013_lst$plots$us_states, computers_2021_lst$plots$us_states)
 
 layout <- list(
   plots = plot_lst,
