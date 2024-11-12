@@ -1,0 +1,70 @@
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.17em;
+}
+h4 {
+  font-size: 1.0em;
+}
+
+.fullcontent {
+  font-size: 11px;
+  font-family: Verdana;
+}
+
+caption {
+  text-align: left;
+  font-size: 9pt;
+  font-weight: normal;
+  font-family: Verdana;
+}
+
+.figure {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.figure-caption {
+  text-align: left;
+  font-size: 9pt;
+  font-weight: normal;
+  font-family: Verdana;
+}
+
+.sourceCode {
+  font-family: Verdana;
+  font-weight: bold;
+}
+
+.task {
+  font-size: 10pt;
+  color: #964B00;
+}
+
+.exer {
+  font-size: 10pt;
+  font-weight: bold;
+  color: darkorange;
+}
+
+.takeaway {
+  font-size: 10pt;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.note {
+  font-weight: normal;
+  font-family: Verdana;
+  border: 1px solid hsl(0, 0%, 0%);
+  margin-top: 30px;
+  margin-bottom: 30px;
+  box-shadow:
+  0 0 0.25rem hsl(300, 40%, 5%),
+  0 1rem .5rem -1rem hsl(300, 40%, 5%),
+  0 0.25rem 1rem hsl(200, 40%, 30%),
+  0 0.25rem 1rem hsl(300, 40%, 30%);
+}

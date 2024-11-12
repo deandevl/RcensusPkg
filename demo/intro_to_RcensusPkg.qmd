@@ -1,0 +1,323 @@
+---
+title: "Introduction to RcensusPkg"
+author: "Rick Dean"
+format: 
+  html:
+    toc: false
+    toc-depth: 4
+    toc-location: "right"
+    number-sections: true
+    number-offset: 0
+    self-contained: true
+    smooth-scroll: true
+    code-block-bg: "#f1f3f5"
+    code-block-border-left: "#31BAE9"
+    code-overflow: wrap
+    tbl-cap-location: "bottom"
+    fig-width: 7
+    fig-asp: 0.6
+    fig-align: "center"
+    fig-cap-location: "bottom"
+    css: style.css
+    link-external-newwindow: true
+    abstract-title: "Abstract"
+    abstract: "Accessing the US Census Bureau's database of survey data and map geometries via their API can be a challenge. The R package RcensusPkg can help by providing specific functions for checking on the availability of geographies, variables, datasets, and dates. In addition, the package provides easy access to the Bureau's extensive Tiger Line map geometries and for joining the maps with Census Bureau survey data.  This paper presents a basic step-by-step demonstration of how RcensusPkg could be applied to investigate computer and broadband presence from an earlier time to the present across the states. A series of 'task' are presented to illustrate how to download the data, download the state geometries, join data with the map and finally present the results.  The companion package RspatialPkg is a ggplot2 based R package that creates and maps the visualizations. As the investigator gains more knowledge of his/her subject, not all of the steps outlined here will be required.  We are starting from ground zero with this demonstration where we know little about the availability of Census Bureau data or how to access it and put it together. RcensusPkg is available from GitHub at [deandevl](https://github.com/deandevl/RcensusPkg). There are many additional demonstrations on the package at the repository. In the `demo` folder each function is demonstrated for downloading data and sf geometries along with R script tutorials. Also [R_Analysis_of_US_Census_Data](https://github.com/deandevl/R_Analysis_of_US_Census_Data) contains R script that uses RcensusPkg to follow Kyle Walker's book [Analyzing US Census Data: Methods, Maps, and Models in R](https://walker-data.com/census-r/index.html)."
+---
+# Accessing the US Census Bureau API with `RcensusPkg`
+
+## Load the Required R Packages:
+
+```{r}
+#| warning: false
+#| message: false
+
+library(data.table)
+library(jsonlite)
+library(httr)
+library(usmap)
+library(purrr)
+library(sf)
+library(ggplot2)
+library(RColorBrewer)
+library(magrittr)
+library(here)
+library(RspatialPkg)
+library(RplotterPkg)
+library(RcensusPkg)
+```
+
+## Formulate a goal
+
+::: task
+Formulate a goal that characterizes the types of variables and maps needed.
+:::
+
+Our goal is to get annual survey percentages on computer ownership and presence of broadband in households across the states. We want a recent year like 2021 and an earlier year such as 2013.
+
+## Find a dataset name acronym
+
+::: task
+Do a general search at the US Census Bureau's site to identify possible dataset sources.
+:::
+
+An excellent place to start are the descriptions of all the datasets available from the API at [Available APIs](https://www.census.gov/data/developers/data-sets.html). In addition, there is the Census Bureau's Explorer where the [Tables](https://data.census.gov/all) are presented. Tables or datasets are really groups of survey variables that could possibly relate to our goal. We are wanting to find the dataset acronym that has computer related variables. We see a Table named "DP02 Selected Social Characteristics in the United States". When we click the link for the DP02 Table we get a listing which at the very end has the sub-category "COMPUTERS AND INTERNET USE". Two variables under the category have numbers for households "With a computer" and "With a broadband internet subscription". We also see back toward the top of the page the name of the dataset as "ACS 1-Year Estimates Data Profiles". It appears that this dataset is what we are looking for.
+
+::: task
+Determine the acronym for the dataset "ACS 1-Year Estimates Data Profiles".
+:::
+
+Use `RcensusPkg::get_dataset_names()` and the "title" column of the resultant data.table containing "1-year" as a case non-sensitive filter string across all years and datasets.
+
+```{r}
+acs_dataset_names_dt <- RcensusPkg::get_dataset_names(
+  filter_title_str = "1-year"
+)
+```
+
+Among the 109 "1-Year" surveys we find that "acs/acs1/profile" has extensive years (2005 to 2021) and contains the key word "profile". The one exception is 2020 which is missing because of the Bureau's Decennial or 10 year survey for that year.
+
+## Find the computer related variable names
+
+::: task
+We have a dataset acronym name and some dates. Find the availability of variable names that relate to computer and broadband presence in households.
+:::
+
+We learned from the above discussion that table "DP02" has a sub-category "COMPUTERS AND INTERNET USE". We can use this information to search the "acs/acs1/profile" dataset using `RcensusPkg::get_variable_names()`. The function requires a dataset name, a vintage and a search string. We'll start with vintage 2021 and the "label" column of the resultant data.table containing "computers" as a case non-sensitive filter string.
+
+```{r}
+DP02_2021_computers_dt <- RcensusPkg::get_variable_names(
+  dataset = "acs/acs1/profile",
+  vintage = 2021,
+  filter_label_str = "computers"
+)
+```
+
+```{r}
+#| code-fold: true
+#| tbl-cap: |
+#|   Table 1.1: Computer related variables from US Census Bureau ACS profile 1-year survey, 2021
+
+RplotterPkg::create_table(
+  x = DP02_2021_computers_dt,
+  container_width_px = 500
+)
+```
+
+From the "concept" column we see that there are a group of 6 variables for Puerto Rico and 6 variables for the United States. We'll use the United States with variable names "DP02_0152E", "DP02_0153PE", and "DP02_0154PE" for total households, percent with computers, and percent with broadband respectively.
+
+An earlier date is required for comparison so we'll select the survey for 2013.
+
+::: task
+Request variable names for 2013 with the "label" column filtered for "computers".
+:::
+
+```{r}
+DP02_2013_computers_dt <- RcensusPkg::get_variable_names(
+  dataset = "acs/acs1/profile",
+  vintage = 2013,
+  filter_label_str = "computers"
+)
+```
+
+```{r}
+#| code-fold: true
+#| tbl-cap: |
+#|   Table 1.2: Computer related variables from US Census Bureau ACS profile 1-year survey, 2013
+
+RplotterPkg::create_table(
+  x = DP02_2013_computers_dt[7:12,],
+  container_width_px = 500
+)
+```
+
+We obtain similar results but the variable names have changed! For 2013 we have "DP02_0150E", "DP02_0151PE", "DP02_0152PE" which is to be expected (and be cautious of) when conducting a time series study.
+
+## Find "required" variables
+
+::: note
+Make sure that there are no required variables when requesting data.
+:::
+
+Whenever requesting variable names, you should review the "required" column for any variables that should be included in your request. If left out you will receive an error from the API. Using the 2021 vintage as an example we can quickly check for required variables using simple data.table filtering. The value for "required" should be either NA or "default displayed" for no requirements.
+
+```{r}
+DP02_2021_variables_dt <- RcensusPkg::get_variable_names(
+  dataset = "acs/acs1/profile",
+  vintage = 2021
+)
+required_variables_dt <- DP02_2021_variables_dt[!is.na(required), ]
+```
+
+```{r}
+#| code-fold: true
+#| tbl-cap: |
+#|   Table 1.3: No required variables for American Survey 1-year profile, 2021
+
+RplotterPkg::create_table(
+  x = required_variables_dt,
+  container_width_px = 400
+)
+```
+
+The result is only one variable with "default displayed".
+
+## Check the geography
+
+Our request will require that among the geography divisions (such as state, county, tract, block) we can get survey results at the state level. We can use `RcensusPkg::get_geography()` to check if "state" for the dataset and vintage combination is available.
+
+```{r}
+acs1_2021_geo_dt <- RcensusPkg::get_geography(
+  dataset = "acs/acs1/profile",
+  vintage = 2021
+)
+```
+
+The resultant data.table does have an entry for "state" under the "name" column:
+
+```{r}
+#| code-fold: true
+#| tbl-cap: |
+#|   Table 1.4: Availability of state geography from acs/acs1/profile, 2021
+
+RplotterPkg::create_table(
+  x = acs1_2021_geo_dt[1:6,],
+  container_width_px = 300
+)
+```
+
+## Request the computer related data
+
+We have all the parameters now for submitting a request from the "acs/acs1/profile" dataset for 2013 and 2021.
+
+::: task
+Get the data for 2013:
+:::
+
+```{r}
+acs1_computers_data_2013_dt <- RcensusPkg::get_vintage_data(
+  dataset = "acs/acs1/profile",
+  vintage = 2013,
+  vars = c("DP02_0150E", "DP02_0151PE", "DP02_0152PE"),
+  region = "state:*"
+)
+```
+
+Rename columns; select columns; convert values to numeric; order the rows by "State":
+
+```{r}
+acs1_computers_data_2013_dt <- acs1_computers_data_2013_dt %>% 
+  data.table::setnames(
+    old = c("NAME", "DP02_0150E", "DP02_0151PE", "DP02_0152PE"),
+    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) %>% 
+  .[, .(GEOID, State, Total, ComputerPresent, BroadbandPresent)] %>% 
+  .[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent),
+           BroadbandPresent = as.numeric(BroadbandPresent))] %>% 
+  .[order(State)]
+```
+
+```{r}
+#| code-fold: true
+#| tbl-cap: |
+#|   Table 1.5: Computer/broadband related percentages from acs/acs1/profile, 2013
+
+RplotterPkg::create_table(
+  x = acs1_computers_data_2013_dt[1:6,],
+  container_width_px = 500
+)
+```
+
+::: task
+Get the data for 2021:
+:::
+
+```{r}
+acs1_computers_data_2021_dt <- RcensusPkg::get_vintage_data(
+  dataset = "acs/acs1/profile",
+  vintage = 2021,
+  vars = c("DP02_0152E", "DP02_0153PE", "DP02_0154PE"),
+  region = "state:*"
+)
+```
+
+Rename the columns; convert values to numeric:
+
+```{r}
+acs1_computers_data_2021_dt <- acs1_computers_data_2021_dt %>% 
+  data.table::setnames(
+    old = c("NAME", "DP02_0152E", "DP02_0153PE", "DP02_0154PE"), 
+    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) %>% 
+  .[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent), 
+           BroadbandPresent = as.numeric(BroadbandPresent))]    
+```
+
+## Map the "ComputerPresent" variable across the states for both years 2013 and 2021
+
+Use *RcensusPkg::plot_us_data()* to do the mapping.
+
+Define an output directory for the downloading of shapefiles from the Census Bureau:
+```{r}
+output_dir <- file.path(here(), "demo", "shapefiles")
+```
+
+From the `acs1_computers_data_2013_dt` dataframe map "ComputerPresent" for 2013:
+```{r}
+computers_2013_lst <- RcensusPkg::plot_us_data(
+  df = acs1_computers_data_2013_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+  states_col = "State",
+  value_col = "ComputerPresent",
+  output_dir = output_dir,
+  scale_breaks = seq(70,100,5),
+  scale_labels = seq(70,100,5),
+  scale_limits = c(70,100),
+  scale_palette = "GnBu",
+  display_plot = FALSE,
+  show_legend = FALSE
+)
+```
+
+From the `acs1_computers_data_2021_dt` dataframe map "ComputerPresent" for 2021:
+```{r}
+computers_2021_lst <- RcensusPkg::plot_us_data(
+  df = acs1_computers_data_2021_dt[!(State %in% c("Alaska","Hawaii","Puerto Rico")),],
+  states_col = "State",
+  value_col = "ComputerPresent",
+  output_dir = output_dir,
+  scale_breaks = seq(70,100,5),
+  scale_labels = seq(70,100,5),
+  scale_limits = c(70,100),
+  scale_palette = "GnBu",
+  display_plot = FALSE
+)
+```
+
+## Arrange the two plots for easier comparison:
+
+```{r}
+#| code-fold: true
+#| fig-width: 12
+#| fig-height: 10
+#| fig-cap: |
+#|   Figure 1.3: Percent of Computers Present in 2013/2021
+
+plot_lst <- list(
+  computers_2013_lst$us_states, 
+  computers_2021_lst$us_states
+)
+
+layout <- list(
+  plots = plot_lst,
+  rows = c(1, 2),
+  cols = c(1, 1)
+)
+
+RplotterPkg::multi_panel_grid(
+  layout = layout,
+  cell_width = 15,
+  cell_height = 9,
+  plot_titles = c("Year: 2013","Year:2021")
+)
+```
+
+## Conclusion
+
+We left the mapping of the "BroadbandPresent" variable for the reader to explore other approaches for display. We have attempted to outline an approach when accessing the Census Bureau's API. Knowing some of the "gotsha's" and utilizing a few of the functions in `RcensusPkg` could possibly help in a successful study.
