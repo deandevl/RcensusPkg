@@ -78,9 +78,7 @@ RcensusPkg::plot_us_data(
   output_dir = output_dir,
   scale_breaks = seq(0,6,1),
   scale_limits = c(0,6),
-  scale_palette = "YlOrRd",
-  scale_labels = seq(0,6,1),
-  scale_direction = 1
+  scale_labels = seq(0,6,1)
 )
 
 # Using Summary File 3 ("dec/sf3") get the variable metadata that gives the total
@@ -113,9 +111,7 @@ RcensusPkg::plot_us_data(
   output_dir = output_dir,
   scale_breaks = seq(0,70,10),
   scale_limits = c(0,70),
-  scale_palette = "Greens",
-  scale_labels = seq(0,70,10),
-  scale_direction = 1
+  scale_labels = seq(0,70,10)
 )
 
 # Using Summary File 4 ("dec/sf4") get the variable metadata that gives the counts
@@ -150,7 +146,5 @@ RcensusPkg::plot_us_data(
   output_dir = output_dir,
   scale_breaks = seq(20,40,5),
   scale_limits = c(20,40),
-  scale_palette = "OrRd",
-  scale_labels = seq(20,40,5),
-  scale_direction = 1
+  scale_labels = seq(20,40,5)
 )

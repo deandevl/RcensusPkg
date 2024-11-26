@@ -56,7 +56,7 @@ RcensusPkg::plot_us_data(
   scale_values = c("red","blue"),
   scale_breaks = c("Republican","Democrate"),
   output_dir = output_dir,
-  text_col = "NAME",
+  text_col = "states",
   text_color = "white",
   text_size = 4,
   text_fontface = "bold",

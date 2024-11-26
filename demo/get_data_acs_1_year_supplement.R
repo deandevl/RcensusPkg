@@ -16,7 +16,8 @@ marital_status_names_dt <- RcensusPkg::get_variable_names(
   filter_group_est = T,
   vintage = 2021
 ) %>%
-.[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
+.[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)] %>%
+.[1:6,]
 
 marital_status_names_dt$label[[1]] <- "Total"
 
@@ -50,3 +51,34 @@ marital_status_plot <- RplotterPkg::create_bar_plot(
   x_title = "Percent"
 )
 marital_status_plot
+
+
+# Find the same statistics across the states
+sel_columns <- c("NAME", marital_status_names_dt$name)
+name_columns <- c("State", "Total", "Never_Married", "Now_Married", "Separated", "Widowed", "Divorced")
+marital_status_states_dt <- RcensusPkg::get_vintage_data(
+  dataset = "acs/acsse",
+  vintage = 2023,
+  group = "K201001",
+  region = "state:*"
+) %>%
+.[, ..sel_columns] %>%
+data.table::setnames(old = sel_columns, new = name_columns) %>%
+.[, `:=`(
+  Total = as.numeric(Total),
+  Never_Married = as.numeric(Never_Married),
+  Now_Married = as.numeric(Now_Married),
+  Separated = as.numeric(Separated),
+  Widowed = as.numeric(Widowed),
+  Divorced = as.numeric(Divorced)
+ )] %>%
+.[, Alone_pct := round((Never_Married + Separated + Widowed + Divorced)/Total * 100, digits = 1)] %>%
+.[, `:=`(
+  Never_Married_pct = round(Never_Married/Total * 100, digits = 1),
+  Now_Married_pct = round(Now_Married/Total * 100, digits = 1),
+  Separated_pct = round(Separated/Total * 100, digits = 1),
+  Widowed_pct = round(Widowed/Total * 100, digits = 1),
+  Divorced_pct = round(Divorced/Total * 100, digits = 1)
+)]
+
+
