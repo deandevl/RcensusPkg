@@ -37,3 +37,4 @@ tutorial_join_data_1          Shows how to join data with sf geometries
 tutorial_join_data_2          Shows how to join data with sf geometries
 tutorial_predicates           Shows how to use predicates
 tutorial_melt                 Shows how to use data.table::melt() function
+get_idb                       Gets data from International Database
