@@ -104,7 +104,7 @@ get_variable_names <- function(
   # Check and add variables
   variable_lst <- purrr::map2(names(raw_json$variables), raw_json$variables,  add_variable)
 
-  dt <- data.table::rbindlist(variable_lst, fill = T)
+  dt <- data.table::rbindlist(variable_lst, fill = TRUE)
 
   # If variables were derived by group, do we filter their names
   #   to get just estimates and margin of error related variable names

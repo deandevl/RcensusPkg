@@ -14,7 +14,7 @@
 #' A more generalized, recognizable version of the CBSA geometries that has less download size is also available.  For more information on cartographic boundary files see
 #'   \href{https://www.census.gov/programs-surveys/geography/technical-documentation/naming-convention/cartographic-boundary-file.html}{Cartographic Boundary File Description}.
 #'   These files are available for vintages greater than 2009 with resolution 1:500k, 1:5m, 1:20m meters.
-#'   For descriptive information on CBSA see {https://www.census.gov/programs-surveys/metro-micro/about.html}{About}.
+#'   For descriptive information on CBSA see \href{https://www.census.gov/programs-surveys/metro-micro/about.html}{About}.
 #'
 #' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RspatialPkg}{RspatialPkg::get_geom_sf()}) or
 #' joined with US Census Bureau demographic data. To help incorporate data files, this function
@@ -56,7 +56,7 @@
 #'
 #' @export
 tiger_cbsa_sf <- function(
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   general = FALSE,
@@ -132,7 +132,7 @@ tiger_cbsa_sf <- function(
         df_2 = tiger_sf,
         key_1 = datafile_key,
         key_2 = sf_key,
-        return_sf = T
+        return_sf = TRUE
       )
     }
 

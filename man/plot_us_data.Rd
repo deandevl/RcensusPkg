@@ -14,7 +14,7 @@ plot_us_data(
   text_size = 3,
   text_color = "black",
   text_fontface = "plain",
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   vintage = 2020,
   general = FALSE,
   resol = "500k",

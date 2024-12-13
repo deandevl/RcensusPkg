@@ -55,7 +55,7 @@ dc_joined_sf <- RcensusPkg::join_it(
   df_2 = dc_tracts_sf,
   key_1 = "GEOID",
   key_2 = "GEOID",
-  return_sf = T
+  return_sf = TRUE
 )
 
 # Map the joined simple feature geometries with "value" column as

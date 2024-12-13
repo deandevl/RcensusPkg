@@ -23,10 +23,10 @@ build_plot <- function(id, years, set_crs, vars, state_fips, county_fips){
   tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
     state = state_fips,
     vintage = years[[id]],
-    general = T,
+    general = TRUE,
     set_crs = set_crs[[id]],
     output_dir = output_dir,
-    sf_info = F
+    sf_info = FALSE
   )
 
   col_name <- vars[[id]]
@@ -37,8 +37,8 @@ build_plot <- function(id, years, set_crs, vars, state_fips, county_fips){
   tarrant_tracts_plot <- RspatialPkg::get_geom_sf(
     sf = tarrant_tracts_sf,
     subtitle = paste0(years[[id]], ": ", nrow(tarrant_tracts_sf), " tracts"),
-    hide_x_tics = T,
-    hide_y_tics = T
+    hide_x_tics = TRUE,
+    hide_y_tics = TRUE
   )
   return(tarrant_tracts_plot)
 }

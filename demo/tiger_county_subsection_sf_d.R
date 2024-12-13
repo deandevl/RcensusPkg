@@ -28,8 +28,8 @@ hc_median_home_ctysub_sf <- RcensusPkg::tiger_county_subsection_sf(
   state = ohio_fips,
   output_dir = output_dir,
   vintage = 2020,
-  general = T,
-  sf_info = F,
+  general = TRUE,
+  sf_info = FALSE,
   datafile = hc_median_home_ctysub_dt,
   datafile_key = "GEOID",
   express = express

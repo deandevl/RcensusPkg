@@ -154,7 +154,7 @@ tiger_block_groups_sf <- function(
         df_2 = tiger_sf,
         key_1 = datafile_key,
         key_2 = sf_key,
-        return_sf = T
+        return_sf = TRUE
       )
     }
 

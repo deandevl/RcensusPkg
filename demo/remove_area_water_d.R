@@ -27,8 +27,8 @@ ny_tracts_sf <- RcensusPkg::tiger_tracts_sf(
 ny_tracts_plot <- RspatialPkg::get_geom_sf(
   sf = ny_tracts_sf,
   sf_fill = "green",
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 
 ny_tracts_without_water_sf <- RcensusPkg::remove_area_water(ny_tracts_sf, output_dir = output_dir)
@@ -36,8 +36,8 @@ ny_tracts_without_water_sf <- RcensusPkg::remove_area_water(ny_tracts_sf, output
 ny_tracts_without_water_plot <- RspatialPkg::get_geom_sf(
   sf = ny_tracts_without_water_sf,
   sf_fill = "blue",
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 
 layout <- list(

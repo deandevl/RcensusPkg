@@ -14,8 +14,8 @@ us_roads_sf <- RcensusPkg::tiger_roads_sf(output_dir = output_dir)
 # With over 17000 observations, the mapping is time consuming
 us_roads_plot <- RspatialPkg::get_geom_sf(
   sf = us_roads_sf,
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 us_roads_plot
 
@@ -43,7 +43,7 @@ geauga_roads_sf <- RcensusPkg::tiger_roads_sf(
 # Map the simple feature
 geauga_roads_plot <- RspatialPkg::get_geom_sf(
   sf = geauga_roads_sf,
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 geauga_roads_plot

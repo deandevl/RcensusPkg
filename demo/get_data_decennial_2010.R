@@ -38,7 +38,7 @@ white_ownership_2010_dt <- get_vintage_data(
   vintage = 2010,
   group = "H11A",
   region = "us:1",
-  wide_to_long = T
+  wide_to_long = TRUE
 ) %>%
   .[1:4,] %>%
   .[, value := as.numeric(value)] %>%
@@ -52,7 +52,7 @@ black_ownership_2010_dt <- get_vintage_data(
   vintage = 2010,
   group = "H11B",
   region = "us:1",
-  wide_to_long = T
+  wide_to_long = TRUE
 ) %>%
   .[1:4,] %>%
   .[, value := as.numeric(value)] %>%
@@ -69,8 +69,8 @@ white_black_ownership_plot <- RplotterPkg::create_bar_plot(
   aes_fill = "race",
   position = "dodge",
   x_title = "percent",
-  rot_y_tic_label = T,
-  do_coord_flip = T
+  rot_y_tic_label = TRUE,
+  do_coord_flip = TRUE
 ) + ggplot2::scale_fill_manual(values = c("black","white"))
 white_black_ownership_plot
 
@@ -83,7 +83,6 @@ grandchildren_variable_dt <- RcensusPkg::get_variable_names(
   vintage = 2010,
   vars = "PCT035001"
 )
-
 
 # -----------------------------------
 # Get the number of grandchildren living with grandparents by tract in Cuyahoga County, Ohio.
@@ -119,7 +118,7 @@ cuyahoga_ohio_tracts_grandchildren_sf <- RcensusPkg::tiger_tracts_sf(
   datafile_key = "GEOID",
   sf_key = "GEOID10",
   express = express,
-  sf_info = F
+  sf_info = FALSE
 )
 
 # Plot the simple feature showing the county's tracts and their respective "total_grandchildren" under 18
@@ -128,8 +127,8 @@ cuyahoga_ohio_tracts_grandchildren_sf <- RcensusPkg::tiger_tracts_sf(
 cuyahoga_ohio_tracts_grandchildren_plot <- RspatialPkg::get_geom_sf(
   sf = cuyahoga_ohio_tracts_grandchildren_sf,
   aes_fill = "total_grandchildren",
-  hide_x_tics = F,
-  hide_y_tics = F
+  hide_x_tics = FALSE,
+  hide_y_tics = FALSE
 ) + ggplot2::coord_sf(ylim = c(41.26,41.615))
 cuyahoga_ohio_tracts_grandchildren_plot
 

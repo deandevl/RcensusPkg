@@ -6,7 +6,7 @@
 \usage{
 tiger_blocks_sf(
   state = NULL,
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   set_crs = NULL,

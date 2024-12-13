@@ -5,7 +5,7 @@
 \title{tiger_zctas_sf}
 \usage{
 tiger_zctas_sf(
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   general = FALSE,

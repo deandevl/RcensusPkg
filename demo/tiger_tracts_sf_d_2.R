@@ -23,10 +23,10 @@ tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
   state = tx_fips,
   vintage = 1990,
   set_crs = 3486,
-  general = T,
+  general = TRUE,
   output_dir = output_dir,
-  delete_files = F,
-  do_progress = T
+  delete_files = FALSE,
+  do_progress = TRUE
 )
 
 # Get just the tracts for Tarrant County, Texas

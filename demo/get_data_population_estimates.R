@@ -36,7 +36,6 @@ RcensusPkg::plot_us_data(
   output_dir = output_dir,
   scale_breaks = seq(0,1400,200),
   scale_limits = c(0,1400),
-  scale_palette = "YlGn",
   scale_labels = seq(0,1400,200)
 )
 
@@ -49,7 +48,6 @@ RcensusPkg::plot_us_data(
   output_dir = output_dir,
   scale_breaks = seq(0,1400,200),
   scale_limits = c(0,1400),
-  scale_palette = "YlGn",
   scale_labels = seq(0,1400,200),
   sf_color = "white",
   sf_linewidth = 1.0

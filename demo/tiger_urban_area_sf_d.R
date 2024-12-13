@@ -39,8 +39,8 @@ ca_urban_pop_sf <- RcensusPkg::join_it(
   df_2 = us_urban_areas_sf,
   key_1 = "NAME",
   key_2 = "NAME10",
-  match = T,
-  return_sf = T
+  match = TRUE,
+  return_sf = TRUE
 ) %>% data.table::as.data.table(.) %>%
   .[, NAME := stringr::str_remove(NAME, fixed(", CA"))] %>%
   .[, Label := paste(NAME,population)] %>%
@@ -51,9 +51,9 @@ express <- expression(STATEFP == "06")
 ca_geo_sf <- RcensusPkg::tiger_states_sf(
   output_dir = output_dir,
   vintage = 2019,
-  general = T,
+  general = TRUE,
   express = express,
-  sf_info = F
+  sf_info = FALSE
 )
 
 

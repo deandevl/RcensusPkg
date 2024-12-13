@@ -1,6 +1,7 @@
 library(data.table)
 library(magrittr)
 library(httr)
+library(stringr)
 library(ggplot2)
 library(RplotterPkg)
 library(RcensusPkg)
@@ -14,7 +15,7 @@ sex_by_age_names_dt <- RcensusPkg::get_variable_names(
   dataset = "acs/acs1",
   vintage = 2021,
   group = "B01001",
-  filter_group_est = T
+  filter_group_est = TRUE
 ) %>%
  .[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)]
 
@@ -48,9 +49,9 @@ male_female_bar_plot <- RplotterPkg::create_bar_plot(
   aes_x = "label",
   aes_y = "percent",
   aes_fill = "sex",
-  do_coord_flip = T,
+  do_coord_flip = TRUE,
   position = "dodge",
-  rot_y_tic_label = T,
+  rot_y_tic_label = TRUE,
   x_title = "Percent"
 )
 male_female_bar_plot

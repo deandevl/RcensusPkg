@@ -50,13 +50,12 @@ percent_poverty_dt$percent_poverty <- data.table::fifelse(
   percent_poverty_dt$percent_poverty
 )
 
-poverty_plot <- RplotterPkg::create_scatter_plot(
+RplotterPkg::create_scatter_plot(
   df = percent_poverty_dt,
   aes_x = "time",
   aes_y = "percent_poverty",
   aes_color = "RACE",
-  connect = T,
+  connect = TRUE,
   x_major_breaks = seq(from = 2002, to = 2022, by = 2),
   y_major_breaks = seq(from = 0, to = 30, by = 2)
 )
-poverty_plot

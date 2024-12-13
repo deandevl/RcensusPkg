@@ -1,6 +1,7 @@
 library(data.table)
 library(magrittr)
 library(httr)
+library(stringr)
 library(ggplot2)
 library(RplotterPkg)
 library(RcensusPkg)
@@ -13,7 +14,7 @@ library(RcensusPkg)
 marital_status_names_dt <- RcensusPkg::get_variable_names(
   dataset = "acs/acsse",
   group = "K201001",
-  filter_group_est = T,
+  filter_group_est = TRUE,
   vintage = 2021
 ) %>%
 .[, .(name, label = stringr::str_remove_all(label, "Estimate!!Total:!!"), predicateType)] %>%
@@ -41,11 +42,11 @@ marital_status_plot <- RplotterPkg::create_bar_plot(
   df = marital_status_dt,
   aes_x = "Label",
   aes_y = "Percent",
-  do_coord_flip = T,
+  do_coord_flip = TRUE,
   position = "dodge",
-  rot_y_tic_label = T,
+  rot_y_tic_label = TRUE,
   order_bars = "desc",
-  bar_labels = T,
+  bar_labels = TRUE,
   bar_fill = "green",
   bar_alpha = 0.7,
   x_title = "Percent"

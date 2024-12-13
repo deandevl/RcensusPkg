@@ -37,11 +37,11 @@ household_size_plot <- RplotterPkg::create_bar_plot(
   df = household_size_2000_dt[2:8,],
   aes_x = "label",
   aes_y = "percent",
-  do_coord_flip = T,
-  rot_y_tic_label = T,
+  do_coord_flip = TRUE,
+  rot_y_tic_label = TRUE,
   bar_fill = "green",
   order_bars = "desc",
-  bar_labels = T,
+  bar_labels = TRUE,
   x_title = "Percent"
 )
 household_size_plot

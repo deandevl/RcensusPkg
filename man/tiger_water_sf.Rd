@@ -7,7 +7,7 @@
 tiger_water_sf(
   state = NULL,
   county = NULL,
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   entity = "area",

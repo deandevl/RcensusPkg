@@ -24,7 +24,7 @@
 remove_area_water <- function(
     x,
     vintage = 2020,
-    output_dir = tempdir(check = T)){
+    output_dir = tempdir(check = TRUE)){
 
   if (!"sf" %in% class(x)) {
     stop("The input dataset is not an sf object.")
@@ -35,7 +35,7 @@ remove_area_water <- function(
     output_dir = output_dir,
     vintage = vintage,
     general = TRUE,
-    sf_info = F
+    sf_info = FALSE
   )
 
   # Identify the counties that overlap the input sf object
@@ -56,7 +56,7 @@ remove_area_water <- function(
       county = substr(geoid, 3, 5),
       vintage = vintage,
       output_dir = output_dir,
-      sf_info = F
+      sf_info = FALSE
     )
   }
 

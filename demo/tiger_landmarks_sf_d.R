@@ -31,17 +31,16 @@ nelson_fips <- substr(kentucky_nelson_fips, 3, 5)
 kentucky_landmarks_sf <- RcensusPkg::tiger_landmarks_sf(
   state = kentucky_fips,
   entity = "point",
-  check_na = T,
+  check_na = TRUE,
   output_dir = output_dir
 )
 #kentucky_landmarks_sf <- na.omit(kentucky_landmarks_sf)
 
 # Map the Kentucky landmark geometries over the geometries for Kentucky
 kentucky_landmarks_plot <-
-  kentucky_plot +
+  kentucky_plot %>%
   RspatialPkg::get_geom_sf(
-    sf = kentucky_landmarks_sf,
-    adding = TRUE
+    sf = kentucky_landmarks_sf
   )
 kentucky_landmarks_plot
 
@@ -73,21 +72,19 @@ nelson_landmarks_plot <-
     sf = nelson_sf,
     sf_fill = "yellow",
     sf_alpha = 0.7,
-    hide_x_tics = T,
-    hide_y_tics = T) +
+    hide_x_tics = TRUE,
+    hide_y_tics = TRUE) %>%
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     aes_text = "FULLNAME",
     text_color = "black",
-    text_size = 1.5,
-    text_nudge_y = 0.007,
-    adding = T
-  ) +
+    text_size = 2.5,
+    text_nudge_y = 0.007
+  ) %>%
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     sf_fill = "red",
-    sf_size = 1.0,
-    adding = T
+    sf_size = 1.0
   )
 nelson_landmarks_plot
 

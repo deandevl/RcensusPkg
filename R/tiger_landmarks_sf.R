@@ -67,7 +67,7 @@
 #' @export
 tiger_landmarks_sf <- function(
   state = NULL,
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   entity = "point",

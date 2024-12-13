@@ -4,7 +4,7 @@
 \alias{remove_area_water}
 \title{remove_area_water}
 \usage{
-remove_area_water(x, vintage = 2020, output_dir = tempdir(check = T))
+remove_area_water(x, vintage = 2020, output_dir = tempdir(check = TRUE))
 }
 \arguments{
 \item{x}{An sf shapefile object with possible areas of water downloaded from the Census Bureau}

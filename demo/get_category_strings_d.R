@@ -4,7 +4,7 @@ library(usmap)
 library(RcensusPkg)
 
 # Get the names currently supported category variables
-category_names_v <- RcensusPkg::get_category_strings(get_names = T)
+category_names_v <- RcensusPkg::get_category_strings(get_names = TRUE)
 
 # Get the integer/string pairs for the category name "sex"
 sex_category_dt <- RcensusPkg::get_category_strings(name = "sex")

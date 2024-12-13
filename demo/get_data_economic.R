@@ -2,6 +2,7 @@ library(data.table)
 library(magrittr)
 library(httr)
 library(ggplot2)
+library(stringr)
 library(usmap)
 library(here)
 library(RspatialPkg)
@@ -29,7 +30,7 @@ naics_codes_dt <- RcensusPkg::get_vintage_data(
   dataset = "ecnbasic",
   vintage = 2017,
   vars = c("NAICS2017_LABEL", "NAICS2017"),
-  NAME_GEOID = F,
+  NAME_GEOID = FALSE,
   region = "us:*"
 )
 
@@ -59,8 +60,8 @@ us_computer_expenses_plot <- RplotterPkg::create_bar_plot(
   aes_x = "NAICS2017_LABEL",
   aes_y = "value",
   aes_fill = "variable",
-  do_coord_flip = T,
-  rot_y_tic_label = T
+  do_coord_flip = TRUE,
+  rot_y_tic_label = TRUE
 )
 us_computer_expenses_plot
 
@@ -81,8 +82,8 @@ express <- expression(STATEFP == 39)
 ohio_county_sf <- RcensusPkg::tiger_counties_sf(
   output_dir = output_dir,
   vintage = 2017,
-  general = T,
-  sf_info = F,
+  general = TRUE,
+  sf_info = FALSE,
   datafile = ohio_county_physician_employees_dt,
   datafile_key = "GEOID",
   express = express,
@@ -101,8 +102,8 @@ ohio_physicians_plot <- RspatialPkg::get_geom_sf(
   aes_text = "i.NAME",
   sf_color = "white",
   text_color = "white",
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 ohio_physicians_plot
 

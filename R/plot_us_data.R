@@ -88,7 +88,7 @@ plot_us_data <- function(
   text_size = 3.0,
   text_color = "black",
   text_fontface = "plain",
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   vintage = 2020,
   general = FALSE,
   resol = "500k",
@@ -135,8 +135,8 @@ plot_us_data <- function(
   states_sf <- RcensusPkg::tiger_states_sf(
     vintage = vintage,
     resol = resol,
-    general = T,
-    sf_info = F,
+    general = TRUE,
+    sf_info = FALSE,
     output_dir = output_dir
   ) %>%
     data.table::as.data.table(.) %>%
@@ -177,8 +177,8 @@ plot_us_data <- function(
     text_size = text_size,
     text_color = text_color,
     text_fontface = text_fontface,
-    hide_x_tics = T,
-    hide_y_tics = T,
+    hide_x_tics = TRUE,
+    hide_y_tics = TRUE,
     sf_color = sf_color,
     sf_fill = sf_fill,
     sf_linewidth = sf_linewidth,
@@ -222,8 +222,8 @@ plot_us_data <- function(
       text_size = text_size,
       text_color = text_color,
       text_fontface = text_fontface,
-      hide_x_tics = T,
-      hide_y_tics = T,
+      hide_x_tics = TRUE,
+      hide_y_tics = TRUE,
       sf_color = sf_color,
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
@@ -235,7 +235,7 @@ plot_us_data <- function(
       scale_colors = scale_colors,
       scale_na_value = scale_na_value,
       own_scale = own_scale,
-      show_legend = F
+      show_legend = FALSE
     ) + theme(
       panel.border = element_blank(),
       panel.background = element_blank(),
@@ -262,8 +262,8 @@ plot_us_data <- function(
       text_size = text_size,
       text_color = text_color,
       text_fontface = text_fontface,
-      hide_x_tics = T,
-      hide_y_tics = T,
+      hide_x_tics = TRUE,
+      hide_y_tics = TRUE,
       sf_color = sf_color,
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
@@ -275,7 +275,7 @@ plot_us_data <- function(
       scale_colors = scale_colors,
       scale_na_value = scale_na_value,
       own_scale = own_scale,
-      show_legend = F
+      show_legend = FALSE
     ) + theme(
       panel.border = element_blank(),
       panel.background = element_blank(),
@@ -303,8 +303,8 @@ plot_us_data <- function(
       text_size = text_size,
       text_color = text_color,
       text_fontface = text_fontface,
-      hide_x_tics = T,
-      hide_y_tics = T,
+      hide_x_tics = TRUE,
+      hide_y_tics = TRUE,
       sf_color = sf_color,
       sf_fill = sf_fill,
       sf_linewidth = sf_linewidth,
@@ -316,7 +316,7 @@ plot_us_data <- function(
       scale_colors = scale_colors,
       scale_na_value = scale_na_value,
       own_scale = own_scale,
-      show_legend = F
+      show_legend = FALSE
     ) + theme(
       panel.border = element_blank(),
       panel.background = element_blank(),
@@ -350,48 +350,6 @@ plot_us_data <- function(
       r = 20
     )
   }
-  # if(!is.null(title) & is.null(legend_grob)){
-  #   title_grob <- grid::textGrob(label = title, gp = grid::gpar(col = "black", fontsize = title_fontsz, fontface = 2L))
-  #   plots_table <- gtable::gtable_add_grob(
-  #     plots_table,
-  #     grobs = list(
-  #       title_grob
-  #     ),
-  #     t = 7,
-  #     l = 8,
-  #     r = 20
-  #   )
-  # }else if(is.null(title) & !is.null(legend_grob)){
-  #   plots_table <- gtable::gtable_add_grob(
-  #     plots_table,
-  #     grobs = list(
-  #       legend_grob
-  #     ),
-  #     t = 8,
-  #     l = 20,
-  #     r = 25
-  #   )
-  # }else if(!is.null(title) & !is.null(legend_grob)){
-  #   title_grob <- grid::textGrob(label = title, gp = grid::gpar(col = "black", fontsize = title_fontsz, fontface = 2L))
-  #   plots_table <- gtable::gtable_add_grob(
-  #     plots_table,
-  #     grobs = list(
-  #       title_grob
-  #     ),
-  #     t = 7,
-  #     l = 8,
-  #     r = 20
-  #   )
-  #   plots_table <- gtable::gtable_add_grob(
-  #     plots_table,
-  #     grobs = list(
-  #       legend_grob
-  #     ),
-  #     t = 8,
-  #     l = 20,
-  #     r = 25
-  #   )
-  # }
 
   plots_table <- gtable::gtable_add_grob(
     plots_table,
@@ -437,8 +395,6 @@ plot_us_data <- function(
       t = 19.8,
       l = 21,
       r = 21.5,
-      # l = 20,
-      # r = 20.5,
       b = 20
     )
   }

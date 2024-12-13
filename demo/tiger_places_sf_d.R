@@ -35,20 +35,18 @@ kentucky_places_plot <- RspatialPkg::get_geom_sf(
   sf_fill = "blue",
   sf_alpha = 0.7,
   panel_color = "brown",
-  hide_x_tics = T,
-  hide_y_tics = T
-) +
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
+) %>%
 RspatialPkg::get_geom_sf(
   sf = kentucky_places_sf,
-  sf_fill = "yellow",
-  adding = T
-) +
+  sf_fill = "yellow"
+) %>%
 RspatialPkg::get_geom_sf(
   sf = kentucky_places_sf,
   aes_text = "NAME",
   text_color = "white",
   text_size = 3,
-  text_nudge_y = 0.1,
-  adding = T
+  text_nudge_y = 0.1
 )
 kentucky_places_plot

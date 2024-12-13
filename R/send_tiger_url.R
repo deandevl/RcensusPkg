@@ -79,7 +79,7 @@
 
   if(delete_files){
     # Get all files in the directories, recursively
-    f <- list.files(output_dir, include.dirs = T, full.names = T, recursive = T)
+    f <- list.files(output_dir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
     # remove the files
     file.remove(f)
   }

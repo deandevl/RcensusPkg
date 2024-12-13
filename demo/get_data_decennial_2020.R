@@ -2,6 +2,7 @@ library(data.table)
 library(magrittr)
 library(httr)
 library(ggplot2)
+library(stringr)
 library(usmap)
 library(RplotterPkg)
 library(RcensusPkg)
@@ -34,7 +35,7 @@ get_household_size_count <- function(county_fips){
   dataset = "dec/dhc",
   vintage = 2020,
   group = "H12I",
-  wide_to_long = T,
+  wide_to_long = TRUE,
   region = paste0("county:", county_fips),
   regionin = paste0("state:", ohio_fips),
 ) %>%
@@ -58,7 +59,7 @@ holmes_geauga_household_size_plot <- RplotterPkg::create_bar_plot(
   aes_fill = "NAME",
   position = "dodge",
   x_title = "percent",
-  rot_y_tic_label = T,
-  do_coord_flip = T
+  rot_y_tic_label = TRUE,
+  do_coord_flip = TRUE
 )
 holmes_geauga_household_size_plot

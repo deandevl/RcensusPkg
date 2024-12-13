@@ -4,6 +4,7 @@ library(httr)
 library(here)
 library(ggplot2)
 library(usmap)
+library(stringr)
 library(RspatialPkg)
 library(RcensusPkg)
 
@@ -34,19 +35,19 @@ real_estate_metro_dt <- RcensusPkg::get_vintage_data(
 cbsa_sf <- RcensusPkg::tiger_cbsa_sf(
   output_dir = output_dir,
   vintage = 2020,
-  general = T,
-  sf_info = F,
+  general = TRUE,
+  sf_info = FALSE,
   datafile = real_estate_metro_dt[1:10,],
   datafile_key = "GEOID",
   sf_key = "GEOID",
-  check_na = T
+  check_na = TRUE
 )
 
 # Map the locations of the top 15 metro areas
 real_estate_metro_plot <- RspatialPkg::get_geom_sf(
   sf = cbsa_sf,
   aes_text = "i.NAME",
-  hide_x_tics = T,
-  hide_y_tics = T
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE
 )
 real_estate_metro_plot

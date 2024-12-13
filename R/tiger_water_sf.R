@@ -75,7 +75,7 @@
 tiger_water_sf <- function(
   state = NULL,
   county = NULL,
-  output_dir = tempdir(check = T),
+  output_dir = tempdir(check = TRUE),
   delete_files = TRUE,
   vintage = 2020,
   entity = "area",
@@ -150,7 +150,7 @@ tiger_water_sf <- function(
         df_2 = tiger_sf,
         key_1 = datafile_key,
         key_2 = sf_key,
-        return_sf = T
+        return_sf = TRUE
       )
     }
 
