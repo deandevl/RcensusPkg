@@ -3,7 +3,6 @@ library(sf)
 library(here)
 library(ggplot2)
 library(data.table)
-library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
@@ -29,8 +28,7 @@ mun_zcta_sf <- RcensusPkg::tiger_zctas_sf(
 )
 
 # Map the Boston area ZCTA
-mun_zcta_plot <- RspatialPkg::get_geom_sf(sf = mun_zcta_sf)
-mun_zcta_plot
+RspatialPkg::get_geom_sf(sf = mun_zcta_sf)
 
 # get dataset names
 datasets_dt <- RcensusPkg::get_dataset_names(
@@ -76,14 +74,14 @@ mun_zcta_data_sf <- RcensusPkg::tiger_zctas_sf(
   datafile = income_dt,
   datafile_key = "GEOID",
   sf_key = "GEOID20"
-) %>%
-  data.table::as.data.table(.) %>%
-  data.table::setnames(old = "B19113_001E", new = "Family_Income") %>%
-  .[, .(GEOID, Family_Income = as.numeric(Family_Income), geometry)] %>%
-  sf::st_sf(.)
+) |>
+  data.table::as.data.table() |>
+  data.table::setnames(old = "B19113_001E", new = "Family_Income") |>
+  _[, .(GEOID, Family_Income = as.numeric(Family_Income), geometry)] |>
+  sf::st_sf()
 
 # map the data with tiger geographies
-mun_zcta_data_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = mun_zcta_data_sf,
   aes_fill = "Family_Income",
   hide_x_tics = TRUE,
@@ -91,4 +89,3 @@ mun_zcta_data_plot <- RspatialPkg::get_geom_sf(
   panel_color = "white",
   caption = "Income for families in the county of Middlesex, MA near Boston"
 )
-mun_zcta_data_plot

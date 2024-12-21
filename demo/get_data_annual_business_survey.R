@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(here)
 library(ggplot2)
@@ -27,8 +26,8 @@ real_estate_metro_dt <- RcensusPkg::get_vintage_data(
   vars = c("NAICS2017", "NAICS2017_LABEL", "FIRMPDEMP", "EMP", "PAYANN"),
   predicates = "&NAICS2017=53",
   region = "metropolitan statistical area/micropolitan statistical area:*"
-) %>%
-  .[, .(NAME = stringr::str_remove(NAME, " Metro Area"), GEOID, NAICS2017 = as.integer(NAICS2017), FIRMPDEMP = as.integer(FIRMPDEMP), EMP = as.integer(EMP), PAYANN = as.integer(PAYANN), NAICS2017_LABEL)] %>%
+) |>
+  _[, .(NAME = stringr::str_remove(NAME, " Metro Area"), GEOID, NAICS2017 = as.integer(NAICS2017), FIRMPDEMP = as.integer(FIRMPDEMP), EMP = as.integer(EMP), PAYANN = as.integer(PAYANN), NAICS2017_LABEL)] |>
   data.table::setorderv(cols = "PAYANN", order = -1)
 
 # Get the geometries of the top 10 metro areas based on real estate company annual payroll.
@@ -44,10 +43,9 @@ cbsa_sf <- RcensusPkg::tiger_cbsa_sf(
 )
 
 # Map the locations of the top 15 metro areas
-real_estate_metro_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = cbsa_sf,
   aes_text = "i.NAME",
   hide_x_tics = TRUE,
   hide_y_tics = TRUE
 )
-real_estate_metro_plot

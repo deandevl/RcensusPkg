@@ -4,7 +4,6 @@ library(here)
 library(usmap)
 library(ggplot2)
 library(data.table)
-library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
@@ -24,11 +23,10 @@ cbsa_tx_sf <- RcensusPkg::tiger_cbsa_sf(
 head(cbsa_tx_sf, 1)
 
 # Map the cbsa boundaries for Kansas City
-cbsa_tx_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = cbsa_tx_sf,
   hide_x_tics = TRUE,
   hide_y_tics = TRUE
 )
-cbsa_tx_plot
 
 

@@ -1,6 +1,5 @@
 library(jsonlite)
 library(data.table)
-library(magrittr)
 library(httr)
 library(usmap)
 library(RcensusPkg)
@@ -38,8 +37,8 @@ college_by_year_dt <- RcensusPkg::get_multi_vintage_data(
   vars = vars,
   region = "county:*",
   regionin = paste0("state:", co_fips)
-) %>%
-  .[,`:=`(state = NULL, county = NULL)]
+) |>
+  _[,`:=`(state = NULL, county = NULL)]
 
 # Reshape college_by_year_dt in "long" format.
 college_by_year_long_dt <- data.table::melt(

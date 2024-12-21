@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(RcensusPkg)
 

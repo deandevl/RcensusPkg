@@ -1,7 +1,6 @@
 library(httr)
 library(sf)
 library(data.table)
-library(magrittr)
 library(usmap)
 library(here)
 library(RspatialPkg)
@@ -26,7 +25,5 @@ losalamos_tracts_sf <- RcensusPkg::tiger_tracts_sf(
   output_dir = output_dir
 )
 
-
 # Map the Los Alamos County tract geometries
-losalamos_tracts_plot <- RspatialPkg::get_geom_sf(sf = losalamos_tracts_sf)
-losalamos_tracts_plot
+RspatialPkg::get_geom_sf(sf = losalamos_tracts_sf)

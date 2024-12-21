@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(here)
 library(sf)
 library(stringr)

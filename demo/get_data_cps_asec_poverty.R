@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(ggplot2)
 library(RcensusPkg)
@@ -20,8 +19,8 @@ percent_poverty_dt <- RcensusPkg::get_vintage_data(
   vars = "PCTPOV",
   predicates = "&time=from+2002+to+2021&RACE=2&RACE=7",
   region = "us:*"
-) %>%
-  .[, .(time = as.integer(time), PCTPOV = as.numeric(PCTPOV), RACE = as.integer(RACE))] %>%
+) |>
+  _[, .(time = as.integer(time), PCTPOV = as.numeric(PCTPOV), RACE = as.integer(RACE))] |>
   data.table::setnames(old = "PCTPOV", new = "percent_poverty")
 
 # Do some data wrangling

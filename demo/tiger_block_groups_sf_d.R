@@ -25,5 +25,4 @@ dc_block_groups_general_sf <- RcensusPkg::tiger_block_groups_sf(
   output_dir = output_dir
 )
 # Map the sf
-dc_block_groups_general_plot <- RspatialPkg::get_geom_sf(sf = dc_block_groups_general_sf)
-dc_block_groups_general_plot
+RspatialPkg::get_geom_sf(sf = dc_block_groups_general_sf)

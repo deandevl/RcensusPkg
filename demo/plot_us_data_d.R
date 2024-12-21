@@ -1,6 +1,5 @@
 library(sf)
 library(here)
-library(magrittr)
 library(ggplot2)
 library(RColorBrewer)
 library(RspatialPkg)
@@ -22,9 +21,9 @@ RcensusPkg::plot_us_data(
   vintage = 2019,
   vars = "B01002_001E",
   region = "state"
-) %>%
-  data.table::setnames(., old = "B01002_001E", new = "median_age") %>%
-  .[, median_age := as.numeric(median_age)]
+) |>
+  data.table::setnames(old = "B01002_001E", new = "median_age") |>
+  _[, median_age := as.numeric(median_age)]
 
 # this is used for debugging--an obvious value at the lower end of the scale
 #states_median_age_dt[NAME == "Alaska", median_age := 30]
@@ -60,7 +59,6 @@ RcensusPkg::plot_us_data(
   text_color = "white",
   text_size = 4,
   text_fontface = "bold",
-  sf_alpha = 0.5,
   sf_linewidth = 1,
   scale_labels = c("Republican","Democrate"),
   legend_pos = "top"
@@ -72,7 +70,7 @@ vote2020_dt <- data.table::fread(file = data_file_path)
 names(vote2020_dt)
 
 # Change the name of column "state" to "NAME" and set the "called" column as a factor:
-vote2020_dt[, `:=`(called = as.factor(called))] %>%
+vote2020_dt[, `:=`(called = as.factor(called))] |>
   data.table::setnames(old = "called", new = "Party")
 
 RcensusPkg::plot_us_data(
@@ -95,10 +93,10 @@ housing_values_dt <- RcensusPkg::get_vintage_data(
   vintage = 2019,
   vars = "B25077_001E",
   region = "state:*"
-) %>%
-  data.table::setnames(old = "B25077_001E", new = "estimate") %>%
-  .[, estimate := as.numeric(estimate)] %>%
-  data.table::setnames(., old = "estimate", new = "Median_House_Values")
+) |>
+  data.table::setnames(old = "B25077_001E", new = "estimate") |>
+  _[, estimate := as.numeric(estimate)] |>
+  data.table::setnames(old = "estimate", new = "Median_House_Values")
 
 # Define "pretty" intervals for housing values
 intervals <- classInt::classIntervals(
@@ -136,14 +134,14 @@ acs1_computers_data_2013_dt <- RcensusPkg::get_vintage_data(
   vars = c("DP02_0150E", "DP02_0151PE", "DP02_0152PE"),
   region = "state:*"
 )
-acs1_computers_data_2013_dt <- acs1_computers_data_2013_dt %>%
+acs1_computers_data_2013_dt <- acs1_computers_data_2013_dt |>
   data.table::setnames(
     old = c("NAME", "DP02_0150E", "DP02_0151PE", "DP02_0152PE"),
-    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) %>%
-  .[, .(GEOID, State, Total, ComputerPresent, BroadbandPresent)] %>%
-  .[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent),
-           BroadbandPresent = as.numeric(BroadbandPresent))] %>%
-  .[order(State)]
+    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) |>
+  _[, .(GEOID, State, Total, ComputerPresent, BroadbandPresent)] |>
+  _[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent),
+           BroadbandPresent = as.numeric(BroadbandPresent))] |>
+  _[order(State)]
 
 # 2023 data
 acs1_computers_data_2023_dt <- RcensusPkg::get_vintage_data(
@@ -152,11 +150,11 @@ acs1_computers_data_2023_dt <- RcensusPkg::get_vintage_data(
   vars = c("DP02_0152E", "DP02_0153PE", "DP02_0154PE"),
   region = "state:*"
 )
-acs1_computers_data_2023_dt <- acs1_computers_data_2023_dt %>%
+acs1_computers_data_2023_dt <- acs1_computers_data_2023_dt |>
   data.table::setnames(
     old = c("NAME", "DP02_0152E", "DP02_0153PE", "DP02_0154PE"),
-    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) %>%
-  .[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent),
+    new = c("State", "Total", "ComputerPresent", "BroadbandPresent")) |>
+  _[, `:=`(Total = as.numeric(Total), ComputerPresent = as.numeric(ComputerPresent),
            BroadbandPresent = as.numeric(BroadbandPresent))]
 
 # Create the plots for 2013, 2021

@@ -2,7 +2,6 @@ library(httr)
 library(sf)
 library(here)
 library(data.table)
-library(magrittr)
 library(usmap)
 library(ggplot2)
 library(RspatialPkg)
@@ -30,16 +29,15 @@ tx_tracts_sf <-  RcensusPkg::tiger_tracts_sf(
 )
 
 # Get just the tracts for Tarrant County, Texas
-tarrant_cty_tracts_sf <- data.table::as.data.table(tx_tracts_sf) %>%
-  .[CO == tarrant_fips, ] %>%
-  sf::st_as_sf(.)
+tarrant_cty_tracts_sf <- data.table::as.data.table(tx_tracts_sf) |>
+  _[CO == tarrant_fips, ] |>
+  sf::st_as_sf()
 
 # Map the simple feature (sf) object for Tarrant County, Texas tracts
-tarrant_cty_tracts_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = tarrant_cty_tracts_sf,
   sf_fill = "green"
 )
-tarrant_cty_tracts_plot
 
 # -----------------------Read and convert to a simple feature a downloaded shapefile of all Texas tracts---------
 # Change the crs to 4326
@@ -50,8 +48,7 @@ tx_tracts_downloaded_sf <- RcensusPkg::tiger_tracts_sf(
 )
 
 # Map the simple feature
-tx_tracts_downloaded_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = tx_tracts_downloaded_sf,
   sf_fill = "yellow"
 )
-tx_tracts_downloaded_plot

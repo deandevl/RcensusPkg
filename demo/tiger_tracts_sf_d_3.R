@@ -2,7 +2,6 @@ library(httr)
 library(here)
 library(sf)
 library(data.table)
-library(magrittr)
 library(usmap)
 library(purrr)
 library(ggplot2)
@@ -30,9 +29,9 @@ build_plot <- function(id, years, set_crs, vars, state_fips, county_fips){
   )
 
   col_name <- vars[[id]]
-  tarrant_tracts_sf <- data.table::as.data.table(tx_tracts_sf) %>%
-    .[.[[col_name]] == county_fips, ] %>%
-    sf::st_as_sf(.)
+  tarrant_tracts_sf <- data.table::as.data.table(tx_tracts_sf) |>
+    _[col_name == county_fips, ] |>
+    sf::st_as_sf()
 
   tarrant_tracts_plot <- RspatialPkg::get_geom_sf(
     sf = tarrant_tracts_sf,

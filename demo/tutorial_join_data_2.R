@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(sf)
 library(here)
 library(usmap)
@@ -39,8 +38,8 @@ data.table::setnames(dc_B19013_dt, old = "B19013_001E", new = "MedianIncome")
 # simple wrangling
 # Remove rows with value = -666666666
 # Convert value column to numeric
-dc_B19013_dt <- dc_B19013_dt[MedianIncome != -666666666, ] %>%
-  .[, MedianIncome := as.numeric(MedianIncome)]
+dc_B19013_dt <- dc_B19013_dt[MedianIncome != -666666666, ] |>
+  _[, MedianIncome := as.numeric(MedianIncome)]
 
 # Get the simple feature DC tract geometries and join the data dataframe "dc_B19013_dt"
 output_dir <- file.path(here(), "demos", "shapefiles")
@@ -60,7 +59,7 @@ dc_joined_sf <- RcensusPkg::join_it(
 
 # Map the joined simple feature geometries with "value" column as
 #  a fill aesthetic variable.
-dc_joined_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = dc_joined_sf,
   aes_fill = "MedianIncome"
 ) +
@@ -68,8 +67,6 @@ ggplot2::scale_fill_gradientn(
   colors = RColorBrewer::brewer.pal(n = 9, name = "Greens"),
   n.breaks = 8
 )
-dc_joined_plot
-
 
 # --------------------The following also works----------
 # Create the simple feature with a joined data dataframe
@@ -80,8 +77,7 @@ dc_joined_alternative__sf <- RcensusPkg::tiger_tracts_sf(
   datafile_key = "GEOID"
 )
 # Map the simple feature
-dc_joined_alternative_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = dc_joined_alternative__sf,
   aes_fill = "MedianIncome"
 )
-dc_joined_alternative_plot

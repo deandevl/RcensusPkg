@@ -26,8 +26,7 @@ ohio_counties_sf <- RcensusPkg::tiger_counties_sf(
 )
 
 # Map the Ohio counties
-ohio_counties_plot <- RspatialPkg::get_geom_sf(sf = ohio_counties_sf)
-ohio_counties_plot
+RspatialPkg::get_geom_sf(sf = ohio_counties_sf)
 
 # Get just Geauga County in Ohio by using the "express" parameter
 # We need the fips code for Geauga County
@@ -45,6 +44,4 @@ geauga_sf <- RcensusPkg::tiger_counties_sf(
 )
 
 # Map Geauga County geometries
-geauga_plot <- RspatialPkg::get_geom_sf(sf = geauga_sf)
-geauga_plot
-
+RspatialPkg::get_geom_sf(sf = geauga_sf)

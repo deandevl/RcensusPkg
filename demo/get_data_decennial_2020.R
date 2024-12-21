@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(ggplot2)
 library(stringr)
@@ -24,10 +23,10 @@ household_size_vars_dt <- RcensusPkg::get_variable_names(
   dataset = "dec/dhc",
   vintage = 2020,
   group = "H12I"
-) %>%
-  .[predicateType == "int",] %>%
-  .[2:9] %>%
-  .[, .(name, label = stringr::str_remove_all(label, "!!Total:!!Owner occupied:!!"))]
+) |>
+  _[predicateType == "int",] |>
+  _[2:9] |>
+  _[, .(name, label = stringr::str_remove_all(label, "!!Total:!!Owner occupied:!!"))]
 household_size_vars_dt[[1,2]] <- "Total"
 
 get_household_size_count <- function(county_fips){
@@ -38,11 +37,11 @@ get_household_size_count <- function(county_fips){
   wide_to_long = TRUE,
   region = paste0("county:", county_fips),
   regionin = paste0("state:", ohio_fips),
-) %>%
- na.omit() %>%
- .[2:9, .(NAME, variable, value = as.numeric(value))] %>%
- .[, `:=`(label =  household_size_vars_dt$label, percent = round(value/value[[1]],digits = 2))] %>%
- .[2:8]
+) |>
+ na.omit() |>
+ _[2:9, .(NAME, variable, value = as.numeric(value))] |>
+ _[, `:=`(label =  household_size_vars_dt$label, percent = round(value/value[[1]],digits = 2))] |>
+ _[2:8]
 
   return(county_household_size_count_dt)
 }
@@ -52,7 +51,7 @@ geauga_ohio_household_size_count_dt <- get_household_size_count(county_fips = ge
 
 holmes_geauga_household_size_count_dt <- rbind(holmes_ohio_household_size_count_dt, geauga_ohio_household_size_count_dt)
 
-holmes_geauga_household_size_plot <- RplotterPkg::create_bar_plot(
+RplotterPkg::create_bar_plot(
   df = holmes_geauga_household_size_count_dt,
   aes_x = "label",
   aes_y = "percent",
@@ -62,4 +61,3 @@ holmes_geauga_household_size_plot <- RplotterPkg::create_bar_plot(
   rot_y_tic_label = TRUE,
   do_coord_flip = TRUE
 )
-holmes_geauga_household_size_plot

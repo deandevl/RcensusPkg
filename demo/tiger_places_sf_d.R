@@ -4,7 +4,6 @@ library(usmap)
 library(here)
 library(ggplot2)
 library(data.table)
-library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
@@ -30,18 +29,18 @@ kentucky_sf <- RcensusPkg::tiger_states_sf(
 )
 
 # Map the major places and Kentucky state boundary geometries
-kentucky_places_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = kentucky_sf,
   sf_fill = "blue",
   sf_alpha = 0.7,
   panel_color = "brown",
   hide_x_tics = TRUE,
   hide_y_tics = TRUE
-) %>%
+) |>
 RspatialPkg::get_geom_sf(
   sf = kentucky_places_sf,
   sf_fill = "yellow"
-) %>%
+) |>
 RspatialPkg::get_geom_sf(
   sf = kentucky_places_sf,
   aes_text = "NAME",
@@ -49,4 +48,3 @@ RspatialPkg::get_geom_sf(
   text_size = 3,
   text_nudge_y = 0.1
 )
-kentucky_places_plot

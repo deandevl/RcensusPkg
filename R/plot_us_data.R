@@ -18,7 +18,7 @@
 #'   If the column has discrete values then it must be a factor. This is a required parameter.
 #' @param title A string that sets the plot title.
 #' @param title_fontsz A numeric that sets the title's font size. The default is 18.
-#' @param text_col An optional string that sets the column name from \code{df} for labelling each state polygon.
+#' @param text_col An optional string that sets the column name from \code{df} for labeling each state polygon.
 #' @param text_size A numeric value that sets the size of labeled state text.
 #' @param text_color A string that sets the color of labeled state text.
 #' @param text_fontface A string that sets the fontface of labeled state text.
@@ -69,7 +69,6 @@
 #' @importFrom RspatialPkg get_geom_sf
 #' @importFrom ggplotify as.ggplot
 #' @import ggplot2
-#' @import magrittr
 #'
 #' @author Rick Dean
 #'
@@ -138,10 +137,10 @@ plot_us_data <- function(
     general = TRUE,
     sf_info = FALSE,
     output_dir = output_dir
-  ) %>%
-    data.table::as.data.table(.) %>%
-    .[, NAME := tolower(NAME)] %>%
-    sf::st_as_sf(.)
+  ) |>
+    data.table::as.data.table() |>
+    _[, NAME := tolower(NAME)] |>
+    sf::st_as_sf()
 
   # join states_sf with df
   if(!is.null(df)){
@@ -153,30 +152,26 @@ plot_us_data <- function(
 
     data.table::setkeyv(dt, cols = "NAME")
     data.table::setkeyv(states_dt, cols = "NAME")
-    data_sf <- states_dt[dt, nomatch = 0] %>%
-      sf::st_as_sf(.)
+    data_sf <- states_dt[dt, nomatch = 0] |>
+      sf::st_as_sf()
   }else {
     data_sf <- states_sf
   }
 
   # Remove AK,HI,PR from data_sf
-  lower_48_states_sf <- data_sf %>%
-    data.table::as.data.table(.) %>%
-    .[!NAME %in% c("alaska","hawaii","puerto rico",
+  lower_48_states_sf <- data_sf  |>
+    data.table::as.data.table() |>
+    _[!NAME %in% c("alaska","hawaii","puerto rico",
                    "guam","commonwealth of the northern mariana islands",
                    "united states virgin islands","american samoa")
-      ] %>%
-    sf::st_as_sf(.) %>%
+      ] |>
+    sf::st_as_sf() |>
     sf::st_transform(lower_48_crs)
 
   # Get plot grob for lower 48 states
   lower_48_states_plot <- RspatialPkg::get_geom_sf(
     sf = lower_48_states_sf,
     aes_fill = value_col,
-    aes_text = text_col,
-    text_size = text_size,
-    text_color = text_color,
-    text_fontface = text_fontface,
     hide_x_tics = TRUE,
     hide_y_tics = TRUE,
     sf_color = sf_color,
@@ -201,6 +196,18 @@ plot_us_data <- function(
     plot.margin = unit(rep(0.1,4),"cm"),
   )
 
+  if(!is.null(text_col)) {
+    lower_48_states_plot <- lower_48_states_plot |>
+      RspatialPkg::get_geom_sf(
+        sf = lower_48_states_sf,
+        aes_text = text_col,
+        text_size = text_size,
+        text_color = text_color,
+        text_fontface = text_fontface,
+        sf_alpha = 0
+      )
+  }
+
   plots_lst[["lower_48"]] = lower_48_states_plot
   sf_lst[["lower_48"]] = lower_48_states_sf
   # Convert ggplot2 object to grob
@@ -209,19 +216,15 @@ plot_us_data <- function(
   # Get geometries/grobs for "outer" states
   alaska_grob <- NULL
   if("alaska" %in% data_sf$NAME){
-    alaska_sf <- data_sf %>%
-      data.table::as.data.table(.) %>%
-      .[NAME == "alaska",] %>%
-      sf::st_as_sf(.) %>%
+    alaska_sf <- data_sf |>
+      data.table::as.data.table() |>
+      _[NAME == "alaska",] |>
+      sf::st_as_sf() |>
       sf::st_transform(alaska_crs)
 
     alaska_plot <- RspatialPkg::get_geom_sf(
       sf = alaska_sf,
       aes_fill = value_col,
-      aes_text = text_col,
-      text_size = text_size,
-      text_color = text_color,
-      text_fontface = text_fontface,
       hide_x_tics = TRUE,
       hide_y_tics = TRUE,
       sf_color = sf_color,
@@ -242,6 +245,18 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm"),
       legend.position = "none"
     )
+
+    if(!is.null(text_col)) {
+      alaska_plot <- alaska_plot |>
+        RspatialPkg::get_geom_sf(
+          sf = alaska_sf,
+          aes_text = text_col,
+          text_size = text_size,
+          text_color = text_color,
+          text_fontface = text_fontface,
+          sf_alpha = 0
+        )
+    }
 
     plots_lst[["alaska"]] <- alaska_plot
     sf_lst[["alaska"]] <- alaska_sf
@@ -250,18 +265,14 @@ plot_us_data <- function(
 
   hawaii_grob <- NULL
   if("hawaii" %in% data_sf$NAME){
-    hawaii_sf <- data_sf %>%
-      data.table::as.data.table(.) %>%
-      .[NAME == "hawaii",] %>%
-      sf::st_as_sf(.) %>%
+    hawaii_sf <- data_sf |>
+      data.table::as.data.table() |>
+      _[NAME == "hawaii",] |>
+      sf::st_as_sf() |>
       sf::st_transform(hawaii_crs)
     hawaii_plot <- RspatialPkg::get_geom_sf(
       sf = hawaii_sf,
       aes_fill = value_col,
-      aes_text = text_col,
-      text_size = text_size,
-      text_color = text_color,
-      text_fontface = text_fontface,
       hide_x_tics = TRUE,
       hide_y_tics = TRUE,
       sf_color = sf_color,
@@ -283,6 +294,18 @@ plot_us_data <- function(
       legend.position = "none"
     )
 
+    if(!is.null(text_col)) {
+      hawaii_plot <- hawaii_plot |>
+        RspatialPkg::get_geom_sf(
+          sf = hawaii_sf,
+          aes_text = text_col,
+          text_size = text_size,
+          text_color = text_color,
+          text_fontface = text_fontface,
+          sf_alpha = 0
+        )
+    }
+
     plots_lst[["hawaii"]] <- hawaii_plot
     sf_lst[["hawaii"]] <- hawaii_sf
     hawaii_grob <- ggplot2::ggplotGrob(hawaii_plot)
@@ -290,10 +313,10 @@ plot_us_data <- function(
 
   puerto_grob <- NULL
   if("puerto rico" %in% data_sf$NAME){
-    puerto_sf <- data_sf %>%
-      data.table::as.data.table(.) %>%
-      .[NAME == "puerto rico",] %>%
-      sf::st_as_sf(.) %>%
+    puerto_sf <- data_sf |>
+      data.table::as.data.table() |>
+      _[NAME == "puerto rico",] |>
+      sf::st_as_sf() |>
       sf::st_transform(pureto_crs)
 
     puerto_plot <- RspatialPkg::get_geom_sf(
@@ -323,6 +346,18 @@ plot_us_data <- function(
       plot.margin = unit(rep(0.1,4),"cm"),
       legend.position = "none"
     )
+
+    if(!is.null(text_col)) {
+      puerto_plot <- puerto_plot |>
+        RspatialPkg::get_geom_sf(
+          sf = puerto_sf,
+          aes_text = text_col,
+          text_size = text_size,
+          text_color = text_color,
+          text_fontface = text_fontface,
+          sf_alpha = 0
+        )
+    }
 
     plots_lst[["puerto_rico"]] <- puerto_plot
     sf_lst[["puerto_rico"]] <- puerto_sf

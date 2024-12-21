@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(RcensusPkg)
 
@@ -20,8 +19,8 @@ white_females_dt <- RcensusPkg::get_vintage_data(
   vars = c("B01001A_017E", "B01001A_001E"),
   vintage = 2021,
   region = "state:*"
-) %>%
-  data.table::setnames(old = c("B01001A_017E", "B01001A_001E"), new = c("white_females", "total_white")) %>%
-  .[, .(NAME, white_females = as.numeric(white_females), total_white = as.numeric(total_white))]  %>%
-  .[, percent_female := round(white_females/total_white * 100, digits = 1)]
+) |>
+  data.table::setnames(old = c("B01001A_017E", "B01001A_001E"), new = c("white_females", "total_white")) |>
+  _[, .(NAME, white_females = as.numeric(white_females), total_white = as.numeric(total_white))]  |>
+  _[, percent_female := round(white_females/total_white * 100, digits = 1)]
 

@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(ggplot2)
 library(stringr)
@@ -49,13 +48,13 @@ us_computer_expenses_dt <- RcensusPkg::get_vintage_data(
 )
 
 # Do some data.table wrangling to produce a bar chart.
-us_computer_expenses_long_dt <- us_computer_expenses_dt %>%
-  data.table::setnames(old = c("PCHDAPR", "PCHCMPQ"), new = c("computer_services", "computer_hardware")) %>%
-  data.table::melt(id.vars = "NAICS2017_LABEL", measure.vars = c("computer_services", "computer_hardware")) %>%
-  .[, .(NAICS2017_LABEL, variable, value = as.integer(value))]
+us_computer_expenses_long_dt <- us_computer_expenses_dt |>
+  data.table::setnames(old = c("PCHDAPR", "PCHCMPQ"), new = c("computer_services", "computer_hardware")) |>
+  data.table::melt(id.vars = "NAICS2017_LABEL", measure.vars = c("computer_services", "computer_hardware")) |>
+  _[, .(NAICS2017_LABEL, variable, value = as.integer(value))]
 
 # Create the bar chart
-us_computer_expenses_plot <- RplotterPkg::create_bar_plot(
+RplotterPkg::create_bar_plot(
   df = us_computer_expenses_long_dt,
   aes_x = "NAICS2017_LABEL",
   aes_y = "value",
@@ -63,7 +62,6 @@ us_computer_expenses_plot <- RplotterPkg::create_bar_plot(
   do_coord_flip = TRUE,
   rot_y_tic_label = TRUE
 )
-us_computer_expenses_plot
 
 # ------------------------------------------------
 # Find the number of employees ("EMP") associated with NAICS code 6211 ("Offices of physicians") among counties in Ohio.
@@ -74,8 +72,8 @@ ohio_county_physician_employees_dt <- RcensusPkg::get_vintage_data(
   predicates = "&NAICS2017=6211",
   region = "county:*",
   regionin = paste0("state:", ohio_fips)
-) %>%
-  .[, .(NAME = stringr::str_remove(NAME, "County, Ohio"), GEOID, county, EMP = as.numeric(EMP))]
+) |>
+  _[, .(NAME = stringr::str_remove(NAME, "County, Ohio"), GEOID, county, EMP = as.numeric(EMP))]
 
 # Get the simple feature (sf) geometries for the Ohio counties and join it with the above physician employees data
 express <- expression(STATEFP == 39)
@@ -96,26 +94,16 @@ dt$EMP <- data.table::fifelse(test =  dt$EMP > 0.0, yes =  dt$EMP, no = 0.0, na 
 ohio_county_sf <- sf::st_as_sf(dt)
 
 # Plot the Ohio counties with their degree of employees in physician offices
-ohio_physicians_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = ohio_county_sf,
   aes_fill = "EMP",
-  aes_text = "i.NAME",
   sf_color = "white",
   text_color = "white",
   hide_x_tics = TRUE,
   hide_y_tics = TRUE
+) |>
+RspatialPkg::get_geom_sf(
+  sf = ohio_county_sf,
+  aes_text = "i.NAME",
+  sf_alpha = 0
 )
-ohio_physicians_plot
-
-
-# Get metadata of the variable "Capital expenditures for computers and peripheral data processing equipment($1000)"
-#   ("CEXMCHC")
-# capital_vars_dt <- RcensusPkg::get_vintage_data(
-#   dataset = "ecnbasic",
-#   vintage = 2017,
-#   vars =  "CEXMCHC",
-#   predicates = "&NAICS2017=2111",
-#   region = "state:*",
-#   regionin = "us:1"
-# )
-

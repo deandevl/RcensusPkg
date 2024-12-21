@@ -1,7 +1,6 @@
 library(jsonlite)
 library(data.table)
 library(httr)
-library(magrittr)
 library(RcensusPkg)
 
 # Get data.table of variables for 'acs/acs5' for 2019

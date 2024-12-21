@@ -1,6 +1,4 @@
 library(data.table)
-library(magrittr)
-library(httr)
 library(ggplot2)
 library(here)
 library(usmap)
@@ -18,19 +16,10 @@ white_house_ownership_vars_dt <- RcensusPkg::get_variable_names(
   dataset = "dec/sf1",
   vintage = 2010,
   group = "H11A"
-) %>%
-  .[, .(name, label = stringr::str_remove_all(label, "Population in occupied housing units!!"), predicateType)]
-white_house_ownership_vars_dt$label[[1]] <- "total_pop"
+) |>
+ _[, .(name, label = stringr::str_remove_all(label, "Population in occupied housing units!!"), predicateType)]
 
-# Similarly, get metadata of the variable group "TOTAL POPULATION IN OCCUPIED HOUSING UNITS
-#  BY TENURE (BLACK OR AFRICAN AMERICAN ALONE HOUSEHOLDER)" ("H11B")
-black_house_ownership_vars_dt <- RcensusPkg::get_variable_names(
-  dataset = "dec/sf1",
-  vintage = 2010,
-  group = "H11B"
-) %>%
-  .[, .(name, label = stringr::str_remove_all(label, "Population in occupied housing units!!"), predicateType)]
-black_house_ownership_vars_dt$label[[1]] <- "total_pop"
+labels <- white_house_ownership_vars_dt$label[2:5]
 
 # Get count estimates for the white tenure of home ownership across the US for 2010.
 white_ownership_2010_dt <- get_vintage_data(
@@ -39,11 +28,11 @@ white_ownership_2010_dt <- get_vintage_data(
   group = "H11A",
   region = "us:1",
   wide_to_long = TRUE
-) %>%
-  .[1:4,] %>%
-  .[, value := as.numeric(value)] %>%
-  .[, `:=`(percent = round(value/value[[1]] * 100, digits = 1), race = "white", label = white_house_ownership_vars_dt$label)] %>%
-  .[2:4,]
+) |>
+  _[1:4,] |>
+  _[, value := as.numeric(value)] |>
+  _[, `:=`(percent = round(value/value[[1]] * 100, digits = 1), race = "white", label = factor(labels, levels = labels))] |>
+  _[2:4,]
 
 
 # Similarly get count estimates for the black tenure of home ownership
@@ -56,13 +45,13 @@ black_ownership_2010_dt <- get_vintage_data(
 ) %>%
   .[1:4,] %>%
   .[, value := as.numeric(value)] %>%
-  .[, `:=`(percent = round(value/value[[1]] * 100, digits = 1), race = "black", label = black_house_ownership_vars_dt$label)] %>%
+  .[, `:=`(percent = round(value/value[[1]] * 100, digits = 1), race = "black", label = factor(labels, levels = labels))] %>%
   .[2:4,]
 
 
 # Compare white and black tenure ownership in a bar chart
 white_black_ownership_dt <- rbind(white_ownership_2010_dt, black_ownership_2010_dt)
-white_black_ownership_plot <- RplotterPkg::create_bar_plot(
+RplotterPkg::create_bar_plot(
   df = white_black_ownership_dt,
   aes_x = "label",
   aes_y = "percent",
@@ -72,8 +61,6 @@ white_black_ownership_plot <- RplotterPkg::create_bar_plot(
   rot_y_tic_label = TRUE,
   do_coord_flip = TRUE
 ) + ggplot2::scale_fill_manual(values = c("black","white"))
-white_black_ownership_plot
-
 
 #---------------------------------
 # From the 2010 Decennial Summary File 2 ("dec/sf2") dataset get metadata of the variable giving the total number of
@@ -101,10 +88,10 @@ cuyahoga_ohio_grandchildren_dt <- RcensusPkg::get_vintage_data(
   vars = "PCT035001",
   region = "tract",
   regionin = paste0("state:", ohio_fips)
-) %>%
-  .[county == cuyahoga_fips,] %>%
-  data.table::setnames(old = "PCT035001", new = "total_grandchildren") %>%
-  .[, .(GEOID, tract, total_grandchildren = as.numeric(total_grandchildren))]
+) |>
+  _[county == cuyahoga_fips,] |>
+  data.table::setnames(old = "PCT035001", new = "total_grandchildren") |>
+  _[, .(GEOID, tract, total_grandchildren = as.numeric(total_grandchildren))]
 
 # Create a simple features data.frame (sf) that incorporates the above data.table with the "total_grandchildren" living
 #  living with grandparents.
@@ -124,12 +111,11 @@ cuyahoga_ohio_tracts_grandchildren_sf <- RcensusPkg::tiger_tracts_sf(
 # Plot the simple feature showing the county's tracts and their respective "total_grandchildren" under 18
 #   living with grandparents.
 #  Static plot with ggplot2
-cuyahoga_ohio_tracts_grandchildren_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = cuyahoga_ohio_tracts_grandchildren_sf,
   aes_fill = "total_grandchildren",
   hide_x_tics = FALSE,
   hide_y_tics = FALSE
 ) + ggplot2::coord_sf(ylim = c(41.26,41.615))
-cuyahoga_ohio_tracts_grandchildren_plot
 
 mapview::mapview(cuyahoga_ohio_tracts_grandchildren_sf, zcol = "total_grandchildren")

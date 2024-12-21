@@ -52,7 +52,7 @@ If the column has discrete values then it must be a factor. This is a required p
 
 \item{title_fontsz}{A numeric that sets the title's font size. The default is 18.}
 
-\item{text_col}{An optional string that sets the column name from \code{df} for labelling each state polygon.}
+\item{text_col}{An optional string that sets the column name from \code{df} for labeling each state polygon.}
 
 \item{text_size}{A numeric value that sets the size of labeled state text.}
 

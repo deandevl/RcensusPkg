@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(sf)
 library(here)
 library(usmap)
@@ -38,7 +37,7 @@ states_joined_sf <- RcensusPkg::tiger_states_sf(
 )
 
 # Map the simple feature
-states_joined_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = states_joined_sf,
   aes_fill = "MedianAge"
 ) +
@@ -50,4 +49,3 @@ ggplot2::coord_sf(
   xlim = c(-179.0, -60.0),
   ylim = c(15.0, 72.0)
 )
-states_joined_plot

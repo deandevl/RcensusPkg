@@ -4,7 +4,6 @@ library(usmap)
 library(here)
 library(ggplot2)
 library(data.table)
-library(magrittr)
 library(RspatialPkg)
 library(RcensusPkg)
 
@@ -37,12 +36,10 @@ kentucky_landmarks_sf <- RcensusPkg::tiger_landmarks_sf(
 #kentucky_landmarks_sf <- na.omit(kentucky_landmarks_sf)
 
 # Map the Kentucky landmark geometries over the geometries for Kentucky
-kentucky_landmarks_plot <-
-  kentucky_plot %>%
+kentucky_plot |>
   RspatialPkg::get_geom_sf(
     sf = kentucky_landmarks_sf
   )
-kentucky_landmarks_plot
 
 # Get the landmarks for just Nelson County, Kentucky by
 #  intersecting all Kentucky landsmarks (i.e. kentucky_landmarks_sf)
@@ -67,24 +64,21 @@ nelson_landmarks_sf <- kentucky_landmarks_sf[nelson_landmarks_intersect_lg[,1],]
 
 # Plot the geometries of Nelson landmarks over the geometries of Nelson County
 # Use the variable "FULLNAME" from nelson_landmarks_sf
-nelson_landmarks_plot <-
-  RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
     sf = nelson_sf,
     sf_fill = "yellow",
     sf_alpha = 0.7,
     hide_x_tics = TRUE,
-    hide_y_tics = TRUE) %>%
+    hide_y_tics = TRUE) |>
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     aes_text = "FULLNAME",
     text_color = "black",
     text_size = 2.5,
     text_nudge_y = 0.007
-  ) %>%
+  ) |>
   RspatialPkg::get_geom_sf(
     sf = nelson_landmarks_sf,
     sf_fill = "red",
     sf_size = 1.0
   )
-nelson_landmarks_plot
-

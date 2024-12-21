@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(usmap)
 library(RcensusPkg)
 
@@ -23,10 +22,10 @@ ut_dt <- RcensusPkg::get_vintage_data(
 )
 
 # 2. Do some minor wrangling with `ut_dt`:
-ut_dt <- ut_dt %>%
-  .[, `:=`(SEX = as.numeric(SEX), AGEGROUP = as.numeric(AGEGROUP), POP = as.numeric(POP))] %>% # set as numeric
-  .[order(SEX, AGEGROUP)] %>%                                                                  # order by SEX, AGEGROUP
-  .[SEX > 0 & AGEGROUP > 0 & AGEGROUP < 19] # categories for SEX and AGEGROUP of interest
+ut_dt <- ut_dt |>
+  _[, `:=`(SEX = as.numeric(SEX), AGEGROUP = as.numeric(AGEGROUP), POP = as.numeric(POP))] |>  # set as numeric
+  _[order(SEX, AGEGROUP)] |>                                                                   # order by SEX, AGEGROUP
+  _[SEX > 0 & AGEGROUP > 0 & AGEGROUP < 19] # categories for SEX and AGEGROUP of interest
 
 
 # 3. Get the "SEX" and "AGEGROUP" integer values and string labels:

@@ -1,5 +1,4 @@
 library(data.table)
-library(magrittr)
 library(httr)
 library(ggplot2)
 library(usmap)
@@ -24,9 +23,9 @@ state_pop_density_dt <- RcensusPkg::get_vintage_data(
   vintage = 2021,
   vars = "DENSITY_2021",
   region = "state:*"
-) %>%
-  .[, .(NAME, GEOID, DENSITY_2021 = round(as.numeric(DENSITY_2021), digits = 0))] %>%
-  .[GEOID != 11 & GEOID != 72,]
+) |>
+  _[, .(NAME, GEOID, DENSITY_2021 = round(as.numeric(DENSITY_2021), digits = 0))] |>
+  _[GEOID != 11 & GEOID != 72,]
 
 # Map the degree of density across the states
 RcensusPkg::plot_us_data(

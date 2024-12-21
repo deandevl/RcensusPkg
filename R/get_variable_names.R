@@ -109,7 +109,8 @@ get_variable_names <- function(
   # If variables were derived by group, do we filter their names
   #   to get just estimates and margin of error related variable names
   if(!is.null(group) & filter_group_est){
-    dt <- dt[endsWith(name, "E"),]
+    dt <- dt[endsWith(name, "E"),] |>
+      _[name != "NAME"]
   }
 
   # Order by name

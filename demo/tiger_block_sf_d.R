@@ -15,5 +15,4 @@ nm_blocks_sf <- RcensusPkg::tiger_blocks_sf(
   output_dir = output_dir
 )
 # Map the sf
-nm_blocks_plot <- RspatialPkg::get_geom_sf(sf = nm_blocks_sf)
-nm_blocks_plot
+RspatialPkg::get_geom_sf(sf = nm_blocks_sf)

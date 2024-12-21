@@ -20,11 +20,10 @@ geauga_area_water_sf <- RcensusPkg::tiger_water_sf(
 )
 head(geauga_area_water_sf,1)
 
-geauga_area_water_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = geauga_area_water_sf,
   sf_fill = "blue"
 )
-geauga_area_water_plot
 
 # get linear water
 geauga_linear_water_sf <- RcensusPkg::tiger_water_sf(
@@ -35,11 +34,10 @@ geauga_linear_water_sf <- RcensusPkg::tiger_water_sf(
 )
 head(geauga_linear_water_sf,1)
 
-geauga_linear_water_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = geauga_linear_water_sf,
   sf_fill = "blue"
 )
-geauga_linear_water_plot
 
 # get coastline
 us_coastline_sf <- RcensusPkg::tiger_water_sf(
@@ -48,8 +46,7 @@ us_coastline_sf <- RcensusPkg::tiger_water_sf(
 )
 head(us_coastline_sf,1)
 
-us_coastline_plot <- RspatialPkg::get_geom_sf(
+RspatialPkg::get_geom_sf(
   sf = us_coastline_sf,
   sf_color = "brown"
 )
-us_coastline_plot
