@@ -1,0 +1,182 @@
+---
+title: "RcensusPkg"
+format: gfm
+editor: visual
+date: last-modified
+author: Rick Dean
+---
+
+The goal of RcensusPkg is to provide easy access to the US Census Bureau’s [datasets](https://www.census.gov/data/developers/data-sets.html) and collection of TIGER/Line Shapefiles providing plot geometries for states, counties, roads, landmarks, water, enumeration tracts/blocks for the entire United States. The only requirement is for the user to apply for and obtain a free access key issued from the Bureau. See [Guidance for Developers](https://www.census.gov/data/developers/guidance.html) for additional information.
+
+The example below illustrates a simple workflow for downloading a dataset, merging the data with shapefile geometries, and plotting the merge to create a choropleth map.
+
+## Installation
+
+You can install the development version of RcensusPkg from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("deandevl/RcensusPkg")
+```
+
+Using `devtools::install_github()`:
+
+`devtools::install_github("deandevl/RcensusPkg")`
+
+Also for the Example: `devtools::install_github("deandevl/RplotterPkg")`
+
+## Example
+
+### Setup
+
+We will be using the following packages.
+
+``` r
+library(httr)
+library(jsonlite)
+library(stringr)
+library(data.table)
+library(withr)
+library(sf)
+library(kableExtra)
+library(ggplot2)
+library(RplotterPkg)
+library(RcensusPkg)
+```
+
+### A look at the US Census Bureau’s community resilience estimates (CRE) database.
+
+Among the list of [available API](https://www.census.gov/data/developers/data-sets.html), there is the Community Resilience Estimates based on such factors as:
+
+-   Income-to-Poverty Ratio (IPR) \< 130 percent
+-   Single or zero caregiver household
+-   Aged 65 years or older
+-   No health insurance coverage
+-   No vehicle access (Household)
+-   Disability, at least one serious constraint to significant life activity
+-   No one in the household is employed full-time, year-round
+-   Households without broadband internet access
+-   Unit-level crowding with \>= 0.75 persons per room
+-   No one in the household has received a high school diploma
+-   No one in the household speaks English “very well”
+
+The factors are used to estimate the number of people with:
+
+-   0 risk factors (Low risk)
+-   1-2 risk factors (Medium risk)
+-   3 or more risk factors (High risk)
+
+The workflow for using `RcensusPkg` is the following:
+
+1.  Get a database name recognized by the API. Use `RcensusPkg::get_dataset_names()` filtering for a “resilience” title and vintage of 2022.
+
+```{r}
+datasets_dt <- RcensusPkg::get_dataset_names(
+  vintage = 2022,
+  filter_title_str = "resilience"
+)
+```
+
+```{r}
+#| echo: false
+#| tbl-cap: "Table 1: 'resilience' datasets"
+
+kableExtra::kable(datasets_dt$data)
+```
+
+The returned dataframe shows a dataset name for CRE 2022 as (surprise) "cre".
+
+2.  Get the variable names available for the "cre" dataset.
+
+```{r}
+cre_var_names_dt <- RcensusPkg::get_variable_names(
+  dataset = "cre",
+  vintage = 2022
+) |> 
+  _[, .(name, label)]
+```
+
+```{r}
+#| echo: false
+#| tbl-cap: "Table 2: Variable names from the CRE dataset"
+kableExtra::kable(cre_var_names_dt)
+```
+
+We are interested in the percentage of individuals with three or more vulnerabilities ("PRED3_PE")
+
+3.  Get the regions available for the CRE dataset.
+
+```{r}
+cre_regions_dt <- RcensusPkg::get_geography(
+  dataset = "cre",
+  vintage = 2022
+)
+```
+
+```{r}
+#| echo: false
+#| tbl-cap: "Table 3: Regions from the CRE dataset"
+
+kableExtra::kable(cre_regions_dt)
+```
+
+So we can get CRE estimates from the entire US, state, county, and tract enumeration levels. We are interested in the counties for the state of Florida.
+
+4.  Download the data:
+
+```{r}
+florida_fips <-  usmap::fips(("FL"))
+
+florida_cre_dt <- RcensusPkg::get_vintage_data(
+  dataset = "cre",
+  vintage = 2022,
+  vars = "PRED3_PE",
+  region = "county",
+  regionin = paste0("state:", florida_fips)
+) |> 
+  _[, PRED3_PE := as.numeric(PRED3_PE)] |> 
+  data.table::setnames(old = "PRED3_PE", new = "CRE_GE_3")
+```
+
+```{r}
+#| echo: false
+#| tbl-cap: "Table 4: Florida county percent risk from the CRE dataset"
+
+kableExtra::kable(florida_cre_dt[1:8,])
+```
+
+5.  Merge the CRE county data with the Florida county shapefile geographies from the Bureau.
+
+```{r}
+#| message: false
+
+output_dir <- withr::local_tempdir()
+if(!dir.exists(output_dir)){
+  dir.create(output_dir)
+}
+express <- parse(text = paste0("STATEFP == ", '"', florida_fips, '"'))
+cre_florida_sf <- RcensusPkg::tiger_counties_sf(
+  output_dir = output_dir,
+  vintage = 2022,
+  general = TRUE,
+  express = express,
+  datafile = florida_cre_dt,
+  datafile_key = "county"
+)
+```
+
+6.  Plot the choropleth map of the percent of individuals with 3 or more risk factors.
+
+```{r}
+RplotterPkg::create_sf_plot(
+  sf = cre_florida_sf,
+  aes_fill = "CRE_GE_3",
+  hide_x_tics = TRUE,
+  hide_y_tics = TRUE,
+  panel_color = "white",
+  panel_border_color = "white",
+  caption = "Percent 3 or more risk factors among Florida counties"
+)
+```
+
+A more detailed example of the `RcensusPkg` workflow is available [here](https://rcensuspkg-ex.netlify.app/).
