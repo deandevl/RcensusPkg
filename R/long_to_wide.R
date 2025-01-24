@@ -6,11 +6,11 @@
 #'   its values to multiple columns.
 #'
 #' @param dt The required \code{data.table} with a long column format.
-#' @param id_v A required vector of column names from \code{dt} that act as identifiers and
+#' @param id_v A required vector of column names from 'dt' that act as identifiers and
 #'   are not part of the widened column.
-#' @param parameter_col A column name from \code{dt} whose unique values will become
+#' @param parameter_col A column name from 'dt' whose unique values will become
 #'   column names for the new expanded \code{data.table}.
-#' @param value_col A required column name or vector of column names from \code{dt} whose values will fall under
+#' @param value_col A required column name or vector of column names from 'dt' whose values will fall under
 #'   the new expanded \code{data.table}.
 #'
 #' @return A reshaped \code{data.table} in the "wide" format.

@@ -12,24 +12,24 @@
 #'   between two simple features (created by \code{RcensusPkg::tiger_*_sf()}) or between
 #'   two dataframes (created by \code{RcensusPkg::get_vintage_data()}).
 #'
-#'   The important thing to remember is that all the rows in \code{df_2} will
+#'   The important thing to remember is that all the rows in 'df_2' will
 #'   be present in the resultant \code{data.table}.
 #'
 #' @param df_1 The first dataframe to be joined.
-#' @param df_2 The second dataframe to be joined with \code{df_1}. All rows in
+#' @param df_2 The second dataframe to be joined with 'df_1'. All rows in
 #'   this dataframe will be present in the resultant dataframe.
-#' @param key_1 A string that names the column from \code{df_1} that is common to \code{df_2}.
-#' @param key_2 A string that names the column from \code{df_2} that is common to \code{df_1}.
+#' @param key_1 A string that names the column from 'df_1' that is common to 'df_2'.
+#' @param key_2 A string that names the column from 'df_2' that is common to 'df_1'.
 #' @param negate An optional logical which if \code{TRUE} will return a dataframe
-#'   that has rows in \code{df_1} but not in \code{df_2}.
+#'   that has rows in 'df_1' but not in 'df_2'.
 #' @param match An optional logical which if \code{TRUE} will return a dataframe
-#'   that has rows where only both \code{df_1} and \code{df_2} have matches.
+#'   that has rows where only both 'df_1' and 'df_2' have matches.
 #' @param return_sf An optional logical which if \code{TRUE} will convert the resultant
 #'   \code{data.table} to a simple feature if it has a geometries column.
 #' @param na_rm An optional logical which if \code{TRUE} (the default) then remove rows
 #'   with NA values.
 #'
-#' @return A \code{data.table} or simple feature object if \code{return_sf} is \code{TRUE}.
+#' @return A \code{data.table} or simple feature object if 'return_sf' is \code{TRUE}.
 #'
 #' @examples
 #' \dontrun{

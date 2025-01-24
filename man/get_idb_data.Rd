@@ -56,17 +56,17 @@ year, variables, and country. See Census Bureau's publicly available
 dataset descriptions.
 }
 \details{
-For the "1year", a \code{data.table} is returned with columns for the
-\href{https://api.census.gov/data/timeseries/idb/1year/variables.html}{1year}:
-\describe{
-\item{GEO_ID}{char - geo id string}
-\item{NAME}{char - name of the country}
-\item{GENC}{char - GENC country abbreviation}
-\item{POP}{char - the total population for a specific age and sex in the country}
-\item{YR}{char - the year of the estimate}
-\item{AGE}{char - the specific age are values from 1 to 100}
-\item{SEX}{char - the specific sex with values 0 - Both, 1 - Male, 2 - Female}
+For the "1year", a \code{data.table} is returned with the following columns:
+\tabular{ll}{
+\strong{GEO_ID} \tab char - geo id string\cr
+\strong{NAME} \tab char - name of the country\cr
+\strong{GENC} \tab char - GENC country abbreviation\cr
+\strong{POP} \tab char - the total population for a specific age and sex in the country\cr
+\strong{YR} \tab char - the year of the estimate\cr
+\strong{AGE} \tab char - the specific age are values from 1 to 100\cr
+\strong{SEX} \tab char - the specific sex with values 0 - Both, 1 - Male, 2 - Female
 }
+More details are available \href{https://api.census.gov/data/timeseries/idb/1year/variables.html}{here}.
 
 For the "5year", see \href{https://api.census.gov/data/timeseries/idb/5year/variables.html}{5year} and the 119 variable
 names and descriptions.

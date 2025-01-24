@@ -1,6 +1,6 @@
 Package: RcensusPkg
 Type: Package
-Title: R functions for Accessing US Census Bureau Data
+Title: R Functions for Accessing US Census Bureau Data
 Version: 0.1.0
 Authors@R: c(
     person(

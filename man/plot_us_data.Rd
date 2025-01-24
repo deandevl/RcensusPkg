@@ -41,19 +41,19 @@ plot_us_data(
 }
 \arguments{
 \item{df}{The data frame with a column of full state names and a second variable column of their respective values.
-The column name for the states must be "NAME". If \code{df} is NULL, then only a sf object with the state geometries are returned.}
+The column name for the states must be "NAME". If 'df' is \code{NULL}, then only a sf object with the state geometries are returned.}
 
-\item{states_col}{A required string (if \code{df} is not NULL) that sets the column name from \code{df} containing the state names of interest. These are
+\item{states_col}{A required string (if 'df' is not \code{NULL}) that sets the column name from 'df' containing the state names of interest. These are
 full state names, either capitalized or lower case.}
 
-\item{value_col}{A required string (if \code{df} is not NULL) that sets the column name from \code{df} where values(discrete or continuous) are defined.
+\item{value_col}{A required string (if 'df' is not \code{NULL}) that sets the column name from 'df' where values(discrete or continuous) are defined.
 If the column has discrete values then it must be a factor.}
 
 \item{title}{A string that sets the plot title.}
 
 \item{title_fontsz}{A numeric that sets the title's font size. The default is 18.}
 
-\item{text_col}{An optional string that sets the column name from \code{df} for labeling each state polygon.}
+\item{text_col}{An optional string that sets the column name from 'df' for labeling each state polygon.}
 
 \item{text_size}{A numeric value that sets the size of labeled state text.}
 
@@ -65,14 +65,14 @@ Acceptable values: "plain", "bold", "italic", "bold.italic". The default is "pla
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.
 The default is the directory defined by the value returned by \code{tempdir()}.}
 
-\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 The default is \code{TRUE}.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.}
 
 \item{general}{A logical which if \code{TRUE} will download a less detailed, more generalized version of the state geometries.}
 
-\item{resol}{If \code{general} is \code{TRUE}, then the resolution to return. Acceptable values are strings
+\item{resol}{If 'general' is \code{TRUE}, then the resolution to return. Acceptable values are strings
 "500k", "5m", "20m".}
 
 \item{na_rm}{A logical which if \code{TRUE}, missing observations are removed. If \code{FALSE}, the default,
@@ -118,14 +118,14 @@ If \code{FALSE}, then a ggplot2 object is returned}
 \item{legend_key_backgrd}{A string that sets the legend's background color.}
 }
 \value{
-A list of ggplot2 objects if \code{display_plot} is \code{FALSE}. Included in the
+A list of ggplot2 objects if 'display_plot' is \code{FALSE}. Included in the
 list is the plot of all the states ("us_states") along with the original ggplot2
 \code{ggplot2::geom_sf} plots of the lower 48 ("lower_48"), Alaska ("alaska"), Hawaii ("hawaii") and Puerto Rico ("puerto_rico").
 }
 \description{
 This function produces a ggplot2 based choropleth map of a discrete/continuous variable across all/selected US states
 including placement of Alaska, Hawaii, and Puerto Rico. The function accepts a data frame with a column of
-state names and a column with their respective values.  If the data frame (parameter \code{df}) is submitted as NULL then only the simple
+state names and a column with their respective values.  If the data frame (parameter 'df') is submitted as \code{NULL} then only the simple
 feature state geometries are returned for mapping. The function offers several options for
 control/selection of state geographies and variable scaling.
 

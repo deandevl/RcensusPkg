@@ -26,13 +26,13 @@ For example the group value "B01001" would return values of all variables relate
 \item{vars}{A string vector of variable names to be acquired.}
 
 \item{NAME_GEOID}{A logical which if \code{TRUE} will add "NAME" and "GEO_ID"
-variables to \code{vars} string vector. The default is \code{TRUE}.}
+variables to 'vars' string vector. The default is \code{TRUE}.}
 
-\item{predicates}{A vector of strings that adds filtering to the list of variables in \code{vars}.}
+\item{predicates}{A vector of strings that adds filtering to the list of variables in 'vars'.}
 
 \item{region}{A string that specifies the geography of the request.}
 
-\item{regionin}{A string that sets a qualifier for \code{region}.}
+\item{regionin}{A string that sets a qualifier for 'region'.}
 
 \item{key}{All Census Bureau API requests require a client key from the calling function.}
 }

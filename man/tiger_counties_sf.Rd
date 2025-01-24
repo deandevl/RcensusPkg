@@ -26,20 +26,20 @@ tiger_counties_sf(
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.
 The default is the directory defined by the value returned by \code{tempdir()}.}
 
-\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 The default is TRUE.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.}
 
 \item{general}{A logical which if \code{TRUE} will download a less detailed, more generalized version of the county geometries.}
 
-\item{resol}{If \code{general} is \code{TRUE}, then the resolution to return. Acceptable values are strings
+\item{resol}{If 'general' is \code{TRUE}, then the resolution to return. Acceptable values are strings
 "500k", "5m", "20m".}
 
 \item{set_crs}{A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.}
 
-\item{transform_crs}{A numeric or character string which if non-NULL calls sf::st_transform()
-to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.}
+\item{transform_crs}{A numeric or character string which if non-NULL calls \code{sf::st_transform()}
+to perform a crs transform of the geometries. Note that the crs of the shapefile must not be \code{NA}.}
 
 \item{sf_info}{A logical which if \code{TRUE} displays info on the resulting simple feature object.}
 
@@ -49,19 +49,19 @@ to perform a crs transform of the geometries. Note that the crs of the shapefile
 
 \item{datafile}{A dataframe containing data that should be joined with this function's resultant simple feature object.}
 
-\item{datafile_key}{The column name from \code{datafile} dataframe used to key with the \code{sf_key} column
+\item{datafile_key}{The column name from 'datafile' dataframe used to key with the 'sf_key' column
 of the resultant simple feature dataframe.}
 
-\item{sf_key}{The column from the resultant dataframe used to key with the \code{datafile} dataframe.}
+\item{sf_key}{The column from the resultant dataframe used to key with the 'datafile' dataframe.}
 
 \item{express}{A logical expression object used to filter the resultant simple feature dataframe.
 For example, one of the columns of the resultant simple feature dataframe is "STATEFP".
 If you wanted to return just the geometries for Florida (which has a fips code of "12"),
-then you assign \code{express} equal to: expression(STATEFP == "12"). The expression will be
+then you assign 'express' equal to: expression(STATEFP == "12"). The expression will be
 evaluated and only the geometries for Florida will be returned.}
 
 \item{check_na}{A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-The default is to not check the columns for NA values.}
+The default is to not check the columns for \code{NA} values.}
 }
 \value{
 An object of class sf
@@ -90,7 +90,7 @@ A more generalized, recognizable version of the county geometries that has less 
 \href{https://www.census.gov/programs-surveys/geography/technical-documentation/naming-convention/cartographic-boundary-file.html}{Cartographic Boundary File Description}.
 These files are available for vintages greater than 2013 with resolution 1:500k, 1:5m, 1:20m meters.
 
-Some earlier vintages may have NA for the crs so you may need to specify the \code{crs_transform} to 3426.  Also
+Some earlier vintages may have NA for the crs so you may need to specify the 'crs_transform' to 3426.  Also
 you may be interested in using a state level crs. See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 
 The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or

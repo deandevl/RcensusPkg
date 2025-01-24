@@ -19,7 +19,7 @@ remove_area_water(
 \item{output_dir}{A full directory path where supportive shapefiles and their associated files will be downloaded.
 The default is the directory defined by the value returned by \code{tempdir()}.}
 
-\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 The default is TRUE.}
 }
 \value{

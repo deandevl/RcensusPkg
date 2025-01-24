@@ -18,7 +18,7 @@ get_category_strings(
 a vector of categorical variable names recognized by the function.}
 
 \item{start_idx}{An optional integer that sets the starting index of the variable's integer/label pairs.
-If the value is NULL(the default), then the variable's entire integer/label pairs are returned.}
+If the value is \code{NULL}(the default), then the variable's entire integer/label pairs are returned.}
 
 \item{end_idx}{An optional integer that sets the ending row index of the returned variable's integer/label pairs.}
 }

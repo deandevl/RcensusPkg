@@ -14,13 +14,13 @@ long_to_wide(
 \arguments{
 \item{dt}{The required \code{data.table} with a long column format.}
 
-\item{id_v}{A required vector of column names from \code{dt} that act as identifiers and
+\item{id_v}{A required vector of column names from 'dt' that act as identifiers and
 are not part of the widened column.}
 
-\item{parameter_col}{A column name from \code{dt} whose unique values will become
+\item{parameter_col}{A column name from 'dt' whose unique values will become
 column names for the new expanded \code{data.table}.}
 
-\item{value_col}{A required column name or vector of column names from \code{dt} whose values will fall under
+\item{value_col}{A required column name or vector of column names from 'dt' whose values will fall under
 the new expanded \code{data.table}.}
 }
 \value{

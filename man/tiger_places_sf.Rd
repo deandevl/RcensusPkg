@@ -26,17 +26,17 @@ See \href{https://cran.r-project.org/package=usmap}{usmap::fips function} for fi
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.
 The default is the directory defined by the value returned by \code{tempdir()}.}
 
-\item{delete_files}{A logical which if TRUE will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if TRUE will delete the shapefile and associated files in 'output_dir'.
 The default is \code{TRUE}.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.
 The value should be greater than 2010.}
 
-\item{general}{A logical which if \code{TRUE} will download a less detailed, more gerneralized version of the places geometries.}
+\item{general}{A logical which if \code{TRUE} will download a less detailed, more generalized version of the places geometries.}
 
 \item{set_crs}{A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.}
 
-\item{transform_crs}{A numeric or character string which if non-NULL calls sf::st_transform()
+\item{transform_crs}{A numeric or character string which if non-NULL calls \code{sf::st_transform()}
 to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.}
 
 \item{sf_info}{A logical which if \code{TRUE} displays info on the resulting simple feature object.}
@@ -48,11 +48,11 @@ to perform a crs transform of the geometries. Note that the crs of the shapefile
 \item{express}{A logical expression object used to filter the resultant simple feature dataframe.
 For example, one of the columns of the resultant simple feature dataframe is "NAME" for major places.
 Say we wanted to return just the geometries for major places in Kentucky such as "Bowling Green" and "Louisville".
-We would assign \code{express} equal to: expression(NAME \%in\% c("Bowling Green", "Louisville" )). The expression will be
+We would assign 'express' equal to: expression(NAME \%in\% c("Bowling Green", "Louisville" )). The expression will be
 evaluated and only the geometries for the two places will be returned.}
 
 \item{check_na}{A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-The default is to not check the columns for NA values.}
+The default is to not check the columns for \code{NA} values.}
 }
 \value{
 A data frame object of class sf
@@ -89,7 +89,7 @@ the CDPs are located."
 The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or
 joined with US Census Bureau demographic data via the GEOID value.
 
-Some earlier vintages may have NA for the crs so you may need to specify the \code{crs_transform} to 3426.  Also
+Some earlier vintages may have NA for the crs so you may need to specify the 'crs_transform' to 3426.  Also
 you may be interested in using a state level crs.  See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 }
 \examples{

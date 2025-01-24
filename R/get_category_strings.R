@@ -13,7 +13,7 @@
 #' @param get_names An optional logical which if \code{TRUE} the function will return
 #'  a vector of categorical variable names recognized by the function.
 #' @param start_idx An optional integer that sets the starting index of the variable's integer/label pairs.
-#'   If the value is NULL(the default), then the variable's entire integer/label pairs are returned.
+#'   If the value is \code{NULL}(the default), then the variable's entire integer/label pairs are returned.
 #' @param end_idx An optional integer that sets the ending row index of the returned variable's integer/label pairs.
 #'
 #' @return A \code{data.table} with the variable's integer values and corresponding label strings.

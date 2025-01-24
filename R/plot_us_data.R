@@ -2,7 +2,7 @@
 #'
 #' @description This function produces a ggplot2 based choropleth map of a discrete/continuous variable across all/selected US states
 #'   including placement of Alaska, Hawaii, and Puerto Rico. The function accepts a data frame with a column of
-#'   state names and a column with their respective values.  If the data frame (parameter \code{df}) is submitted as NULL then only the simple
+#'   state names and a column with their respective values.  If the data frame (parameter 'df') is submitted as \code{NULL} then only the simple
 #'   feature state geometries are returned for mapping. The function offers several options for
 #'   control/selection of state geographies and variable scaling.
 #'
@@ -11,25 +11,25 @@
 #'   displaying the shapefile geometries, so this package should be installed.
 #'
 #' @param df The data frame with a column of full state names and a second variable column of their respective values.
-#'   The column name for the states must be "NAME". If \code{df} is NULL, then only a sf object with the state geometries are returned.
-#' @param states_col A required string (if \code{df} is not NULL) that sets the column name from \code{df} containing the state names of interest. These are
+#'   The column name for the states must be "NAME". If 'df' is \code{NULL}, then only a sf object with the state geometries are returned.
+#' @param states_col A required string (if 'df' is not \code{NULL}) that sets the column name from 'df' containing the state names of interest. These are
 #'   full state names, either capitalized or lower case.
-#' @param value_col A required string (if \code{df} is not NULL) that sets the column name from \code{df} where values(discrete or continuous) are defined.
+#' @param value_col A required string (if 'df' is not \code{NULL}) that sets the column name from 'df' where values(discrete or continuous) are defined.
 #'   If the column has discrete values then it must be a factor.
 #' @param title A string that sets the plot title.
 #' @param title_fontsz A numeric that sets the title's font size. The default is 18.
-#' @param text_col An optional string that sets the column name from \code{df} for labeling each state polygon.
+#' @param text_col An optional string that sets the column name from 'df' for labeling each state polygon.
 #' @param text_size A numeric value that sets the size of labeled state text.
 #' @param text_color A string that sets the color of labeled state text.
 #' @param text_fontface A string that sets the fontface of labeled state text.
 #'  Acceptable values: "plain", "bold", "italic", "bold.italic". The default is "plain".
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is \code{TRUE}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #' @param general A logical which if \code{TRUE} will download a less detailed, more generalized version of the state geometries.
-#' @param resol If \code{general} is \code{TRUE}, then the resolution to return. Acceptable values are strings
+#' @param resol If 'general' is \code{TRUE}, then the resolution to return. Acceptable values are strings
 #'   "500k", "5m", "20m".
 #' @param na_rm A logical which if \code{TRUE}, missing observations are removed. If \code{FALSE}, the default,
 #'   missing observations are removed with a warning.
@@ -56,7 +56,7 @@
 #' @param legend_key_height A numeric that sets the legend height in cm.
 #' @param legend_key_backgrd A string that sets the legend's background color.
 #'
-#' @return A list of ggplot2 objects if \code{display_plot} is \code{FALSE}. Included in the
+#' @return A list of ggplot2 objects if 'display_plot' is \code{FALSE}. Included in the
 #'   list is the plot of all the states ("us_states") along with the original ggplot2
 #'   \code{ggplot2::geom_sf} plots of the lower 48 ("lower_48"), Alaska ("alaska"), Hawaii ("hawaii") and Puerto Rico ("puerto_rico").
 #'

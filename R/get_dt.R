@@ -15,10 +15,10 @@
 #'  "SEX BY AGE".
 #' @param vars A string vector of variable names to be acquired.
 #' @param NAME_GEOID A logical which if \code{TRUE} will add "NAME" and "GEO_ID"
-#'  variables to \code{vars} string vector. The default is \code{TRUE}.
-#' @param predicates A vector of strings that adds filtering to the list of variables in \code{vars}.
+#'  variables to 'vars' string vector. The default is \code{TRUE}.
+#' @param predicates A vector of strings that adds filtering to the list of variables in 'vars'.
 #' @param region A string that specifies the geography of the request.
-#' @param regionin A string that sets a qualifier for \code{region}.
+#' @param regionin A string that sets a qualifier for 'region'.
 #' @param key All Census Bureau API requests require a client key from the calling function.
 #'
 #' @keywords internal

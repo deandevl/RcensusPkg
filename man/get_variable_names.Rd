@@ -36,13 +36,13 @@ categories are one of the following:
 \item{vintage}{An required numeric that sets the year of interest. The default is 2020.}
 
 \item{vars}{An optional vector of variable names whose descriptions are of interest.
-This parameter requires that either \code{dataset} or \code{category} had been defined.}
+This parameter requires that either 'dataset' or 'category' had been defined.}
 
 \item{group}{An optional string that sets the group name associated with a set of variables.
-This parameter requires that either \code{dataset} or \code{category} had been defined.
+This parameter requires that either 'dataset' or 'category' had been defined.
 See \code{Rcensus::get_groups()} for available group names under a specific dataset and vintage.}
 
-\item{filter_group_est}{A logical which if \code{TRUE} will filter the variable names from \code{group} and return
+\item{filter_group_est}{A logical which if \code{TRUE} will filter the variable names from 'group' and return
 only estimate related variable names. The default is \code{FALSE}.}
 
 \item{filter_name_str}{A character string by which to filter the resultant \code{data.table}'s "name" column.}
@@ -75,8 +75,8 @@ in your data requests (i.e. \code{RcensusPkg::get_vintage_data()}) or
 the API will return an error.
 }
 \details{
-The function's search for variable names depends on either specifying the parameters \code{dataset}
-name or a dataset \code{category}. Entering an available \code{vintage} also influences obtaining a
+The function's search for variable names depends on either specifying the parameters 'dataset'
+name or a dataset 'category'. Entering an available 'vintage' also influences obtaining a
 full dataframe of variable names and descriptions. To assist in using the function the user
 should consult the Census Bureau's publicly available \href{https://www.census.gov/data/developers/data-sets.html}{datasets descriptions}.
 Also of help is \code{Rcensus::get_dataset_names()} for available dataset acronym names and

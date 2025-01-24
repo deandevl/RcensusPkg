@@ -29,9 +29,9 @@
 #'  \code{RcensusPkg::get_dataset_names()}.
 #' @param vintage An optional numeric that sets the vintage of interest. Available vintages
 #'   for a specific dataset can be found by running \code{RcensusPkg::get_dataset_names()}.
-#' @param vars A required string vector (if the parameter \code{group} is \code{NULL}) of variable names to be acquired.
+#' @param vars A required string vector (if the parameter 'group' is \code{NULL}) of variable names to be acquired.
 #'   Available variable names can be determined by running \code{RcensusPkg::get_variable_names()}.
-#' @param NAME_GEOID A logical which if \code{TRUE} will add "NAME" and "GEO_ID" variables to the \code{vars} string vector.
+#' @param NAME_GEOID A logical which if \code{TRUE} will add "NAME" and "GEO_ID" variables to the 'vars' string vector.
 #'   The default is \code{TRUE}.
 #' @param predicates An optional vector of strings that adds data filtering.
 #'   See \href{https://www.census.gov/data/developers/guidance.html}{Census Data API User Guide} for
@@ -40,15 +40,15 @@
 #' @param group An optional string that names an entire group of similar variables to be retrieved.
 #'   For example the group value "B01001" would return values of all variables related to
 #'  "SEX BY AGE". To find available groups submit a dataset and vintage to \code{RcensusPkg::get_groups}.
-#' @param wide_to_long If \code{group} is defined then the returned \code{data.table} is normally in a wide format with all the group variables as columns.
+#' @param wide_to_long If 'group' is defined then the returned \code{data.table} is normally in a wide format with all the group variables as columns.
 #'   If this logical parameter is \code{TRUE} then a long format is returned with group variable names in one column (named "estimate") and
 #'   their respective values in another column (named "value").
 #' @param region An optional string that specifies the geography of the request. See
 #'   \href{https://www.census.gov/library/reference/code-lists/ansi.html}{Federal Information Processing Series (FIPS)}
-#'   for a listing of codes for this and the \code{regionin} parameter. Not all regions such as counties,
+#'   for a listing of codes for this and the 'regionin' parameter. Not all regions such as counties,
 #'   blocks, or tracts are available for a specific dataset and vintage. Use
-#'   \code{RcensusPkg::get_geography()} to check on both \code{region} and \code{regionin}.
-#' @param regionin An optional string that sets a qualifier for \code{region}.
+#'   \code{RcensusPkg::get_geography()} to check on both 'region' and 'regionin'.
+#' @param regionin An optional string that sets a qualifier for 'region'.
 #' @param na_cols If \code{TRUE} will remove all rows with missing values. If a
 #'   vector of column names/integers will check only those columns for missing values.
 #' @param key A required string that sets the access key. All Census Bureau API requests require an access key.

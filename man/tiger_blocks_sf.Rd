@@ -25,7 +25,7 @@ See \href{https://cran.r-project.org/package=usmap}{usmap::fips function} for fi
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.
 The default is the directory defined by the value returned by \code{tempdir()}.}
 
-\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 The default is \code{TRUE}.}
 
 \item{vintage}{A numeric that sets the vintage of interest. The default is 2020.}
@@ -44,11 +44,11 @@ to perform a crs transform of the geometries. Note that the crs of the shapefile
 \item{express}{A logical expression object used to filter the resultant simple feature dataframe.
 For example, one of the columns of the resultant simple feature dataframe is "COUNTYFP".
 If you wanted to return just the geometries for Los Alamos, New Mexico (which has a fips code of "028"),
-then you assign \code{express} equal to: expression(COUNTYFP == "028"). The expression will be
+then you assign 'express' equal to: expression(COUNTYFP == "028"). The expression will be
 evaluated and only the tract geometries for Los Alamos will be returned.}
 
 \item{check_na}{A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-The default is to not check the columns for NA values.}
+The default is to not check the columns for \code{NA} values.}
 }
 \value{
 A data frame object of class sf

@@ -20,7 +20,7 @@
 
 \item{output_dir}{A full directory path where the shapefile and its associated files will be downloaded.}
 
-\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+\item{delete_files}{A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 The default is \code{TRUE}.}
 
 \item{set_crs}{A numeric or character string which if non-NULL calls \code{sf::st_crs()} to set the crs of the geometries.}

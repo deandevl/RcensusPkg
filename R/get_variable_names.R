@@ -17,11 +17,11 @@
 #'    the API will return an error.
 #'
 #' @details
-#' The function's search for variable names depends on either specifying the parameters `dataset`
-#' name or a dataset `category`. Entering an available `vintage` also influences obtaining a
+#' The function's search for variable names depends on either specifying the parameters 'dataset'
+#' name or a dataset 'category'. Entering an available 'vintage' also influences obtaining a
 #' full dataframe of variable names and descriptions. To assist in using the function the user
 #' should consult the Census Bureau's publicly available \href{https://www.census.gov/data/developers/data-sets.html}{datasets descriptions}.
-#' Also of help is `Rcensus::get_dataset_names()` for available dataset acronym names and
+#' Also of help is \code{Rcensus::get_dataset_names()} for available dataset acronym names and
 #' their available years.
 #'
 #' @param dataset An optional string that sets the name of a dataset category of interest.
@@ -38,17 +38,17 @@
 #'   }
 #' @param vintage An required numeric that sets the year of interest. The default is 2020.
 #' @param vars An optional vector of variable names whose descriptions are of interest.
-#'   This parameter requires that either `dataset` or `category` had been defined.
+#'   This parameter requires that either 'dataset' or 'category' had been defined.
 #' @param group An optional string that sets the group name associated with a set of variables.
-#'   This parameter requires that either `dataset` or `category` had been defined.
-#'   See `Rcensus::get_groups()` for available group names under a specific dataset and vintage.
-#' @param filter_group_est A logical which if `TRUE` will filter the variable names from `group` and return
-#'   only estimate related variable names. The default is `FALSE`.
-#' @param filter_name_str A character string by which to filter the resultant `data.table`'s "name" column.
-#' @param filter_label_str A character string by which to filter the resultant `data.table`'s "label" column.
-#' @param filter_concept_str A character string by which to filter the resultant `data.table`'s "concept" column.
-#' @param ignore_case A logical which if `FALSE` will not ignore case in filtering the "name", "label", "concept" column.
-#' @param fixed A logical which if `TRUE`, then the above filter strings are used 'as is' in matching.
+#'   This parameter requires that either 'dataset' or 'category' had been defined.
+#'   See \code{Rcensus::get_groups()} for available group names under a specific dataset and vintage.
+#' @param filter_group_est A logical which if \code{TRUE} will filter the variable names from 'group' and return
+#'   only estimate related variable names. The default is \code{FALSE}.
+#' @param filter_name_str A character string by which to filter the resultant \code{data.table}'s "name" column.
+#' @param filter_label_str A character string by which to filter the resultant \code{data.table}'s "label" column.
+#' @param filter_concept_str A character string by which to filter the resultant \code{data.table}'s "concept" column.
+#' @param ignore_case A logical which if \code{FALSE} will not ignore case in filtering the "name", "label", "concept" column.
+#' @param fixed A logical which if \code{TRUE}, then the above filter strings are used 'as is' in matching.
 #'
 #' @return A `data.table`
 #'

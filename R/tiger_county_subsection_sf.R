@@ -25,17 +25,17 @@
 #'
 #' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or
 #' joined with US Census Bureau demographic data.  To help incorporate data files, this function
-#' has a \code{datafile} parameter which will be joined with the resultant simple feature object. The only
+#' has a 'datafile' parameter which will be joined with the resultant simple feature object. The only
 #' requirement is that a common "key" for joining exist between the data dataframe and the simple feature dataframe.
 #'
-#' Some earlier vintages may have NA for the crs so you may need to specify the \code{crs_transform} to 3426.  Also
+#' Some earlier vintages may have \code{NA} for the crs so you may need to specify the 'crs_transform' to 3426.  Also
 #'    you may be interested in using a state level crs. See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 #'
 #' @param state A required two-digit FIPS code for the state of interest.
 #'   See \href{https://cran.r-project.org/package=usmap}{usmap::fips function} for finding FIPS codes.
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in `output_dir`.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is \code{TRUE}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #' @param general A logical which if \code{TRUE} will download a less detailed, more generalized version of the tract geometries.
@@ -46,15 +46,15 @@
 #' @param do_progress A logical which if \code{TRUE} displays a progress bar during the download.
 #' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
 #' @param datafile A dataframe containing data that should be joined with this function's resultant simple feature object.
-#' @param datafile_key The column name from \code{datafile} dataframe used to key with the \code{sf_key} column of the resultant simple feature dataframe.
-#' @param sf_key The column from the resultant dataframe used to key with the \code{datafile} dataframe.
+#' @param datafile_key The column name from 'datafile' dataframe used to key with the 'sf_key' column of the resultant simple feature dataframe.
+#' @param sf_key The column from the resultant dataframe used to key with the 'datafile' dataframe.
 #' @param express A logical expression object used to filter the resultant simple feature dataframe.
 #'   For example, one of the columns of the resultant simple feature dataframe is "COUNTYFP".
 #'   If you wanted to return just the geometries for Los Alamos, New Mexico (which has a fips code of "028"),
-#'   then you assign \code{express} equal to: expression(COUNTYFP == "028"). The expression will be
+#'   then you assign 'express' equal to: expression(COUNTYFP == "028"). The expression will be
 #'   evaluated and only the tract geometries for Los Alamos will be returned.
 #' @param check_na A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.
+#'   The default is to not check the columns for \code{NA} values.
 #'
 #' @return A data frame object of class sf
 #'

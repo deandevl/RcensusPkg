@@ -21,16 +21,16 @@
 #'
 #' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or
 #' joined with US Census Bureau demographic data. To help incorporate data files, this function
-#' has a \code{datafile} parameter which will be joined with the resultant simple feature object. The only
+#' has a 'datafile' parameter which will be joined with the resultant simple feature object. The only
 #' requirement is that a common "key" for joining exist between the data dataframe and the simple feature dataframe.
 #'
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is \code{TRUE}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
-#' @param general A logical which if \code{TRUE} will download a less detailed, more gerneralized version of the state geometries.
-#' @param resol If \code{general} is \code{TRUE}, then the resolution to return. Acceptable values are strings
+#' @param general A logical which if \code{TRUE} will download a less detailed, more generalized version of the state geometries.
+#' @param resol If 'general' is \code{TRUE}, then the resolution to return. Acceptable values are strings
 #'   "500k", "5m", "20m".
 #' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.
 #' @param transform_crs A numeric or character string which if non-NULL calls sf::st_transform()
@@ -39,12 +39,12 @@
 #' @param do_progress A logical which if \code{TRUE} displays a progress bar during the download.
 #' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
 #' @param datafile A dataframe containing data that should be joined with this function's resultant simple feature object.
-#' @param datafile_key The column name from \code{datafile} dataframe used to key with the \code{sf_key} column of the resultant simple feature dataframe.
-#' @param sf_key The column from the resultant dataframe used to key with the \code{datafile} dataframe.
+#' @param datafile_key The column name from 'datafile' dataframe used to key with the 'sf_key' column of the resultant simple feature dataframe.
+#' @param sf_key The column from the resultant dataframe used to key with the 'datafile' dataframe.
 #' @param state_filter A string that filters the resultant sf by a state name (e.g. "TX") .
 #' @param city_filter A string that filters the resultant sf by a city name (e.g. "Kansas City").
 #' @param check_na A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.
+#'   The default is to not check the columns for \code{NA} values.
 #'
 #' @return A data frame object of class sf
 #'

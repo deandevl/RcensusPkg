@@ -24,7 +24,7 @@
 #'     \href{https://www.census.gov/programs-surveys/geography/technical-documentation/naming-convention/cartographic-boundary-file.html}{Cartographic Boundary File Description}.
 #'     These files are available for vintages greater than 2013 with resolution 1:500k, 1:5m, 1:20m meters.
 #'
-#'  Some earlier vintages may have NA for the crs so you may need to specify the \code{crs_transform} to 3426.  Also
+#'  Some earlier vintages may have NA for the crs so you may need to specify the 'crs_transform' to 3426.  Also
 #'    you may be interested in using a state level crs. See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 #'
 #' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or
@@ -32,29 +32,29 @@
 #'
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is TRUE.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #' @param general A logical which if \code{TRUE} will download a less detailed, more generalized version of the county geometries.
-#' @param resol If \code{general} is \code{TRUE}, then the resolution to return. Acceptable values are strings
+#' @param resol If 'general' is \code{TRUE}, then the resolution to return. Acceptable values are strings
 #'   "500k", "5m", "20m".
 #' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.
-#' @param transform_crs A numeric or character string which if non-NULL calls sf::st_transform()
-#'   to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.
+#' @param transform_crs A numeric or character string which if non-NULL calls \code{sf::st_transform()}
+#'   to perform a crs transform of the geometries. Note that the crs of the shapefile must not be \code{NA}.
 #' @param sf_info A logical which if \code{TRUE} displays info on the resulting simple feature object.
 #' @param do_progress A logical which if \code{TRUE} displays a progress bar during the download.
 #' @param shapefile A full file path to a shapefile folder with its unzipped files to be processed instead of downloading.
 #' @param datafile A dataframe containing data that should be joined with this function's resultant simple feature object.
-#' @param datafile_key The column name from \code{datafile} dataframe used to key with the \code{sf_key} column
+#' @param datafile_key The column name from 'datafile' dataframe used to key with the 'sf_key' column
 #'   of the resultant simple feature dataframe.
-#' @param sf_key The column from the resultant dataframe used to key with the \code{datafile} dataframe.
+#' @param sf_key The column from the resultant dataframe used to key with the 'datafile' dataframe.
 #' @param express A logical expression object used to filter the resultant simple feature dataframe.
 #'   For example, one of the columns of the resultant simple feature dataframe is "STATEFP".
 #'   If you wanted to return just the geometries for Florida (which has a fips code of "12"),
-#'   then you assign \code{express} equal to: expression(STATEFP == "12"). The expression will be
+#'   then you assign 'express' equal to: expression(STATEFP == "12"). The expression will be
 #'   evaluated and only the geometries for Florida will be returned.
 #' @param check_na A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.
+#'   The default is to not check the columns for \code{NA} values.
 #'
 #' @return An object of class sf
 #'

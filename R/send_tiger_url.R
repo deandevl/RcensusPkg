@@ -5,7 +5,7 @@
 #'
 #' @param a_url A required string that defines the url to be sent in the http GET request.
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in \code{output_dir}.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is \code{TRUE}.
 #' @param set_crs A numeric or character string which if non-NULL calls \code{sf::st_crs()} to set the crs of the geometries.
 #' @param transform_crs A numeric or character string which if non-NULL calls \code{sf::st_transform()}

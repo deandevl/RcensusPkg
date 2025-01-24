@@ -27,21 +27,21 @@
 #' The function returns the simple feature object which can easily be mapped (see \href{https://github.com/deandevl/RplotterPkg}{RplotterPkg::create_sf_plot()}) or
 #' joined with US Census Bureau demographic data via the GEOID value.
 #'
-#' Some earlier vintages may have NA for the crs so you may need to specify the \code{transform_crs} to 3426.  Also
+#' Some earlier vintages may have NA for the crs so you may need to specify the 'transform_crs' to 3426.  Also
 #'   you may be interested in using a state level crs. See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 #'
 #' @param state The required two-digit FIPS code for the state of interest.
 #'  See \href{https://cran.r-project.org/package=usmap}{usmap::fips function} for finding FIPS codes.
 #' @param output_dir A full directory path where the shapefile and its associated files will be downloaded.
 #'   The default is the directory defined by the value returned by \code{tempdir()}.
-#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in `output_dir`.
+#' @param delete_files A logical which if \code{TRUE} will delete the shapefile and associated files in 'output_dir'.
 #'   The default is \code{TRUE}.
 #' @param vintage A numeric that sets the vintage of interest. The default is 2020.
 #'   The value should be greater than 2010.
 #' @param entity A character string that sets the specific landmark entity of interest. The
 #'   acceptable values are "area" or "point". The default is "point".
 #' @param set_crs A numeric or character string which if non-NULL calls sf::st_crs() to set the crs of the geometries and transforms them.
-#' @param transform_crs A numeric or character string which if non-NULL calls sf::st_transform()
+#' @param transform_crs A numeric or character string which if non-NULL calls \code{sf::st_transform()}
 #'   to perform a crs transform of the geometries. Note that the crs of the shapefile must not be NA.
 #' @param sf_info A logical which if \code{TRUE} displays info on the resulting simple feature object.
 #' @param do_progress A logical which if \code{TRUE} displays a progress bar during the download.
@@ -49,10 +49,10 @@
 #' @param express A logical expression object used to filter the resultant simple feature dataframe.
 #'   For example, one of the columns of the resultant simple feature dataframe is "STATEFP".
 #'   If you wanted to return just the geometries for Nelson County, Kentucky (which has a fips code of "179"),
-#'   then you assign \code{express} equal to: expression(COUNTYFP == "179"). The expression will be
+#'   then you assign 'express' equal to: expression(COUNTYFP == "179"). The expression will be
 #'   evaluated and only the landmark geometries for Nelson County will be returned.
 #' @param check_na A logical which if \code{TRUE} will remove rows that have missing values for any of the columns.
-#'   The default is to not check the columns for NA values.
+#'   The default is to not check the columns for \code{NA} values.
 #'
 #' \strong{Note: Vintage must be greater than 2010.}
 #'
