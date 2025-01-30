@@ -1,7 +1,15 @@
-test_that("tiger_counties_sf() Ohio", {
+test_that("tiger_counties_sf() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("usmap", quietly = TRUE))
-  expect_true(requireNamespace("withr", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
+  expect_true(requireNamespace("withr", quietly = TRUE))
+  expect_true(requireNamespace("vdiffr", quietly = TRUE))
+})
+
+test_that("tiger_counties_sf() Ohio", {
   expect_snapshot({
     # Determine the fips code for Ohio (returns "39")
     ohio_fips <- usmap::fips(state = "ohio")

@@ -1,10 +1,14 @@
 # Note: Test requires valid Census Bureau API key to be
 #  assigned to "CENSUS_KEY" via usethis::edit_r_environ()
 
-test_that("Census Bureau API key required", {
+test_that("join_it() Census Bureau API key required", {
   expect_true(Sys.getenv("CENSUS_KEY") != "")
 })
 
+test_that("join_it() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("sf", quietly = TRUE))
+})
 
 test_that("join_it()", {
   expect_true(requireNamespace("usmap", quietly = TRUE))

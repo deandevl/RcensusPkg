@@ -1,3 +1,9 @@
+test_that("get_dataset_names() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+})
+
 test_that("get_variable_names()", {
   expect_snapshot({
     variables_dt <- RcensusPkg::get_variable_names(

@@ -1,7 +1,14 @@
-test_that("tiger_cbsa_sf()", {
+test_that("tiger_cbsa_sf() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
   expect_true(requireNamespace("withr", quietly = TRUE))
+  expect_true(requireNamespace("vdiffr", quietly = TRUE))
+})
 
+test_that("tiger_cbsa_sf()", {
   expect_snapshot({
     output_dir <- withr::local_tempdir()
     if(!dir.exists(output_dir)){

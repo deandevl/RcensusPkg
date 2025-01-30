@@ -1,8 +1,14 @@
-test_that("remove_area_water()", {
+
+test_that("remove_area_water() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
   expect_true(requireNamespace("usmap", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
   expect_true(requireNamespace("withr", quietly = TRUE))
+})
 
+test_that("remove_area_water()", {
   expect_snapshot({
     ny_state_county_fips <- usmap::fips(state = "New York", county = "New York")
     ny_state_fips <- substr(ny_state_county_fips, 1,2)

@@ -1,8 +1,15 @@
 # Note: Test requires valid Census Bureau API key to be
 #  assigned to "CENSUS_KEY" via usethis::edit_r_environ()
 
-test_that("Census Bureau API key required", {
+test_that("get_multi_vintage_data() Census Bureau API key required", {
   expect_true(Sys.getenv("CENSUS_KEY") != "")
+})
+
+test_that("get_multi_vintage_data() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("usmap", quietly = TRUE))
 })
 
 test_that("get_multi_vintage_data()", {

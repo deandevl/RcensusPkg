@@ -1,8 +1,15 @@
-test_that("tiger_states_sf()", {
+test_that("tiger_states_sf() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("usmap", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
   expect_true(requireNamespace("withr", quietly = TRUE))
+  expect_true(requireNamespace("vdiffr", quietly = TRUE))
+})
 
+test_that("tiger_states_sf()", {
   expect_snapshot({
     florida_fips <- usmap::fips(state = "florida")
     express <- parse(text = paste0("STATEFP == ", '"', florida_fips, '"'))

@@ -1,8 +1,12 @@
 # Note: Test requires valid Census Bureau API key to be
 #  assigned to "CENSUS_KEY" via usethis::edit_r_environ()
 
-test_that("Census Bureau API key required", {
+test_that("long_to_wide() Census Bureau API key required", {
   expect_true(Sys.getenv("CENSUS_KEY") != "")
+})
+
+test_that("create_bar_plot() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
 })
 
 test_that("long_to_wide()", {

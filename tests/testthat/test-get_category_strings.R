@@ -1,3 +1,6 @@
+test_that("get_category_strings() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+})
 
 test_that("get_category_strings() category names",{
   expect_snapshot(RcensusPkg::get_category_strings(get_names = TRUE))

@@ -1,8 +1,15 @@
-test_that("tiger_tracts_sf()", {
+test_that("tiger_tracts_sf() namespaces", {
+  expect_true(requireNamespace("data.table", quietly = TRUE))
+  expect_true(requireNamespace("jsonlite", quietly = TRUE))
+  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("usmap", quietly = TRUE))
-  expect_true(requireNamespace("withr", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
+  expect_true(requireNamespace("withr", quietly = TRUE))
+  expect_true(requireNamespace("vdiffr", quietly = TRUE))
+})
 
+test_that("tiger_tracts_sf()", {
   expect_snapshot({
     nm_los_alamos_fips <- usmap::fips(state = "new mexico", county = "los alamos")
     nm_fips <- substr(nm_los_alamos_fips, 1, 2)

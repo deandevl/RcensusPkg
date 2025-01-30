@@ -5,11 +5,7 @@
 \alias{vote2020}
 \title{vote2020 data}
 \format{
-Data frame with columns:
-\describe{
-\item{State}{character string full state name}
-\item{Party}{character string with values "D" or "R"}
-}
+An object of class \code{data.table} (inherits from \code{data.frame}) with 61 rows and 22 columns.
 }
 \usage{
 vote2020
@@ -18,5 +14,11 @@ vote2020
 Dataframe shows national presidential voting results for 2020 by state.
 Letters "D" and "R" under the Party column indicate respectively Democrate or Republican
 win for a state.
+}
+\details{
+\tabular{ll}{
+\strong{State} \tab character string full state name \cr
+\strong{Party} \tab character string with values "D" or "R"
+}
 }
 \keyword{datasets}
