@@ -1,7 +1,9 @@
 ---
 title: "RcensusPkg"
-format: gfm
-editor: visual
+format: 
+  gfm: default
+  html: default
+editor: source
 date: last-modified
 author: Rick Dean
 ---
@@ -31,7 +33,10 @@ Also for the Example: `devtools::install_github("deandevl/RplotterPkg")`
 
 We will be using the following packages.
 
-``` r
+```{r}
+#| message: false
+#| warning: false
+
 library(httr)
 library(jsonlite)
 library(stringr)
@@ -99,6 +104,7 @@ cre_var_names_dt <- RcensusPkg::get_variable_names(
 ```{r}
 #| echo: false
 #| tbl-cap: "Table 2: Variable names from the CRE dataset"
+
 kableExtra::kable(cre_var_names_dt)
 ```
 
@@ -168,6 +174,8 @@ cre_florida_sf <- RcensusPkg::tiger_counties_sf(
 6.  Plot the choropleth map of the percent of individuals with 3 or more risk factors.
 
 ```{r}
+#| code-fold: true
+
 RplotterPkg::create_sf_plot(
   sf = cre_florida_sf,
   aes_fill = "CRE_GE_3",
