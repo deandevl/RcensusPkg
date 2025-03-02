@@ -1,12 +1,6 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # RcensusPkg
-
-Rick Dean 2025-01-21
+Rick Dean
+2025-01-31
 
 The goal of RcensusPkg is to provide easy access to the US Census
 Bureau’s
@@ -63,24 +57,24 @@ Among the list of [available
 API](https://www.census.gov/data/developers/data-sets.html), there is
 the Community Resilience Estimates based on such factors as:
 
--   Income-to-Poverty Ratio (IPR) \< 130 percent
--   Single or zero caregiver household
--   Aged 65 years or older
--   No health insurance coverage
--   No vehicle access (Household)
--   Disability, at least one serious constraint to significant life
-    activity
--   No one in the household is employed full-time, year-round
--   Households without broadband internet access
--   Unit-level crowding with \>= 0.75 persons per room
--   No one in the household has received a high school diploma
--   No one in the household speaks English “very well”
+- Income-to-Poverty Ratio (IPR) \< 130 percent
+- Single or zero caregiver household
+- Aged 65 years or older
+- No health insurance coverage
+- No vehicle access (Household)
+- Disability, at least one serious constraint to significant life
+  activity
+- No one in the household is employed full-time, year-round
+- Households without broadband internet access
+- Unit-level crowding with \>= 0.75 persons per room
+- No one in the household has received a high school diploma
+- No one in the household speaks English “very well”
 
 The factors are used to estimate the number of people with:
 
--   0 risk factors (Low risk)
--   1-2 risk factors (Medium risk)
--   3 or more risk factors (High risk)
+- 0 risk factors (Low risk)
+- 1-2 risk factors (Medium risk)
+- 3 or more risk factors (High risk)
 
 The workflow for using `RcensusPkg` is the following:
 
@@ -116,7 +110,7 @@ cre_var_names_dt <- RcensusPkg::get_variable_names(
 ```
 
 | name | label |
-|:-----------------------------------|:-----------------------------------|
+|:---|:---|
 | COUNTY | Geography |
 | GEOCOMP | GEO_ID Component |
 | GEO_ID | Geographic Identifier |
@@ -225,7 +219,7 @@ RplotterPkg::create_sf_plot(
 )
 ```
 
-![](README_files/figure-commonmark/unnamed-chunk-10-1.png)
+![](README_files/figure-commonmark/unnamed-chunk-11-1.png)
 
 A more detailed example of the `RcensusPkg` workflow is available
 [here](https://rcensuspkg-ex.netlify.app/).

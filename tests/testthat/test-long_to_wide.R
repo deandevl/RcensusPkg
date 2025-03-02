@@ -5,7 +5,7 @@ test_that("long_to_wide() Census Bureau API key required", {
   expect_true(Sys.getenv("CENSUS_KEY") != "")
 })
 
-test_that("create_bar_plot() namespaces", {
+test_that("long_to_wide() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
 })
 

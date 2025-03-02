@@ -12,7 +12,7 @@ join_it(
   negate = FALSE,
   match = FALSE,
   return_sf = FALSE,
-  na_rm = TRUE
+  na_rm = FALSE
 )
 }
 \arguments{
@@ -34,8 +34,8 @@ that has rows where only both 'df_1' and 'df_2' have matches.}
 \item{return_sf}{An optional logical which if \code{TRUE} will convert the resultant
 \code{data.table} to a simple feature if it has a geometries column.}
 
-\item{na_rm}{An optional logical which if \code{TRUE} (the default) then remove rows
-with NA values.}
+\item{na_rm}{An optional logical which if \code{TRUE} then remove rows
+with NA values. The default is \code{FALSE}.}
 }
 \value{
 A \code{data.table} or simple feature object if 'return_sf' is \code{TRUE}.

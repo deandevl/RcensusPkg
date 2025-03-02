@@ -174,8 +174,6 @@ cre_florida_sf <- RcensusPkg::tiger_counties_sf(
 6.  Plot the choropleth map of the percent of individuals with 3 or more risk factors.
 
 ```{r}
-#| code-fold: true
-
 RplotterPkg::create_sf_plot(
   sf = cre_florida_sf,
   aes_fill = "CRE_GE_3",

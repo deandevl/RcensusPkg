@@ -26,8 +26,8 @@
 #'   that has rows where only both 'df_1' and 'df_2' have matches.
 #' @param return_sf An optional logical which if \code{TRUE} will convert the resultant
 #'   \code{data.table} to a simple feature if it has a geometries column.
-#' @param na_rm An optional logical which if \code{TRUE} (the default) then remove rows
-#'   with NA values.
+#' @param na_rm An optional logical which if \code{TRUE} then remove rows
+#'   with NA values. The default is \code{FALSE}.
 #'
 #' @return A \code{data.table} or simple feature object if 'return_sf' is \code{TRUE}.
 #'
@@ -91,7 +91,7 @@ join_it <- function(
   negate = FALSE,
   match = FALSE,
   return_sf = FALSE,
-  na_rm = TRUE
+  na_rm = FALSE
 ){
 
   dt_1 <- data.table::as.data.table(df_1, na.rm = na_rm)
