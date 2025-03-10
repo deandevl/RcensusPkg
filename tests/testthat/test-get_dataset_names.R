@@ -5,6 +5,7 @@ test_that("get_dataset_names() namespaces", {
 })
 
 test_that("get_dataset_names() acs5", {
+  testthat::skip(message = "Census Bureau request takes well over 10 seconds in most cases.")
   expect_snapshot({
     acs5_datasets_ls <- RcensusPkg::get_dataset_names(
       vintage = 2020,

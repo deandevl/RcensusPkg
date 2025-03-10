@@ -20,16 +20,20 @@
 #'   and a vector of unique vintages (named "vintages").
 #'
 #' @examples
-#' library(jsonlite)
-#' library(data.table)
-#' library(httr)
-#' library(RcensusPkg)
+#' \dontrun{
+#'   # Requests for Census Bureau descriptions takes well over 10
+#'   #  seconds in most cases.
+#'   library(jsonlite)
+#'   library(data.table)
+#'   library(httr)
+#'   library(RcensusPkg)
 #'
-#' # Get descriptions/vintages for 2020 datasets with "acs5" in their name.
-#' acs5_datasets_ls <- RcensusPkg::get_dataset_names(
-#'   vintage = 2020,
-#'   filter_name_str = "acs5/"
-#' )
+#'   # Get descriptions/vintages for 2020 datasets with "acs5" in their name.
+#'   acs5_datasets_ls <- RcensusPkg::get_dataset_names(
+#'     vintage = 2020,
+#'     filter_name_str = "acs5/"
+#'   )
+#'}
 #'
 #' @import data.table
 #' @import httr

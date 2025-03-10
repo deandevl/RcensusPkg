@@ -1,6 +1,6 @@
 # RcensusPkg
 Rick Dean
-2025-01-31
+2025-03-07
 
 The goal of RcensusPkg is to provide easy access to the US Census
 Bureau’s
@@ -12,11 +12,21 @@ for and obtain a free access key issued from the Bureau. See [Guidance
 for Developers](https://www.census.gov/data/developers/guidance.html)
 for additional information.
 
+Three functions (`get_vintage_data()`, `multi_vintage_data()`,
+`get_idb-data()`) call for a key along with many of the examples and
+tests. Be sure to read the description of these functions to learn more
+about incorporating the key.
+
 The example below illustrates a simple workflow for downloading a
 dataset, merging the data with shapefile geometries, and plotting the
-merge to create a choropleth map.
+merge to create a choropleth map. A more detailed example of the
+`RcensusPkg` workflow is available
+[here](https://rcensuspkg-ex.netlify.app/).
 
 ## Installation
+
+The package is available for installation from
+[CRAN](https://cran.r-project.org/web/packages/available_packages_by_name.html).
 
 You can install the development version of RcensusPkg from
 [GitHub](https://github.com/) with:
@@ -29,8 +39,6 @@ pak::pak("deandevl/RcensusPkg")
 Using `devtools::install_github()`:
 
 `devtools::install_github("deandevl/RcensusPkg")`
-
-Also for the Example: `devtools::install_github("deandevl/RplotterPkg")`
 
 ## Example
 
@@ -220,6 +228,3 @@ RplotterPkg::create_sf_plot(
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-11-1.png)
-
-A more detailed example of the `RcensusPkg` workflow is available
-[here](https://rcensuspkg-ex.netlify.app/).

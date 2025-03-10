@@ -1,10 +1,6 @@
 # Note: Test requires valid Census Bureau API key to be
 #  assigned to "CENSUS_KEY" via usethis::edit_r_environ()
 
-test_that("plot_us_data() Census Bureau API key required", {
-  expect_true(Sys.getenv("CENSUS_KEY") != "")
-})
-
 test_that("plot_us_data() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
@@ -18,6 +14,7 @@ test_that("plot_us_data() namespaces", {
 })
 
 test_that("plot_us_data() default", {
+  testthat::skip_if(Sys.getenv("CENSUS_KEY") == "", message = "Census Bureau API key required")
   expect_snapshot({
     output_dir <- withr::local_tempdir()
     if(!dir.exists(output_dir)){
@@ -35,6 +32,7 @@ test_that("plot_us_data() default", {
 })
 
 test_that("plot_us_data() discrete",{
+  testthat::skip_if(Sys.getenv("CENSUS_KEY") == "", message = "Census Bureau API key required")
   expect_snapshot({
     output_dir <- withr::local_tempdir()
     if(!dir.exists(output_dir)){

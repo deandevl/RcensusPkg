@@ -1,10 +1,6 @@
 # Note: Test requires valid Census Bureau API key to be
 #  assigned to "CENSUS_KEY" via usethis::edit_r_environ()
 
-test_that("get_idb_data() Census Bureau API key required", {
-  expect_true(Sys.getenv("CENSUS_KEY") != "")
-})
-
 test_that("get_idb_data() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
@@ -12,6 +8,7 @@ test_that("get_idb_data() namespaces", {
 })
 
 test_that("get_idb_data() 1year", {
+  testthat::skip_if(Sys.getenv("CENSUS_KEY") == "", message = "Census Bureau API key required")
   expect_snapshot(
     head(RcensusPkg::get_idb_data(
       dataset = "1year",
@@ -22,6 +19,7 @@ test_that("get_idb_data() 1year", {
 })
 
 test_that("get_idb_data() 5year", {
+  testthat::skip_if(Sys.getenv("CENSUS_KEY") == "", message = "Census Bureau API key required")
   expect_snapshot(
     head(RcensusPkg::get_idb_data(
       dataset = "5year",

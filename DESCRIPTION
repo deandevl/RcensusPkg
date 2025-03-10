@@ -1,6 +1,6 @@
 Package: RcensusPkg
 Type: Package
-Title: R Functions for Accessing US Census Bureau Data
+Title: Functions for Accessing US Census Bureau Data
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -10,8 +10,7 @@ Authors@R: c(
       comment = c(ORCID = "0009-0005-8086-8436")
     )
   )
-Maintainer: Rick Dean <deanr3@bardstown.com>
-Description: Functions provides easy access to the US Census Bureau's survey and geographic data.
+Description: Provides easy access to the US Census Bureau's survey and geographic data.
 License: MIT + file LICENSE
 URL: https://github.com/deandevl/RcensusPkg
 BugReports: https://github.com/deandevl/RcensusPkg/issues
@@ -26,7 +25,7 @@ Imports:
     sf (>= 1.0-19),
     ggplotify (>= 0.1.2),
     gtable (>= 0.3.6),
-    RplotterPkg (>= 0.1.0)
+    RplotterPkg (>= 0.1.3)
 Suggests: 
     knitr (>= 1.4.9),
     testthat (>= 3.0.0),

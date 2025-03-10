@@ -12,45 +12,48 @@
 #' @return An sf object with the water area geometries removed.
 #'
 #' @examples
-#' library(httr)
-#' library(sf)
-#' library(usmap)
-#' library(withr)
-#' library(data.table)
-#' library(RcensusPkg)
+#' \dontrun{
+#'   # Request for Census Bureau data plus CPU processing can exceed well over 10
+#'   #  seconds in some cases.
+#'   library(httr)
+#'   library(sf)
+#'   library(usmap)
+#'   library(withr)
+#'   library(data.table)
+#'   library(RcensusPkg)
 #'
-#' # Remove water areas from New York, New York sf object
-#' ny_state_county_fips <- usmap::fips(state = "New York", county = "New York")
-#' ny_state_fips <- substr(ny_state_county_fips, 1,2)
-#' ny_county_fips <- substr(ny_state_county_fips, 3, 5)
+#'   # Remove water areas from New York, New York sf object
+#'   ny_state_county_fips <- usmap::fips(state = "New York", county = "New York")
+#'   ny_state_fips <- substr(ny_state_county_fips, 1,2)
+#'   ny_county_fips <- substr(ny_state_county_fips, 3, 5)
 #'
-#' # Define a temporary output folder for the downloaded shapefiles
-#' output_dir <- withr::local_tempdir()
-#' if(!dir.exists(output_dir)){
-#'   dir.create(output_dir)
-#' }
+#'   # Define a temporary output folder for the downloaded shapefiles
+#'   output_dir <- withr::local_tempdir()
+#'   if(!dir.exists(output_dir)){
+#'     dir.create(output_dir)
+#'   }
 #'
-#' # Define an expression for filtering just the New York county
-#' express <- parse(text = paste0("COUNTYFP == ", '"', ny_county_fips, '"'))
+#'   # Define an expression for filtering just the New York county
+#'   express <- parse(text = paste0("COUNTYFP == ", '"', ny_county_fips, '"'))
 #'
-#' # Get the New York,New York county tract sf geometries object
-#' ny_tracts_sf <- RcensusPkg::tiger_tracts_sf(
-#'   state = ny_state_fips,
-#'   vintage = 2020,
-#'   general = FALSE,
-#'   transform_crs = 6538,
-#'   express = express,
-#'   output_dir = output_dir,
-#'   delete_files = FALSE
-#' )
+#'   # Get the New York,New York county tract sf geometries object
+#'   ny_tracts_sf <- RcensusPkg::tiger_tracts_sf(
+#'     state = ny_state_fips,
+#'     vintage = 2020,
+#'     general = FALSE,
+#'     transform_crs = 6538,
+#'     express = express,
+#'     output_dir = output_dir,
+#'     delete_files = FALSE
+#'   )
 #'
-#' # Remove the area waters from New York, New York sf object
-#' ny_without_water_sf <- RcensusPkg::remove_area_water(
-#'   ny_tracts_sf,
-#'   output_dir = output_dir,
-#'   delete_files = FALSE
-#' )
-#'
+#'   # Remove the area waters from New York, New York sf object
+#'     ny_without_water_sf <- RcensusPkg::remove_area_water(
+#'     ny_tracts_sf,
+#'     output_dir = output_dir,
+#'     delete_files = FALSE
+#'   )
+#'}
 #' @importFrom sf st_transform
 #' @importFrom sf st_filter
 #' @importFrom sf st_as_sf
