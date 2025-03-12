@@ -8,3 +8,6 @@
 * Some functions will require a Census Bureau key
 * Some tests and examples may require more than 5 seconds Census Bureau download
    and processing time.
+
+* Patch 0.1.2 reflects a reworded Title and expanded Description paragraph in
+    the DESCRIPTION file.
