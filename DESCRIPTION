@@ -1,7 +1,7 @@
 Package: RcensusPkg
 Type: Package
 Title: Easily Access US Census Bureau Survey and Geographic Data 
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
     person(
       "Rick", "Dean",
@@ -10,15 +10,15 @@ Authors@R: c(
       comment = c(ORCID = "0009-0005-8086-8436")
     )
   )
-Description: 'get_vintage_data()' returns a dataframe and is the window into
-    the Census Bureau API requiring just a dataset name, vintage(year), and
-    vector of variable names for survey estimates/percentages. Other functions 
-    assist in searching for available datasets, geographies, group/variable 
-    concepts of interest.  Also provided are functions to access and layer 
-    (via standard piping) displayable geometries for the US, states, counties, 
-    blocks/tracts, roads, landmarks, places, and bodies of water. Joining survey
-    data with many of the geometry functions is built-in to produce choropleth 
-    maps.
+Description: The key function 'get_vintage_data()' returns a dataframe and is 
+    the window into the Census Bureau API requiring just a dataset name, 
+    vintage(year), and vector of variable names for survey estimates/percentages. 
+    Other functions assist in searching for available datasets, geographies, 
+    group/variable concepts of interest.  Also provided are functions to access 
+    and layer (via standard piping) displayable geometries for the US, states, 
+    counties, blocks/tracts, roads, landmarks, places, and bodies of water. 
+    Joining survey data with many of the geometry functions is built-in to 
+    produce choropleth maps.
 License: MIT + file LICENSE
 URL: https://github.com/deandevl/RcensusPkg
 BugReports: https://github.com/deandevl/RcensusPkg/issues

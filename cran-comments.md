@@ -11,3 +11,5 @@
 
 * Patch 0.1.2 reflects a reworded Title and expanded Description paragraph in
     the DESCRIPTION file.
+
+* Patch 0.1.3 has Description field starting with a capital letter.
