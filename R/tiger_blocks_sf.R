@@ -53,7 +53,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'   # Beware that getting state blocks is time consuming
+#'   # Beware that downloading and processing state blocks can be time consuming
 #'   library(sf)
 #'   library(httr)
 #'   library(usmap)

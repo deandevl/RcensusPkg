@@ -13,3 +13,6 @@
     the DESCRIPTION file.
 
 * Patch 0.1.3 has Description field starting with a capital letter.
+
+* Patch 0.1.4 modifies example for tiger_zctas_sf() to '\dontrun' because  
+    downloading and processing may extend beyond 5 sec.

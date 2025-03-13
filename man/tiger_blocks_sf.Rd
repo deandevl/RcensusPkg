@@ -83,7 +83,7 @@ you may be interested in using a state level crs. See \href{https://epsg.io/}{ep
 }
 \examples{
 \dontrun{
-  # Beware that getting state blocks is time consuming
+  # Beware that downloading and processing state blocks can be time consuming
   library(sf)
   library(httr)
   library(usmap)

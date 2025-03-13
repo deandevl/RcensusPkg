@@ -59,46 +59,51 @@ This function performs three tasks:
 Returns simple feature (sf) shapefile Zip Code Tabulation Areas(ZCTA) shapefile of the entire US.
 }
 \examples{
-library(httr)
-library(sf)
-library(data.table)
-library(withr)
-library(RcensusPkg)
+\dontrun{
+  # Beware that downloading and processing Zip Code Tabulation Areas(ZCTA)
+  #   shapefiles of the entire US can be time consuming
+  library(httr)
+  library(sf)
+  library(data.table)
+  library(withr)
+  library(RcensusPkg)
 
-# Get the sf geometries for the Zip Code Tabulation Area in the county of Middlesex, MA near Boston
-# Define a temporary, self deleting output folder for the downloaded shapefiles
-output_dir <- withr::local_tempdir()
-if(!dir.exists(output_dir)){
-  dir.create(output_dir)
-}
+  # Get the sf geometries for the Zip Code Tabulation Area in the county of
+  #   Middlesex, MA near Boston
+  # Define a temporary, self deleting output folder for the downloaded shapefiles
+  output_dir <- withr::local_tempdir()
+  if(!dir.exists(output_dir)){
+    dir.create(output_dir)
+  }
 
-# Define the codes of interest in a dataframe
-mun_zcta_df <- data.frame(
-  name = c(
-    "Carlisle", "Concord", "Bedford",
-    "Lexington", "Lexington", "Lincoln",
-    "Lincoln", "Sudbury", "Wayland",
-    "Weston","Waltham"
-  ),
-  zcta = c(
-    "01741","01742","01730",
-    "02420","02421","01773",
-    "01731","01776","01778",
-    "02493","02451"
+  # Define the codes of interest in a dataframe
+  mun_zcta_df <- data.frame(
+    name = c(
+      "Carlisle", "Concord", "Bedford",
+      "Lexington", "Lexington", "Lincoln",
+      "Lincoln", "Sudbury", "Wayland",
+      "Weston","Waltham"
+    ),
+    zcta = c(
+      "01741","01742","01730",
+      "02420","02421","01773",
+      "01731","01776","01778",
+      "02493","02451"
+    )
   )
-)
 
-# Define an expression to filter the downloaded shapefile
-express <- expression(ZCTA5CE20 \%in\% mun_zcta_df$zcta)
+  # Define an expression to filter the downloaded shapefile
+  express <- expression(ZCTA5CE20 \%in\% mun_zcta_df$zcta)
 
-# Get the sf geometries
-mun_zcta_sf <- RcensusPkg::tiger_zctas_sf(
-  vintage = 2020,
-  general = TRUE,
-  do_progress = TRUE,
-  express = express,
-  output_dir = output_dir,
-  delete_files = FALSE
-)
+  # Get the sf geometries
+  mun_zcta_sf <- RcensusPkg::tiger_zctas_sf(
+    vintage = 2020,
+    general = TRUE,
+    do_progress = TRUE,
+    express = express,
+    output_dir = output_dir,
+    delete_files = FALSE
+  )
+}
 
 }
