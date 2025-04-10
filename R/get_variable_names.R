@@ -56,9 +56,8 @@
 #' # Get available variables that have the phrase "educational attainment"
 #' # in "label" column of the resultant data.table.
 #'
-#' library(jsonlite)
 #' library(data.table)
-#' library(httr)
+#' library(httr2)
 #' library(RcensusPkg)
 #'
 #' educational_attainment_2019_dt <- RcensusPkg::get_variable_names(
@@ -68,8 +67,9 @@
 #' )
 #'
 #' @import data.table
-#' @import httr
-#' @import jsonlite
+#' @importFrom httr2 request
+#' @importFrom httr2 req_perform
+#' @importFrom httr2 resp_body_json
 #' @importFrom purrr map2
 #'
 #' @export
@@ -185,16 +185,6 @@ get_variable_names <- function(
   )
 
   return_dt <- NULL
-
-  make_request <- function(a_url){
-    # Make a web request
-    resp <- httr::GET(a_url)
-    # Check the response as valid JSON
-    check <- .check_response(resp)
-    # Parse the response and return raw JSON
-    return(.parse_response(resp))
-  }
-
   add_variable <- function(name, var) {
     concept <- NA
     if(!is.null(var$concept)){
@@ -217,33 +207,35 @@ get_variable_names <- function(
       predicateType = predicateType
     )
   }
-
-  make_dt <- function(a_json, a_dataset){
-    # Check and add variables
-    variable_lst <- purrr::map2(names(a_json$variables), a_json$variables,  add_variable)
-    dt <- data.table::rbindlist(variable_lst, fill = TRUE)
-    dt[, dataset := a_dataset]
-    return(dt)
+  make_request <- function(a_url, a_dataset){
+    # Make a web request
+    tryCatch({
+      resp <- httr2::request(a_url) |> httr2::req_perform()
+      content_json <- resp |> httr2::resp_body_json()
+      variable_lst <- purrr::map2(names(content_json$variables), content_json$variables,  add_variable)
+      dt <- data.table::rbindlist(variable_lst, fill = TRUE)
+      dt[, dataset := a_dataset]
+      return(dt)
+    },error = function(err){
+      stop("Error downloading raw json text: ", err$message, "\n")
+    })
   }
 
   if(!is.null(dataset) & is.null(group)){
     a_url <- .get_url(dataset, vintage)
     a_url <- paste(a_url, "variables.json", sep = "/")
-    raw_json <- make_request(a_url)
-    return_dt <- make_dt(raw_json, dataset)
+    return_dt <- make_request(a_url, dataset)
   }else if(!is.null(dataset) & !is.null(group)){
     a_url <- .get_url(dataset, vintage)
     a_url <- paste0(a_url, "/groups/", group, ".json")
-    raw_json <- make_request(a_url)
-    return_dt <- make_dt(raw_json, dataset)
+    return_dt <- make_request(a_url, dataset)
   }else if(!is.null(category)){
     return_dt <- data.frame()
     codes <- cb_datasets[[category]]$code
     for(i in seq_along(codes)){
       a_url <- .get_url(codes[i], vintage)
       a_url <- paste(a_url, "variables.json", sep = "/")
-      raw_json <- make_request(a_url)
-      dt <- make_dt(raw_json, codes[i])
+      dt <- make_request(a_url, codes[i])
       return_dt <- rbind(return_dt, dt)
     }
   }

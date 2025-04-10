@@ -16,9 +16,7 @@
 #'
 #' @return A data frame object of class sf, data frame
 #'
-#' @importFrom httr write_disk
-#' @importFrom httr stop_for_status
-#' @importFrom httr GET
+#' @importFrom downloader download
 #' @importFrom utils unzip
 #' @importFrom sf st_read
 #'
@@ -38,47 +36,39 @@
   }
 
   zip_file_name <- base::basename(a_url)
+  zip_dest_path <- file.path(output_dir, zip_file_name)
 
-  files_zip_path <- file.path(output_dir, zip_file_name)
+  tryCatch({
+    resp <- downloader::download(url = a_url, destfile = zip_dest_path, mode = "wb", quiet = !do_progress)
+    if(do_progress){
+      cat(paste0("File downloaded successfully: ", resp))
+    }
+    utils::unzip(zip_dest_path, exdir = output_dir, overwrite = TRUE)
+    #shape_file_path <- list.files(path = output_dir, full.names = TRUE, recursive = TRUE, pattern = "\\.shp$")
+    #tiger_sf <- sf::st_read(dsn = shape_file_path)
 
-  census_response <- NULL
-  if(do_progress){
-    census_response <- httr::GET(
-      a_url,
-      httr::write_disk(files_zip_path, overwrite = TRUE),
-      progress()
-    )
-  }else {
-    census_response <- httr::GET(
-      a_url,
-      httr::write_disk(files_zip_path, overwrite = TRUE)
-    )
-  }
+    suppressWarnings(tiger_sf <- sf::st_read(dsn = output_dir, quiet = !sf_info))
 
-  httr::stop_for_status(census_response, task = paste0("Request called from ", caller))
+    if(!is.null(set_crs)){
+      sf::st_crs(tiger_sf) <- set_crs
+      tiger_sf <- tiger_sf |>
+        sf::st_transform(set_crs)
+    }
 
-  utils::unzip(files_zip_path, exdir = output_dir, overwrite = TRUE)
-  #shape_file_path <- list.files(path = output_dir, full.names = TRUE, recursive = TRUE, pattern = "\\.shp$")
-  #tiger_sf <- sf::st_read(dsn = shape_file_path)
-  suppressWarnings(tiger_sf <- sf::st_read(dsn = output_dir, quiet = !sf_info))
+    if(!is.null(transform_crs)){
+      tiger_sf <- tiger_sf |>
+        sf::st_transform(transform_crs)
+    }
 
-  if(!is.null(set_crs)){
-    sf::st_crs(tiger_sf) <- set_crs
-    tiger_sf <- tiger_sf |>
-      sf::st_transform(set_crs)
-  }
-
-  if(!is.null(transform_crs)){
-    tiger_sf <- tiger_sf |>
-      sf::st_transform(transform_crs)
-  }
-
-  if(delete_files){
-    # Get all files in the directories, recursively
-    f <- list.files(output_dir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
-    # remove the files
-    file.remove(f)
-  }
-
-  return(tiger_sf)
+    if(delete_files){
+      # Get all files in the directories, recursively
+      f <- list.files(output_dir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+      # remove the files
+      file.remove(f)
+    }
+    return(tiger_sf)
+  }, error = function(err){
+    cat("Error downloading file: ", err$message, "\n")
+    return(NULL)
+  })
 }

@@ -86,9 +86,8 @@ their available years.
 # Get available variables that have the phrase "educational attainment"
 # in "label" column of the resultant data.table.
 
-library(jsonlite)
 library(data.table)
-library(httr)
+library(httr2)
 library(RcensusPkg)
 
 educational_attainment_2019_dt <- RcensusPkg::get_variable_names(

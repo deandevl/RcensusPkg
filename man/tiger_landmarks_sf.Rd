@@ -91,7 +91,7 @@ Some earlier vintages may have NA for the crs so you may need to specify the 'tr
 you may be interested in using a state level crs. See \href{https://epsg.io/}{epsg.io} to search worldwide for crs.
 }
 \examples{
-library(httr)
+library(downloader)
 library(sf)
 library(data.table)
 library(withr)

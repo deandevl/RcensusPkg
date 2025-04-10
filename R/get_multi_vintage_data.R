@@ -25,7 +25,7 @@
 #'   #   back to 2005 through 2019.
 #'   library(jsonlite)
 #'   library(data.table)
-#'   library(httr)
+#'   library(httr2)
 #'   library(usmap)
 #'   library(RcensusPkg)
 #'
@@ -43,7 +43,7 @@
 #'   )
 #' }
 #' @import data.table
-#' @import httr
+#' @import httr2
 #' @import jsonlite
 #'
 #' @export
@@ -77,20 +77,41 @@ get_multi_vintage_data <- function(
     # Create a string url based on the submitted parameters
     a_url <- .get_url(dataset, vintage)
 
-    # Get the data.table
-    dt <- .get_dt(
-      a_url = a_url,
-      key = key,
-      vars = vars,
-      region = region,
-      regionin = regionin
-    )
+    a_url <- paste0(a_url, "?get=")
 
-    if("GEO_ID" %in% names(dt)){
-      dt <- dt[, c("pre", "GEOID") := tstrsplit(GEO_ID, "US")] |>
-      _[,`:=`(pre = NULL, GEO_ID = NULL)]
+    get_vars <- paste(vars, collapse = ",")
+    a_url = paste0(a_url, get_vars)
+
+    if(!is.null(region)){
+      a_url <- paste0(a_url, "&for=", region)
     }
-    return(dt)
+    if(!is.null(regionin)){
+      a_url <- paste0(a_url, "&in=", regionin)
+    }
+
+    a_url <- paste0(a_url, "&key=", key)
+    url_coded <- utils::URLencode(a_url)
+
+    # Make a web request
+    tryCatch({
+      resp <- httr2::request(url_coded) |> httr2::req_perform()
+      content_json <- resp |> httr2::resp_body_string()
+      content_mt <- jsonlite::fromJSON(content_json)
+
+      # Create data,table
+      dt <- data.table::as.data.table(content_mt)
+      colnames(dt) <- content_mt[1,]
+      dt <- dt[-1]
+
+      if("GEO_ID" %in% names(dt)){
+        dt <- dt[, c("pre", "GEOID") := tstrsplit(GEO_ID, "US")] |>
+          _[,`:=`(pre = NULL, GEO_ID = NULL)]
+      }
+
+      return(dt)
+    },error = function(err){
+      stop("Error downloading raw json text: ", err$message, "\n")
+    })
   }
 
   dt <- getDT(vintage_v[[1]])

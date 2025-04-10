@@ -7,5 +7,5 @@
         dir.create(output_dir)
       }
       dc_block_groups_sf <- RcensusPkg::tiger_block_groups_sf(state = dc_fips,
-        output_dir = output_dir, delete_files = FALSE)
+        output_dir = output_dir, do_progress = FALSE, delete_files = TRUE)
 

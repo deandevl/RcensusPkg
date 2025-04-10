@@ -103,7 +103,7 @@ you may be interested in using a state level crs. See \href{https://epsg.io/}{ep
 library(usmap)
 library(sf)
 library(data.table)
-library(httr)
+library(downloader)
 library(withr)
 library(RcensusPkg)
 

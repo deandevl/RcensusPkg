@@ -1,7 +1,7 @@
 test_that("tiger_urban_area_sf() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
-  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("downloader", quietly = TRUE))
   expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
   expect_true(requireNamespace("withr", quietly = TRUE))
@@ -19,7 +19,8 @@ test_that("tiger_urban_area_sf()", {
       vintage = 2019,
       general = TRUE,
       output_dir = output_dir,
-      delete_files = FALSE
+      do_progress = FALSE,
+      delete_files = TRUE
     )
     a_plot <- RplotterPkg::create_sf_plot(us_urban_areas_sf)
   })

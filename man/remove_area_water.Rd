@@ -32,7 +32,7 @@ Function removes water area geometries from downloaded Census Bureau shapefiles
 \dontrun{
   # Request for Census Bureau data plus CPU processing can exceed well over 10
   #  seconds in some cases.
-  library(httr)
+  library(downloader)
   library(sf)
   library(usmap)
   library(withr)

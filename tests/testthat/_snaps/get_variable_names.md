@@ -3,7 +3,7 @@
     Code
       variables_dt <- RcensusPkg::get_variable_names(dataset = "acs/acs1/profile",
         vintage = 2019, filter_label_str = "educational attainment")
-      variables_dt[23:33, .(name, label)]
+      variables_dt[23:33, .(name, label, dataset)]
     Output
                  name
                <char>
@@ -31,13 +31,26 @@
        9:                          Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree
       10:                           Percent!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree
       11:                           Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree
+                   dataset
+                    <char>
+       1: acs/acs1/profile
+       2: acs/acs1/profile
+       3: acs/acs1/profile
+       4: acs/acs1/profile
+       5: acs/acs1/profile
+       6: acs/acs1/profile
+       7: acs/acs1/profile
+       8: acs/acs1/profile
+       9: acs/acs1/profile
+      10: acs/acs1/profile
+      11: acs/acs1/profile
 
 # get_variable_names() category
 
     Code
       variables_dt <- RcensusPkg::get_variable_names(category = "acs1", vintage = 2023,
         filter_label_str = "computers")
-      variables_dt[44:49, .(name, label)]
+      variables_dt[44:49, .(name, label, dataset)]
     Output
                 name
               <char>
@@ -55,4 +68,12 @@
       4:                         Percent!!COMPUTERS AND INTERNET USE!!Total households!!With a computer
       5: Estimate!!COMPUTERS AND INTERNET USE!!Total households!!With a broadband Internet subscription
       6:  Percent!!COMPUTERS AND INTERNET USE!!Total households!!With a broadband Internet subscription
+                  dataset
+                   <char>
+      1: acs/acs1/profile
+      2: acs/acs1/profile
+      3: acs/acs1/profile
+      4: acs/acs1/profile
+      5: acs/acs1/profile
+      6: acs/acs1/profile
 

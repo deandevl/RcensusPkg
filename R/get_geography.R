@@ -14,7 +14,7 @@
 #' @examples
 #' library(jsonlite)
 #' library(data.table)
-#' library(httr)
+#' library(httr2)
 #' library(RcensusPkg)
 
 #' # Get the geographies available for dataset "acs/acs1/profile" with vintage 2019
@@ -24,31 +24,27 @@
 #' )
 #'
 #' @import data.table
-#' @import httr
+#' @import httr2
 #' @import jsonlite
 #'
 #' @export
 get_geography <- function(dataset, vintage = NULL){
-
   # Create a string url based on the submitted parameters
   a_url <- .get_url(dataset, vintage)
-
   a_url <- paste(a_url, "geography.json", sep="/")
 
   # Make a web request
-  resp <- httr::GET(a_url)
-
-  # Check the response as valid JSON
-  .check_response(resp)
-
-  # Parse the response and return raw JSON
-  raw_json <- .parse_response(resp)
-
-  # Return a data.table
-  geo_dt <- data.table(
-    name = raw_json$fips$name,
-    geoLevelDisplay = raw_json$fips$geoLevelDisplay
-  )
-
-  return(geo_dt)
+  tryCatch({
+    resp <- httr2::request(a_url) |> httr2::req_perform()
+    content_json <- resp |> httr2::resp_body_string()
+    content_ls <- jsonlite::fromJSON(content_json)
+    # Return a data.table
+    geo_dt <- data.table(
+      name = content_ls$fips$name,
+      geoLevelDisplay = content_ls$fips$geoLevelDisplay
+    )
+    return(geo_dt)
+  },error = function(err){
+    stop("Error downloading raw json text: ", err$message, "\n")
+  })
 }

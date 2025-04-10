@@ -10,5 +10,6 @@
       }
       express <- parse(text = paste0("COUNTYFP == ", "\"", los_alamos_fips, "\""))
       losalamos_tracts_sf <- RcensusPkg::tiger_tracts_sf(state = nm_fips, general = TRUE,
-        express = express, output_dir = output_dir, delete_files = FALSE)
+        express = express, output_dir = output_dir, do_progress = FALSE,
+        delete_files = TRUE)
 

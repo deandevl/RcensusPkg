@@ -61,7 +61,7 @@
 #' @return A data frame object of class sf
 #'
 #' @examples
-#' library(httr)
+#' library(downloader)
 #' library(sf)
 #' library(data.table)
 #' library(withr)
@@ -169,16 +169,17 @@ tiger_places_sf <- function(
       caller = "tiger_places_sf"
     )
 
-    if(!is.null(express)){
-      tiger_dt <- data.table::as.data.table(tiger_sf)
-      tiger_dt <- tiger_dt[eval(express), ]
-      tiger_sf <- sf::st_as_sf(tiger_dt)
-    }
+    if(!is.null(tiger_sf)){
+      if(!is.null(express)){
+        tiger_dt <- data.table::as.data.table(tiger_sf)
+        tiger_dt <- tiger_dt[eval(express), ]
+        tiger_sf <- sf::st_as_sf(tiger_dt)
+      }
 
-    if(check_na){
-      tiger_sf <- na.omit(tiger_sf)
+      if(check_na){
+        tiger_sf <- na.omit(tiger_sf)
+      }
     }
-
     return(tiger_sf)
   }
 }

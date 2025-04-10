@@ -15,7 +15,7 @@
 #' @examples
 #' library(jsonlite)
 #' library(data.table)
-#' library(httr)
+#' library(httr2)
 #' library(RcensusPkg)
 #'
 #' acs5_groups_dt <- RcensusPkg::get_groups(
@@ -23,7 +23,7 @@
 #'   vintage = 2019)
 #'
 #' @import data.table
-#' @import httr
+#' @import httr2
 #' @import jsonlite
 #'
 #' @export
@@ -43,25 +43,22 @@ get_groups <- function(
 
   # Create a string url based on the submitted parameters
   a_url <- .get_url(dataset, vintage)
-
   a_url <- paste(a_url, "groups.json", sep="/")
 
   # Make a web request
-  resp <- httr::GET(a_url)
+  tryCatch({
+    resp <- httr2::request(a_url) |> httr2::req_perform()
+    content_json <- resp |> httr2::resp_body_string()
+    content_ls <- jsonlite::fromJSON(content_json)
 
-  # Check the response as valid JSON
-  .check_response(resp)
+    # Return a data.table
+    select_cols <- c("name", "description", "variables")
 
-   # Parse the response and return raw JSON
-  raw_json <- .parse_response(resp)
-  if(is.null(dim(raw_json$groups))){
-    stop(paste0("Groups are not available for dataset ", dataset))
-  }
+    dt <- data.table::as.data.table(content_ls[["groups"]]) |>
+      _[, select_cols, with = FALSE]
 
-  # Return a data.table
-  select_cols <- c("name", "description", "variables")
-  dt <- data.table::as.data.table(raw_json[["groups"]]) |>
-    _[, select_cols, with = FALSE]
-
-  return(dt)
+    return(dt)
+  },error = function(err){
+    stop("Error downloading raw json text: ", err$message, "\n")
+  })
 }

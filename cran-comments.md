@@ -16,3 +16,10 @@
 
 * Patch 0.1.4 modifies example for tiger_zctas_sf() to '\dontrun' because  
     downloading and processing may extend beyond 5 sec.
+    
+* Patch 0.1.5 replaces httr with httr2 and adds downloader package for downloading raw json and 
+    shape geometry zip files respectively.  A tryCatch surrounds all Internet request code addressing the
+    Census Bureau, giving the user an informative message by the Bureau or http errors.
+  All url's used in the function descriptions are working from a browser without receiving 
+    a 403 status message (Forbidden).
+  All tests received OK status.

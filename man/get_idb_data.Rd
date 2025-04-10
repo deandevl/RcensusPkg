@@ -75,7 +75,8 @@ names and descriptions.
 \dontrun{
   # Requires Census Bureau API key
   library(data.table)
-  library(httr)
+  library(httr2)
+  library(jsonlite)
   library(RcensusPkg)
 
   # 1year wide form, default variables, 2 countries

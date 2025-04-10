@@ -100,7 +100,7 @@ joined with US Census Bureau demographic data via the GEOID value.
 }
 \examples{
 library(sf)
-library(httr)
+library(downloader)
 library(data.table)
 library(usmap)
 library(withr)

@@ -27,7 +27,7 @@
 #' \dontrun{
 #'   # Requires Census Bureau API key
 #'   library(data.table)
-#'   library(httr)
+#'   library(downloader)
 #'   library(jsonlite)
 #'   library(RcensusPkg)
 #'   # Request for data from Census Bureau which comes in the "wide" form

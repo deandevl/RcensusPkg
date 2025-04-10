@@ -66,7 +66,7 @@
 #'   # Description: https://www.census.gov/data/developers/data-sets/acs-5year.html
 #'
 #'   library(data.table)
-#'   library(httr)
+#'   library(httr2)
 #'   library(jsonlite)
 #'   library(stringr)
 #'   library(RcensusPkg)
@@ -82,7 +82,7 @@
 #'   )
 #' }
 #' @import data.table
-#' @import httr
+#' @import httr2
 #' @import jsonlite
 #' @importFrom stringr str_ends str_sub
 #' @importFrom stats na.omit
@@ -120,54 +120,89 @@ get_vintage_data <- function(
   # Create a string url based on the submitted parameters
   a_url <- .get_url(dataset, vintage)
 
-  # Get the data.table
-  dt <- .get_dt(
-    a_url = a_url,
-    group = group,
-    vars = vars,
-    NAME_GEOID = NAME_GEOID,
-    predicates = predicates,
-    region = region,
-    regionin = regionin,
-    key = key
-  )
+  a_url <- paste0(a_url, "?get=")
 
-  if("GEO_ID" %in% names(dt)){
-    dt <- dt[, c("pre", "GEOID") := tstrsplit(GEO_ID, "US")] |>
-    _[,`:=`(pre = NULL, GEO_ID = NULL)]
+  if(!is.null(group)){
+    a_url <- paste0(a_url, "group(", group, ")")
   }
 
-  if(!is.null(na_cols)){
-    if(is.logical(na_cols)){
-      dt <- na.omit(dt)
-    }else if(is.vector(na_cols)){
-      dt <- na.omit(dt, cols = na_cols)
+  if(!is.null(vars)){
+    if(NAME_GEOID){
+      vars <- c("NAME", "GEO_ID", vars)
     }
-  }
-
-  if(!is.null(group) & wide_to_long){
-    long_dt <- data.table::melt(
-      data = dt,
-      id.vars = c("NAME","GEOID")
-    )
-
-    E_M_dt <- long_dt[stringr::str_ends(long_dt$variable,"E") | stringr::str_ends(long_dt$variable,"M"),]
-    if(nrow(E_M_dt) == 0){
-      return(long_dt)
+    get_vars <- paste(vars, collapse = ",")
+    if(!is.null(group)){
+      a_url = paste0(a_url, ",", get_vars)
     }else {
-      E_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "E",]
-      M_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "M",]
-
-      return_dt <- data.table(
-        NAME = E_dt$NAME,
-        GEOID = E_dt$GEOID,
-        variable = stringr::str_remove(E_dt$variable,"E"),
-        estimate = E_dt$value,
-        moe = M_dt$value
-      )
-      return(return_dt)
+      a_url = paste0(a_url, get_vars)
     }
   }
-  return(dt)
+
+  if(!is.null(predicates)){
+    predicates_collapse <- paste(predicates, collapse = "")
+    a_url <- paste0(a_url, predicates_collapse)
+  }
+
+  if(!is.null(region)){
+    a_url <- paste0(a_url, "&for=", region)
+  }
+  if(!is.null(regionin)){
+    a_url <- paste0(a_url, "&in=", regionin)
+  }
+
+  a_url <- paste0(a_url, "&key=", key)
+  url_coded <- utils::URLencode(a_url)
+
+  # Make a web request
+  tryCatch({
+    resp <- httr2::request(url_coded) |> httr2::req_perform()
+    content_json <- resp |> httr2::resp_body_string()
+    content_mt <- jsonlite::fromJSON(content_json)
+
+    # Create data,table
+    dt <- data.table::as.data.table(content_mt)
+    colnames(dt) <- content_mt[1,]
+    dt <- dt[-1]
+
+    if("GEO_ID" %in% names(dt)){
+      dt <- dt[, c("pre", "GEOID") := tstrsplit(GEO_ID, "US")] |>
+        _[,`:=`(pre = NULL, GEO_ID = NULL)]
+    }
+
+    if(!is.null(na_cols)){
+      if(is.logical(na_cols)){
+        dt <- na.omit(dt)
+      }else if(is.vector(na_cols)){
+        dt <- na.omit(dt, cols = na_cols)
+      }
+    }
+
+    if(!is.null(group) & wide_to_long){
+      long_dt <- data.table::melt(
+        data = dt,
+        id.vars = c("NAME","GEOID")
+      )
+
+      E_M_dt <- long_dt[stringr::str_ends(long_dt$variable,"E") | stringr::str_ends(long_dt$variable,"M"),]
+      if(nrow(E_M_dt) == 0){
+        return(long_dt)
+      }else {
+        E_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "E",]
+        M_dt <- E_M_dt[stringr::str_sub(variable, -1,-1) == "M",]
+
+        return_dt <- data.table(
+          NAME = E_dt$NAME,
+          GEOID = E_dt$GEOID,
+          variable = stringr::str_remove(E_dt$variable,"E"),
+          estimate = E_dt$value,
+          moe = M_dt$value
+        )
+        return(return_dt)
+      }
+    }
+    return(dt)
+  },error = function(err){
+    stop("Error downloading raw json text: ", err$message, "\n")
+  })
 }
 

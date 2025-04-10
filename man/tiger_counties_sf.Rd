@@ -97,7 +97,7 @@ The function returns the simple feature object which can easily be mapped (see \
 joined with US Census Bureau demographic data via the GEOID value.
 }
 \examples{
-library(httr)
+library(downloader)
 library(sf)
 library(data.table)
 library(usmap)

@@ -9,6 +9,6 @@
         dir.create(output_dir)
       }
       geauga_area_water_sf <- RcensusPkg::tiger_water_sf(state = state_fips, county = county_fips,
-        output_dir = output_dir, delete_files = FALSE)
+        output_dir = output_dir, do_progress = FALSE, delete_files = TRUE)
       a_plot <- RplotterPkg::create_sf_plot(geauga_area_water_sf)
 

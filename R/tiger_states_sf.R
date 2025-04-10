@@ -63,7 +63,7 @@
 #' library(usmap)
 #' library(sf)
 #' library(data.table)
-#' library(httr)
+#' library(downloader)
 #' library(withr)
 #' library(RcensusPkg)
 #'
@@ -181,26 +181,27 @@ tiger_states_sf <- function(
       caller = "tiger_states_sf"
     )
 
-    if(!is.null(datafile)){
-      tiger_sf <- RcensusPkg::join_it(
-        df_1 = datafile,
-        df_2 = tiger_sf,
-        key_1 = datafile_key,
-        key_2 = sf_key,
-        return_sf = TRUE
-      )
-    }
+    if(!is.null(tiger_sf)){
+      if(!is.null(datafile)){
+        tiger_sf <- RcensusPkg::join_it(
+          df_1 = datafile,
+          df_2 = tiger_sf,
+          key_1 = datafile_key,
+          key_2 = sf_key,
+          return_sf = TRUE
+        )
+      }
 
-    if(!is.null(express)){
-      tiger_dt <- data.table::as.data.table(tiger_sf)
-      tiger_dt <- tiger_dt[eval(express), ]
-      tiger_sf <- sf::st_as_sf(tiger_dt)
-    }
+      if(!is.null(express)){
+        tiger_dt <- data.table::as.data.table(tiger_sf)
+        tiger_dt <- tiger_dt[eval(express), ]
+        tiger_sf <- sf::st_as_sf(tiger_dt)
+      }
 
-    if(check_na){
-      tiger_sf <- na.omit(tiger_sf)
+      if(check_na){
+        tiger_sf <- na.omit(tiger_sf)
+      }
     }
-
     return(tiger_sf)
   }
 }

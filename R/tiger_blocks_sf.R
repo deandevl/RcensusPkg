@@ -55,7 +55,7 @@
 #' \dontrun{
 #'   # Beware that downloading and processing state blocks can be time consuming
 #'   library(sf)
-#'   library(httr)
+#'   library(downloader)
 #'   library(usmap)
 #'   library(withr)
 #'   library(data.table)
@@ -148,16 +148,17 @@ tiger_blocks_sf <- function(
       do_progress = do_progress,
       caller = "tiger_blocks_sf")
 
-    if(!is.null(express)){
-      tiger_dt <- data.table::as.data.table(tiger_sf)
-      tiger_dt <- tiger_dt[eval(express), ]
-      tiger_sf <- sf::st_as_sf(tiger_dt)
-    }
+    if(!is.null(tiger_sf)){
+      if(!is.null(express)){
+        tiger_dt <- data.table::as.data.table(tiger_sf)
+        tiger_dt <- tiger_dt[eval(express), ]
+        tiger_sf <- sf::st_as_sf(tiger_dt)
+      }
 
-    if(check_na){
-      tiger_sf <- na.omit(tiger_sf)
+      if(check_na){
+        tiger_sf <- na.omit(tiger_sf)
+      }
     }
-
     return(tiger_sf)
   }
 }

@@ -1,7 +1,7 @@
 Package: RcensusPkg
 Type: Package
 Title: Easily Access US Census Bureau Survey and Geographic Data 
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(
     person(
       "Rick", "Dean",
@@ -26,7 +26,8 @@ Depends: R (>= 4.4.0)
 Imports: 
     ggplot2 (>= 3.5.1),
     data.table (>= 1.16.4),
-    httr (>= 1.4.7),
+    httr2 (>= 1.1.2),
+    downloader (>= 0.4.1),
     jsonlite (>= 1.8.9),
     stringr (>= 1.5.1),
     purrr (>= 1.0.2),

@@ -48,7 +48,8 @@
 #' \dontrun{
 #'   # Requires Census Bureau API key
 #'   library(data.table)
-#'   library(httr)
+#'   library(httr2)
+#'   library(jsonlite)
 #'   library(RcensusPkg)
 #'
 #'   # 1year wide form, default variables, 2 countries
@@ -70,7 +71,7 @@
 #' }
 #'
 #' @import data.table
-#' @import httr
+#' @import httr2
 #' @import jsonlite
 #'
 #' @export
@@ -140,30 +141,29 @@ get_idb_data <- function(
   a_url <- paste0(a_url, "&key=", key)
 
   url_coded <- utils::URLencode(a_url)
-  resp <- httr::GET(url = url_coded)
 
-  # Check the response as valid JSON
-  check <- .check_response(resp)
+  # Make a web request
+  tryCatch({
+    resp <- httr2::request(url_coded) |> httr2::req_perform()
+    content_json <- resp |> httr2::resp_body_string()
+    content_mt <- jsonlite::fromJSON(content_json)
 
-  # Parse the response and return raw JSON
-  raw_json <- .parse_response(resp)
+    # Create data,table
+    dt <- data.table::as.data.table(content_mt)
+    colnames(dt) <- content_mt[1,]
+    dt <- dt[-1]
+    dt$`genc standard countries and areas` <- NULL
 
-  # Create data,table
-  dt <- data.table::as.data.table(raw_json)
-
-  colnames(dt) <- raw_json[1,]
-
-  dt <- dt[-1]
-
-  dt$`genc standard countries and areas` <- NULL
-
-  if(wide_to_long){
-    long_dt <- data.table::melt(
-      data = dt,
-      id.vars = c("GEO_ID", "NAME")
-    )
-    return(long_dt)
-  }else{
-    return(dt)
-  }
+    if(wide_to_long){
+      long_dt <- data.table::melt(
+        data = dt,
+        id.vars = c("GEO_ID", "NAME")
+      )
+      return(long_dt)
+    }else{
+      return(dt)
+    }
+  },error = function(err){
+    stop("Error downloading raw json text: ", err$message, "\n")
+  })
 }

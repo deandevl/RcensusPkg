@@ -1,3 +1,8 @@
+# RcensusPkg 0.1.5
+Replaced httr with httr2 and adds downloader package for downloading raw json and 
+  shape geometry zip files respectively. All url's used in the function descriptions
+  are working from a browser without receiving a 403 status message (Forbidden).
+
 # RcensusPkg 0.1.4
 Updated example for tiger_zctas_sf() not to run unless user is aware of 
   downloading and processing time that may exceed 5 sec in some cases.

@@ -11,6 +11,6 @@
         "Danville"))
       kentucky_places_sf <- RcensusPkg::tiger_places_sf(state = kentucky_fips,
         express = major_places_express, general = TRUE, output_dir = output_dir,
-        delete_files = FALSE)
+        do_progress = FALSE, delete_files = TRUE)
       a_plot <- RplotterPkg::create_sf_plot(kentucky_places_sf)
 

@@ -8,6 +8,6 @@
         dir.create(output_dir)
       }
       ohio_counties_sf <- RcensusPkg::tiger_counties_sf(output_dir = output_dir,
-        delete_files = FALSE, general = TRUE, express = express)
+        general = TRUE, express = express, do_progress = FALSE, delete_files = TRUE)
       a_plot <- RplotterPkg::create_sf_plot(sf = ohio_counties_sf)
 

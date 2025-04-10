@@ -134,13 +134,14 @@ that function's parameters are repeated in this function. Also \code{RplotterPkg
 displaying the shapefile geometries, so this package should be installed.
 }
 \examples{
+\dontrun{
 library(sf)
 library(grid)
 library(ggplot2)
 library(ggplotify)
 library(data.table)
 library(gtable)
-library(httr)
+library(httr2)
 library(withr)
 library(RplotterPkg)
 
@@ -156,7 +157,6 @@ us_without_data_plot <- RcensusPkg::plot_us_data(
  delete_files = FALSE
 )
 
-\dontrun{
 # Requires US Census Bureau API key
 # Plot of US map with discrete 2020 presidential results
 output_dir <- withr::local_tempdir()
@@ -175,6 +175,6 @@ a_plot <- RcensusPkg::plot_us_data(
   scale_values = c("red","blue"),
   scale_labels = c("Republican","Democrat"),
   sf_color = "white"
-)}
-
+)
+}
 }

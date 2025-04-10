@@ -42,9 +42,9 @@ for descriptions. Also see \href{https://www.census.gov/programs-surveys.html}{A
 \dontrun{
   # Requests for Census Bureau descriptions takes well over 10
   #  seconds in most cases.
-  library(jsonlite)
   library(data.table)
-  library(httr)
+  library(jsonlite)
+  library(httr2)
   library(RcensusPkg)
 
   # Get descriptions/vintages for 2020 datasets with "acs5" in their name.
@@ -53,5 +53,4 @@ for descriptions. Also see \href{https://www.census.gov/programs-surveys.html}{A
     filter_name_str = "acs5/"
   )
 }
-
 }

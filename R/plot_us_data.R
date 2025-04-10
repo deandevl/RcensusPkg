@@ -61,13 +61,14 @@
 #'   \code{ggplot2::geom_sf} plots of the lower 48 ("lower_48"), Alaska ("alaska"), Hawaii ("hawaii") and Puerto Rico ("puerto_rico").
 #'
 #' @examples
+#' \dontrun{
 #' library(sf)
 #' library(grid)
 #' library(ggplot2)
 #' library(ggplotify)
 #' library(data.table)
 #' library(gtable)
-#' library(httr)
+#' library(httr2)
 #' library(withr)
 #' library(RplotterPkg)
 #'
@@ -83,7 +84,6 @@
 #'  delete_files = FALSE
 #' )
 #'
-#' \dontrun{
 #' # Requires US Census Bureau API key
 #' # Plot of US map with discrete 2020 presidential results
 #' output_dir <- withr::local_tempdir()
@@ -102,8 +102,8 @@
 #'   scale_values = c("red","blue"),
 #'   scale_labels = c("Republican","Democrat"),
 #'   sf_color = "white"
-#' )}
-#'
+#' )
+#' }
 #' @importFrom sf st_transform
 #' @importFrom sf st_crs
 #' @importFrom sf st_as_sf
@@ -119,7 +119,7 @@
 #' @importFrom RplotterPkg create_sf_plot
 #' @importFrom ggplotify as.ggplot
 #' @import ggplot2
-#' @import httr
+#' @import httr2
 #'
 #' @export
 plot_us_data <- function(

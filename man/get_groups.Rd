@@ -25,7 +25,7 @@ descriptions.
 \examples{
 library(jsonlite)
 library(data.table)
-library(httr)
+library(httr2)
 library(RcensusPkg)
 
 acs5_groups_dt <- RcensusPkg::get_groups(

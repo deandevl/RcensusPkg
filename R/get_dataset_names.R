@@ -23,9 +23,9 @@
 #' \dontrun{
 #'   # Requests for Census Bureau descriptions takes well over 10
 #'   #  seconds in most cases.
-#'   library(jsonlite)
 #'   library(data.table)
-#'   library(httr)
+#'   library(jsonlite)
+#'   library(httr2)
 #'   library(RcensusPkg)
 #'
 #'   # Get descriptions/vintages for 2020 datasets with "acs5" in their name.
@@ -34,10 +34,9 @@
 #'     filter_name_str = "acs5/"
 #'   )
 #'}
-#'
-#' @import data.table
-#' @import httr
 #' @import jsonlite
+#' @import data.table
+#' @import httr2
 #'
 #' @export
 get_dataset_names <- function(
@@ -54,20 +53,6 @@ get_dataset_names <- function(
   # Create the url
   a_url <- "https://api.census.gov/data.json"
 
-  # Make a web request
-  resp <- httr::GET(a_url)
-
-  # Check the response as valid JSON
-  check <- .check_response(resp)
-
-  # Parse the response and return raw JSON
-  raw_json <- .parse_response(resp)
-
-  datasets_df <- jsonlite::flatten(raw_json[["dataset"]])
-  colnames(datasets_df) <- gsub("c_","",colnames(datasets_df))
-
-  datasets_dt <- data.table::as.data.table(datasets_df)
-
   change_name <- function(x){
     paste(x[["dataset"]], collapse = "/")
   }
@@ -75,35 +60,51 @@ get_dataset_names <- function(
     return(x[["distribution"]][["accessURL"]])
   }
 
-  datasets_dt[, name := apply(datasets_dt, 1, change_name)]
-  datasets_dt[, url := apply(datasets_dt, 1, change_url)]
+  # Make a web request
+  tryCatch({
+    resp <- httr2::request(a_url) |> httr2::req_perform()
+    content_json <- resp |> httr2::resp_body_string()
 
-  select_cols_v <- c("name","vintage","title","url","isTimeseries","description","modified")
-  if(brief){
-    select_cols_v <- c("name","vintage","title")
-  }
-  datasets_dt <- datasets_dt[, select_cols_v, with = FALSE]
-  if(!is.null(year)){
-    datasets_dt <- datasets_dt[vintage == year,]
-  }
+    content_ls <- jsonlite::fromJSON(content_json)
 
-  if(!is.null(filter_name_str)){
-    if(nchar(filter_name_str) != 0){
-      datasets_dt <- datasets_dt[grepl(filter_name_str, datasets_dt$name, ignore.case = ignore_case, fixed = FALSE)]
+    datasets_df <- jsonlite::flatten(content_ls[["dataset"]])
+
+    colnames(datasets_df) <- gsub("c_","",colnames(datasets_df))
+
+    datasets_dt <- data.table::as.data.table(datasets_df)
+
+    datasets_dt[, name := apply(datasets_dt, 1, change_name)]
+    datasets_dt[, url := apply(datasets_dt, 1, change_url)]
+
+    select_cols_v <- c("name","vintage","title","url","isTimeseries","description","modified")
+    if(brief){
+      select_cols_v <- c("name","vintage","title")
     }
-  }
-  if(!is.null(filter_title_str)) {
-    if(nchar(filter_title_str) != 0){
-      datasets_dt <- datasets_dt[grepl(filter_title_str, datasets_dt$title, ignore.case = ignore_case, fixed = FALSE)]
+    datasets_dt <- datasets_dt[, select_cols_v, with = FALSE]
+    if(!is.null(year)){
+      datasets_dt <- datasets_dt[vintage == year,]
     }
-  }
 
-  data.table::setorderv(datasets_dt, cols = c("name", "vintage"))
+    if(!is.null(filter_name_str)){
+      if(nchar(filter_name_str) != 0){
+        datasets_dt <- datasets_dt[grepl(filter_name_str, datasets_dt$name, ignore.case = ignore_case, fixed = FALSE)]
+      }
+    }
+    if(!is.null(filter_title_str)) {
+      if(nchar(filter_title_str) != 0){
+        datasets_dt <- datasets_dt[grepl(filter_title_str, datasets_dt$title, ignore.case = ignore_case, fixed = FALSE)]
+      }
+    }
 
-  return(
-    list(
-      data = datasets_dt,
-      vintages = unique(datasets_dt$vintage)
+    data.table::setorderv(datasets_dt, cols = c("name", "vintage"))
+
+    return(
+      list(
+        data = datasets_dt,
+        vintages = unique(datasets_dt$vintage)
+      )
     )
-  )
+  },error = function(err){
+    stop("Error downloading raw json text: ", err$message, "\n")
+  })
 }

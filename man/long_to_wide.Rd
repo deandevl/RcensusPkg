@@ -36,7 +36,7 @@ its values to multiple columns.
 \dontrun{
   # Requires Census Bureau API key
   library(data.table)
-  library(httr)
+  library(httr2)
   library(jsonlite)
   library(stringr)
   library(RcensusPkg)

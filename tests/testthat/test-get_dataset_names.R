@@ -1,7 +1,7 @@
 test_that("get_dataset_names() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
-  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("httr2", quietly = TRUE))
 })
 
 test_that("get_dataset_names() acs5", {

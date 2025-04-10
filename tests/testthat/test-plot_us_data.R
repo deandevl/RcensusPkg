@@ -4,7 +4,8 @@
 test_that("plot_us_data() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
-  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("httr2", quietly = TRUE))
+  expect_true(requireNamespace("downloader", quietly = TRUE))
   expect_true(requireNamespace("ggplot2", quietly = TRUE))
   expect_true(requireNamespace("gtable", quietly = TRUE))
   expect_true(requireNamespace("ggplotify", quietly = TRUE))

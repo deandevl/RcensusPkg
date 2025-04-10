@@ -1,7 +1,7 @@
-test_that("get_dataset_names() namespaces", {
+test_that("get_variable_names() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
-  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("httr2", quietly = TRUE))
 })
 
 test_that("get_variable_names()", {
@@ -11,7 +11,7 @@ test_that("get_variable_names()", {
       vintage = 2019,
       filter_label_str = "educational attainment"
     )
-    variables_dt[23:33, .(name, label)]
+    variables_dt[23:33, .(name, label, dataset)]
   })
 })
 
@@ -22,6 +22,6 @@ test_that("get_variable_names() category", {
       vintage = 2023,
       filter_label_str = "computers"
     )
-    variables_dt[44:49, .(name, label)]
+    variables_dt[44:49, .(name, label, dataset)]
   })
 })

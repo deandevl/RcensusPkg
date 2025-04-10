@@ -46,7 +46,7 @@ to reshape a wide data frame to a long form.
 \dontrun{
   # Requires Census Bureau API key
   library(data.table)
-  library(httr)
+  library(downloader)
   library(jsonlite)
   library(RcensusPkg)
   # Request for data from Census Bureau which comes in the "wide" form

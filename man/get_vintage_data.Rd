@@ -97,7 +97,7 @@ Some of the more common Census Bureau datasets include:
   # Description: https://www.census.gov/data/developers/data-sets/acs-5year.html
 
   library(data.table)
-  library(httr)
+  library(httr2)
   library(jsonlite)
   library(stringr)
   library(RcensusPkg)

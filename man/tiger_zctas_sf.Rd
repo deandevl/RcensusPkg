@@ -62,7 +62,7 @@ Returns simple feature (sf) shapefile Zip Code Tabulation Areas(ZCTA) shapefile 
 \dontrun{
   # Beware that downloading and processing Zip Code Tabulation Areas(ZCTA)
   #   shapefiles of the entire US can be time consuming
-  library(httr)
+  library(downloader)
   library(sf)
   library(data.table)
   library(withr)

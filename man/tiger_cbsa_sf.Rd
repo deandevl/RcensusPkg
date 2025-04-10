@@ -89,7 +89,7 @@ has a 'datafile' parameter which will be joined with the resultant simple featur
 requirement is that a common "key" for joining exist between the data dataframe and the simple feature dataframe.
 }
 \examples{
-library(httr)
+library(downloader)
 library(sf)
 library(data.table)
 library(withr)

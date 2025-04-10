@@ -15,7 +15,7 @@
 #' \dontrun{
 #'   # Request for Census Bureau data plus CPU processing can exceed well over 10
 #'   #  seconds in some cases.
-#'   library(httr)
+#'   library(downloader)
 #'   library(sf)
 #'   library(usmap)
 #'   library(withr)
@@ -109,11 +109,10 @@ remove_area_water <- function(
   water_lst <- purrr::map(county_GEOID_v, get_area_water_fun)
   water_dt <- data.table::rbindlist(water_lst)
 
-  with_water_sf <- sf::st_as_sf(water_dt) |>
+  sf_with_water_sf <- sf::st_as_sf(water_dt) |>
     sf::st_transform(sf::st_crs(x)) |>
     sf::st_filter(x)
-
-  without_water_sf <- sf::st_difference(x, sf::st_union(with_water_sf))
-
-  return(without_water_sf)
+  union_sf <- sf::st_union(sf_with_water_sf)
+  difference_sf <- suppressWarnings(sf::st_difference(x, union_sf))
+  return(difference_sf)
 }

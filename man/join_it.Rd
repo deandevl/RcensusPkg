@@ -63,7 +63,7 @@ be present in the resultant \code{data.table}.
   # this data with DC tract boundaries.
 
   library(data.table)
-  library(httr)
+  library(httr2)
   library(jsonlite)
   library(sf)
   library(usmap)

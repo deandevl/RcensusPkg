@@ -1,7 +1,7 @@
 test_that("tiger_tracts_sf() namespaces", {
   expect_true(requireNamespace("data.table", quietly = TRUE))
   expect_true(requireNamespace("jsonlite", quietly = TRUE))
-  expect_true(requireNamespace("httr", quietly = TRUE))
+  expect_true(requireNamespace("downloader", quietly = TRUE))
   expect_true(requireNamespace("sf", quietly = TRUE))
   expect_true(requireNamespace("usmap", quietly = TRUE))
   expect_true(requireNamespace("RplotterPkg", quietly = TRUE))
@@ -24,7 +24,8 @@ test_that("tiger_tracts_sf()", {
       general = TRUE,
       express = express,
       output_dir = output_dir,
-      delete_files = FALSE
+      do_progress = FALSE,
+      delete_files = TRUE
     )
   })
 

@@ -46,7 +46,7 @@ a Census Bureau access key.
   #   back to 2005 through 2019.
   library(jsonlite)
   library(data.table)
-  library(httr)
+  library(httr2)
   library(usmap)
   library(RcensusPkg)
 
